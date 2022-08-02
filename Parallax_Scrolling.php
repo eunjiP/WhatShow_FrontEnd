@@ -14,7 +14,7 @@
     foreach($f_title as $title) {
         $title_arr += explode("	",$title);
     }
-
+    // 깃협업 연습. 8/1 이경식
 ?>
 <!DOCTYPE html>
 <html lang="ko">
