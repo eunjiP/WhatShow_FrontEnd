@@ -2,23 +2,21 @@
   <header>
       <div class="header__left">
         <div>
-          <b-button v-b-modal.modal-multi-1>Open First Modal</b-button>
+          <b-button v-b-modal.modal-regin>현재 위치</b-button>
 
-          <b-modal id="modal-multi-1" size="lg" title="First Modal" ok-only no-stacking>
-            <p class="my-2">First Modal</p>
-            <b-button v-b-modal.modal-multi-2>Open Second Modal</b-button>
+          <b-modal id="modal-regin" size="lg" title="위치 설정" hide-footer hide-header-close style="color:#fff; text-align: center;">
+            <p class="my-2">현재 위치로 설정하시겠습니까?</p>
+            <b-button>현재 위치로 설정</b-button>
+            <b-button v-b-modal.modal-regin2>수동 위치로 설정</b-button>
           </b-modal>
 
-          <b-modal id="modal-multi-2" title="Second Modal" ok-only>
-            <p class="my-2">Second Modal</p>
-            <b-button v-b-modal.modal-multi-3 size="sm">Open Third Modal</b-button>
-          </b-modal>
-
-          <b-modal id="modal-multi-3" size="sm" title="Third Modal" ok-only>
-            <p class="my-1">Third Modal</p>
+          <b-modal id="modal-regin2" hide-footer title="수동 설정" hide-header-close style="color:#fff; text-align: center;">
+            <p class="my-2">수동으로 위치 설정</p>
+            <b-button size="sm" variant="success" @click="ok()">설정</b-button>
+            <b-button size="sm" variant="danger" @click="close()">취소</b-button> 
           </b-modal>
         </div>
-        <div>현재 위치</div>
+        <!-- <div>현재 위치</div> -->
         <div>채팅창</div>
         <div>마이페이지</div>
       </div>
