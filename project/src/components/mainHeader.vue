@@ -38,6 +38,9 @@ export default {
     display: flex;
     justify-content: space-around;
   }
+  .header__left div, .search__bottom, .header__search input[type=submit]{
+    cursor: pointer;
+  }
   .header__logo {
     text-align: center;
   }
