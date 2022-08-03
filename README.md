@@ -1,4 +1,4 @@
-WhatShow (왓쇼) - Front-end 작업 공간
+WhatShow (왓쇼) - Front-end 작업 공간 입니다!
 =====
 ## BOAAA
 
