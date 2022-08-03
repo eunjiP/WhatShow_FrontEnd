@@ -7,7 +7,7 @@ WhatShow (왓쇼) - Front-end 작업 공간
 - 사용언어 : Vue
 - 사용 IDE : Visual Studio Code
 - DB 설계 tool : ERD Cloud [:link:ERD Cloud 주소](https://www.erdcloud.com/d/Jhbdz3qkTWXgCwCBY)
-- Figma [:link:Figma 주소](https://www.figma.com/file/gqcSmteUW8AytmntGTJP7x/WahtShow_%EC%8A%A4%ED%86%A0%EB%A6%AC%EB%B3%B4%EB%93%9C?node-id=1%3A6)
+- 스토리보드 : [:link:Figma 주소](https://www.figma.com/file/gqcSmteUW8AytmntGTJP7x/WahtShow_%EC%8A%A4%ED%86%A0%EB%A6%AC%EB%B3%B4%EB%93%9C?node-id=1%3A6)
 - 개발 기간 : 2022.07.25 ~ 2022.08.19
 - 역할분담
   - 허영롱 : 검색 API는 내가 책임지겠다! (영화, 네이버 검색)
