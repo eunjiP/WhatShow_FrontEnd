@@ -1,5 +1,10 @@
 <template>
-  <header><mainHeader/></header>
+  <div>
+    <header><mainHeader/></header>
+    <router-link to="/">메인</router-link>
+    <router-link to="/detail">상세페이지</router-link>
+    <router-view/>
+  </div>
 </template>
 
 <script>
