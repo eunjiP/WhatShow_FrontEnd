@@ -13,13 +13,18 @@ export default {
   name: 'main',
   data() {
     return {
-      movieList: []
+      movieList: {},
     }
   },
   methods:{
     async getMovieList() {
-      this.movieList = await this.$get('movie/main', {})
+      result = await this.$get('movie/main', {})
+      this.movieList = result.result
+      console.log(result);
     }
+  },
+  created() {
+    getMovieList()
   },
   components: {
     MovieItem,
