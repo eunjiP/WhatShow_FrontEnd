@@ -1,6 +1,7 @@
 <template>
   <div>
-    <img src={{item.movie_poster}}>
+    <div>{{ item.movie_nm }}</div>
+    <img :src="`${item.movie_poster}`">
   </div>
 </template>
 
