@@ -54,7 +54,7 @@
     text-align: center;
   }
   .header__logo > img {
-    width: 8rem;
+    width: 5rem;
   }
   .header__search {
     margin-top: 15px;
