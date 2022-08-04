@@ -8,4 +8,5 @@ import router from './router'
 createApp(App)
 .use(router)
 .use(BootstrapVue3)
+.mixin(mixins)
 .mount('#app')
