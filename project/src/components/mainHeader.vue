@@ -14,10 +14,23 @@
         </b-modal>
 
         <b-modal id="modal-regin2" hide-footer title="수동 설정" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
-          <p class="my-2">수동으로 위치 설정</p>
-          <br>
-          <b-button size="sm" variant="success" @click="ok()">설정</b-button>
-          <b-button size="sm" variant="danger" @click="close()">취소</b-button> 
+          <div class="mr-2">수동으로 위치 설정</div>
+          <select class="my-3" @change="changeLoca1" >
+              <option value="" selected>시/도</option>
+              <option v-for="item in localList1" :key="item.region_nm">
+                {{ item.region_nm }}
+              </option>
+          </select>
+          <select>
+            <option value="" selected>군/구</option>
+            <option v-for="item in localList1" :key="item.region_nm">
+              {{ item.region_nm }}
+            </option>
+          </select>
+          <div>
+            <b-button size="sm" variant="success" @click="ok()">설정</b-button>
+            <b-button size="sm" variant="danger" @click="close()">취소</b-button> 
+          </div>
         </b-modal>
       </div>
 
@@ -149,6 +162,10 @@
     height: 1.5rem;
     background: #fff;
   }
+  /* 위치지정_수동 */
+  #modal-regin2 select { margin: 0 20px; width: 100px; height: 30px;
+    text-align: center; font-size: 1rem; color: black;
+  }
 
   /* 마이페이지 css */
 
@@ -164,10 +181,49 @@
 <script>
   export default {
     name: 'mainHeader',
+    data() {
+      return {
+        localList1: [],
+        localList2: [],
+        selectedLoca1: '',
+        selectedLoca2: ''
+      }
+    },
+    created() {
+      this.getLocalList();
+      this.getLocalList1();
+    },
     methods: {
+      changeLoca1() {
+        this.selectedLoca1 = '';
+        this.localList2 = [];
+        this.getLocalList2(this.selectedLoca1);
+        this.getLocalList();
+      },
+      async getLocalList() {
+        const param = {};
+        if(this.selectedLoca2 > 0) {
+          param['sub_nm'] = this.selectedLoca2;
+        } else {
+          if(this.selectedLoca1 !== '') {
+            param['region_nm'] = this.selectedLoca1;
+          }
+          if(this.selectedLoca2 !== '') {
+            param['sub_nm'] = this.selectedLoca2;
+          }
+        }
+        this.localList = await this.$get('/src/main', param);
+      },
+      async getLocalList1() {
+        this.localList1 = await this.getLocalList('/api/localList1', {});
+      },
+      async getLocalList2() {
+        this.localList2 = await this.$get( `/api/localList2/${region_nm}`, {});
+      },
       uploadImages() {
 
       }
     }
+
   }
 </script>
