@@ -91,7 +91,7 @@
           <br>
           <div class="search__seltag" style="font-size:20px; color:#F9F871;">#태그설정</div>
           <br>
-          <div class="container">
+          <div class="container2">
             <div class="row">
               <div class="col-3">
                 <label><input type="checkbox" name="genre"> 드라마</label>
