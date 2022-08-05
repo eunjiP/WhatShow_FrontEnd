@@ -29,11 +29,4 @@ export default {
 </script>
 
 <style>
-  .videoPreview{
-      transition: 0.5s;
-  }
-  video{
-    width: 300px;
-  }
-
 </style>
