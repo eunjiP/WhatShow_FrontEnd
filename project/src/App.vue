@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header class="header"><mainHeader/></header>
+    <header><mainHeader/></header>
     <div class="router">
       <router-link to="/">메인</router-link> |
       <router-link to="/detail">상세페이지</router-link>
@@ -11,32 +11,12 @@
 
 <script>
 import mainHeader from './components/mainHeader.vue'
-
 export default {
   name: 'main',
   components: {
   mainHeader
   }
 }
-
-//휠 내리면 작아지게 자바스크립트 시작()
-const header = document.querySelector(".header");
-let timer;
-window.scroll({top : 0, behavior: 'smooth'});
-document.addEventListener('scroll', (e) =>{
-
-    if(!timer){
-
-        timer = setTimeout(()=>{
-            timer = null;
-
-            let top = document.documentElement.scrollTop;
-            console.log(top)
-            if(window.scrollY > 10){
-                header.classList.toggle("d-none");
-            }
-            })}})
-
 </script>
 
 <style>
@@ -54,25 +34,9 @@ document.addEventListener('scroll', (e) =>{
     border-collapse: collapse;
     font-family: roundAir;
   }
-
-<<<<<<< HEAD
-  .header{
-    width: 100%;
-    position: fixed;
-  }
-=======
   body {background: #152A35;}
->>>>>>> a4dda22c7bb484167b0bf2c6960e5cff45505bc6
-
   .router {
     text-align: center;
     margin: 0 auto;
-    padding: 10vh;
-    
   }
-
-  .d-none{
-    display: none;
-  }
-
 </style>
