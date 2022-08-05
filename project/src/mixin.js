@@ -1,11 +1,6 @@
 import axios from "axios";
 
 export default {
-    data() {
-        return {
-
-        }
-    },
     methods: {
         async $get(url, param) {
             return (await axios.get(url, {

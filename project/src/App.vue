@@ -33,9 +33,10 @@ export default {
     margin: 0;
     padding: 0;
     border-collapse: collapse;
-    background: #152A35;
     font-family: roundAir;
   }
+
+  body {background: #152A35;}
 
   .router {
     text-align: center;

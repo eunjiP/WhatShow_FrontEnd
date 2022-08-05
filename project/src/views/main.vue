@@ -1,7 +1,9 @@
 <template>
   <main>
-    <div class="main__movieList">
-      <MovieItem v-for="(item) in movieList" :key="item.movie_code" :item="item"></MovieItem>
+    <div class="slide__box">
+      <div class="slide__list" @click="moveRight">
+        <MovieItem v-for="(item, idx) in movieList" :key="idx" :item="item"></MovieItem>
+      </div>
     </div>
   </main>
 </template>
@@ -13,18 +15,33 @@ export default {
   name: 'main',
   data() {
     return {
-      movieList: {},
+      movieList: [],
+      itemIdx: 0,
     }
   },
   methods:{
     async getMovieList() {
-      result = await this.$get('movie/main', {})
-      this.movieList = result.result
-      console.log(result);
+      this.movieList = await this.$get('/movie/main', {})
+    },
+    moveSlide() {
+      const slideList = document.querySelector('.slide__list');
+      for (let i = 0; i < this.moveList.length; i++) {
+        let trans = 100 * i;
+        slideList.style.transform = `translate(-${trans}%)`;
+      }
+    },
+    moveRight() {
+      this.itemIdx++;
+      if(this.itemIdx === this.movieList.length) {
+        this.itemIdx = 0;
+      }
+      const slideList = document.querySelector('.slide__list');
+      slideList.style.transform = `translate(-${this.itemIdx * 100}%)`;
+      
     }
   },
   created() {
-    getMovieList()
+    this.getMovieList()
   },
   components: {
     MovieItem,
@@ -33,5 +50,17 @@ export default {
 </script>
 
 <style scoped>
+  .slide {
+      position: relative;
+  }
 
+  .slide__list {
+      display: flex;
+      transform: translate(0, 0);
+      transition: 0.5s;
+  }
+
+  .slide__item {
+      flex: 0 0 100%;
+  }
 </style>
