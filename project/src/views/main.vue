@@ -1,7 +1,7 @@
 <template>
   <main>
-    <div class="main__movieList">
-      <MovieItem v-for="(item) in movieList" :key="item.movie_code" :item="item"></MovieItem>
+    <div class="row">
+      <MovieItem v-for="(item, idx) in movieList" :key="idx" :item="item" class="col-8 col-md-4 col-xl-2"></MovieItem>
     </div>
   </main>
 </template>
@@ -13,18 +13,16 @@ export default {
   name: 'main',
   data() {
     return {
-      movieList: {},
+      movieList: [],
     }
   },
   methods:{
     async getMovieList() {
-      result = await this.$get('movie/main', {})
-      this.movieList = result.result
-      console.log(result);
+      this.movieList = await this.$get('/movie/main', {})
     }
   },
   created() {
-    getMovieList()
+    this.getMovieList()
   },
   components: {
     MovieItem,
