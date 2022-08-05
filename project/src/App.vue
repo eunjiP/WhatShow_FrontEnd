@@ -64,9 +64,12 @@ document.addEventListener('scroll', (e) =>{
   .router {
     text-align: center;
     margin: 0 auto;
+    padding: 10vh;
+    
   }
 
   .d-none{
     display: none;
   }
+
 </style>

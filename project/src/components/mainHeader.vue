@@ -6,7 +6,7 @@
         <!-- 현재 위치 -->
         <div v-b-modal.modal-regin>현재 위치</div>
 
-        <b-modal id="modal-regin" size="lg" title="위치 설정" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
+        <b-modal id="modal-regin" size="lg"  title="위치 설정" hide-footer style="text-align: center;" header-bg-variant="#152A35" >
           <p class="my-2">현재 위치로 설정하시겠습니까?</p>
           <br>
           <b-button>현재 위치로 설정</b-button>
@@ -84,6 +84,7 @@
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     color: #fff;
+    background: #152A35;
   }
   .header__left {
     margin-top: 15px;

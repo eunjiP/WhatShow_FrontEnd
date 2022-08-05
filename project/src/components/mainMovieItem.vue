@@ -1,5 +1,6 @@
 <template>
-  <div>
+
+  <div class="col">
     <div>{{ item.movie_nm }}</div>
     <video class="videoPreview" muted width="800" height="500" :src="`${item.preview }`" :poster="`${item.movie_poster }`" ref="preview" @click="this.previewPlay"></video>
   </div>
@@ -31,5 +32,8 @@ export default {
 <style>
   .videoPreview{
       transition: 0.5s;
+  }
+  video{
+    width: 300px;
   }
 </style>
