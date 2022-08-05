@@ -1,7 +1,7 @@
 <template>
   <main>
     <div class="row">
-      <MovieItem v-for="(item, idx) in movieList" :key="idx" :item="item" ></MovieItem>
+      <MovieItem v-for="(item, idx) in movieList" :key="idx" :item="item"></MovieItem>
     </div>
   </main>
 </template>
