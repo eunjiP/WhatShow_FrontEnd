@@ -125,7 +125,7 @@
   }
   /* 위치지정_수동 */
   #modal-regin2 select { margin: 0 20px; width: 100px; height: 30px;
-    text-align: center; font-size: 1rem;
+    text-align: center; font-size: 1rem; color: black;
   }
 
   /* 마이페이지 css */
