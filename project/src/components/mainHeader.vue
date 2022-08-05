@@ -28,7 +28,7 @@
       <div>
         <div v-b-modal.modal-mypage>마이페이지</div>
 
-        <b-modal id="modal-mypage" title="마이페이지" hide-footer style="background-color: rgba(0, 0, 0, 0.5);">
+        <b-modal id="modal-mypage" title="마이페이지" ok-only style="background-color: rgba(0, 0, 0, 0.5);">
           <div>
             <div class="mypage__user">
               <label for="input-file">
@@ -38,15 +38,17 @@
               </label>
               <input id="input-file" type="file" @change="uploadImages" accept="image/*" style="display: none"/>
               <div>
-                <label for="input-username" style="font-size:20px;">닉네임</label>
-                <b-form-input id="input-username" class="login__form__username__input" type="text" style="background:white"/>
+                <label for="input-nickname" style="font-size:20px; color:#F9F871;">닉네임</label>
+                <b-form-input id="input-nickname" class="nickname__input" placeholder="닉네임을 입력해주세요"/>
                 <br>
+                <label for="input-favtag" style="font-size:20px; color:#F9F871;">관심 태그</label>
                 <div>#드라마 #액션 #멜로 #코미디 #호러</div>
+                <b-form-input id="input-nickname" class="favtag__input" @keyup.enter="this.value" placeholder="태그를 입력해주세요"/>
                 
               </div>
             <br>
             </div>
-            <div style="font-size: 25px; font-weight: bold;">내가 쓴 댓글</div>
+            <div style="font-size: 20px; color:#F9F871;">내가 쓴 댓글</div>
             <div>[미니언즈2] 너무 귀여워요~</div>
             <div>[한산] 애국심이 불타오른다!!!!!</div>
             <div>[헤어질결심] 헤어지는게 뭐임?</div>
@@ -63,14 +65,50 @@
     <!-- 헤더 오른쪽 -->
     <div class="header__right">
       <div class="header__search">
-          <form action="#" method="post">
-              <input type="text" name="search" placeholder="Search">
-              <input type="submit" value="🔍">
-          </form>
-          <div v-b-modal.modal-search class="search__bottom">상세검색</div>
+        <form action="#" method="post">
+            <input type="text" name="search" placeholder="검색"/>
+            <button style="border:none;" type="submit"><i class="fa-solid fa-play" style="width:30px; color: #C57F1E;" ></i></button>
+        </form>
 
-          <b-modal id="modal-search" title="상세검색" hide-footer style="background-color: rgba(0, 0, 0, 0.5);">
-          
+        <!-- 상세검색 -->
+        <div v-b-modal.modal-search class="search__bottom">상세검색</div>
+
+        <b-modal id="modal-search" title="검색하기" hide-footer style="background-color: rgba(0, 0, 0, 0.5);">
+          <b-form-input id="modal-search" class="detail__search" type="text" placeholder="검색어 입력"/>
+          <br>
+          <div class="search__seltag" style="font-size:20px; color:#F9F871;">#태그설정</div>
+          <br>
+          <div class="container">
+            <div class="row">
+              <div class="col-3">
+                <label><input type="checkbox" name="genre"> 드라마</label>
+              </div>
+              <div class="col-3">
+                <label><input type="checkbox" name="genre"> 멜로</label>
+              </div>
+              <div class="col-3">
+                <label><input type="checkbox" name="genre"> 로맨스</label>
+              </div>
+              <div class="col-3">
+                <label><input type="checkbox" name="genre"> 코미디</label>
+              </div>
+              <div class="col-3">
+                <label><input type="checkbox" name="genre"> 전쟁</label>
+              </div>
+              <div class="col-3">
+                <label><input type="checkbox" name="genre"> 호러</label>
+              </div>
+              <div class="col-3">
+                <label><input type="checkbox" name="genre"> SF</label>
+              </div>
+              <div class="col-3">
+                <label><input type="checkbox" name="genre"> 액션</label>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="search__recommend" style="font-size:20px; color:#F9F871;">추천 검색어</div>
+
         </b-modal>
       </div>
     </div>
@@ -117,6 +155,8 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
+
+  /* 상세검색 css */
 
 </style>
 
