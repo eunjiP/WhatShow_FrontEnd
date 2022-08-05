@@ -38,10 +38,16 @@ export default {
       const slideList = document.querySelector('.slide__list');
       slideList.style.transform = `translate(-${this.itemIdx * 100}%)`;
       
+    },
+    create_uid(){
+      if(!localStorage.getItem('uid')){
+        localStorage.setItem('uid', 'user' + Math.floor(Math.random()*1000));
+      }
     }
   },
   created() {
-    this.getMovieList()
+    this.getMovieList(),
+    this.create_uid()
   },
   components: {
     MovieItem,
