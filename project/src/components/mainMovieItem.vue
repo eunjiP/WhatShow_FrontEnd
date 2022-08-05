@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="slide__item">
     <div>{{ item.movie_nm }}</div>
     <video class="videoPreview" muted width="800" height="500" :src="`${item.preview }`" :poster="`${item.movie_poster }`" ref="preview" @click="this.previewPlay"></video>
   </div>
@@ -29,7 +29,5 @@ export default {
 </script>
 
 <style>
-  .videoPreview{
-      transition: 0.5s;
-  }
+
 </style>
