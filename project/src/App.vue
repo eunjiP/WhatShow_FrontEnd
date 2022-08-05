@@ -52,14 +52,17 @@ document.addEventListener('scroll', (e) =>{
     margin: 0;
     padding: 0;
     border-collapse: collapse;
-    background: #152A35;
     font-family: roundAir;
   }
 
+<<<<<<< HEAD
   .header{
     width: 100%;
     position: fixed;
   }
+=======
+  body {background: #152A35;}
+>>>>>>> a4dda22c7bb484167b0bf2c6960e5cff45505bc6
 
   .router {
     text-align: center;
