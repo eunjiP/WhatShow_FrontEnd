@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header><mainHeader/></header>
+    <header class="header"><mainHeader/></header>
     <div class="router">
       <router-link to="/">메인</router-link> |
       <router-link to="/detail">상세페이지</router-link>
@@ -18,6 +18,25 @@ export default {
   mainHeader
   }
 }
+
+//휠 내리면 작아지게 자바스크립트 시작()
+const header = document.querySelector(".header");
+let timer;
+window.scroll({top : 0, behavior: 'smooth'});
+document.addEventListener('scroll', (e) =>{
+
+    if(!timer){
+
+        timer = setTimeout(()=>{
+            timer = null;
+
+            let top = document.documentElement.scrollTop;
+            console.log(top)
+            if(window.scrollY > 10){
+                header.classList.toggle("d-none");
+            }
+            })}})
+
 </script>
 
 <style>
@@ -37,8 +56,17 @@ export default {
     font-family: roundAir;
   }
 
+  .header{
+    width: 100%;
+    position: fixed;
+  }
+
   .router {
     text-align: center;
     margin: 0 auto;
+  }
+
+  .d-none{
+    display: none;
   }
 </style>
