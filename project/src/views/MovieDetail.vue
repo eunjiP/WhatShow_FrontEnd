@@ -1,14 +1,14 @@
 <template>
   <div class="container p-5">
     <div id="movie-detail">
-        <div id="detail-header" class="row">
+        <div id="detail-header" class="row justify-content-center">
             <div class="movie__title text-start">
                 <h1> 미니언즈2 </h1>
                 <span class="ms-2">Minions: The Rise of Gru, 2022</span>
             </div>
         </div>
 
-        <div id="detail-main" class="row row-cols-2">
+        <div id="detail-main" class="row row-cols-2 justify-content-center">
             <div class="movie__poster col">
                 <img src="http://www.joseilbo.com/gisa_img/16552590641655259064_joseedu.jpg" alt="poster">
             </div>
@@ -79,7 +79,7 @@
             <label for="1-star" class="star">★</label>
         </div>
 
-        <div class="review__form row row justify-content-center">
+        <div class="review__form row justify-content-center">
             <div class="review__input col-10">
                 <textarea class="review__txt" @keyup="revLimit" placeholder="감상평을 남겨주세요. 영화와 상관없는 내용은 관리자에 의해 재재를 받을 수 있습니다."></textarea>
                 <div class="review__limit">({{ limit }} / 100)</div>
@@ -88,7 +88,15 @@
         </div>
 
         <div class="review__box">
-            <div class="review__list"></div>
+            <div class="review__list">
+                <div class="review__comment">
+                    <div class="writer_info">
+                        <div class="writer__img"></div>
+                        <div class="writer__cre"></div>
+                    </div>
+                    <div class="review__cnt"></div>
+                </div>
+            </div>
             <div class="review__more">
                 <button class="more__btn mt-3">
                     <span> 더 보기 <i class="fa-solid fa-angle-down"></i></span>
@@ -134,7 +142,7 @@ export default {
     .fc-yell { color: #F9F871; }
     .fc-oran { color: #F29B21; }
 
-    .container { background: #00000088;}
+    .container { background: #00000088; border-radius: 10px;}
     /* ----- 영화 정보 ----- */
     .movie__title h1, .movie__title span { color: #F9F871; display: inline-block; font-family: 'Do Hyeon', sans-serif;}
     .movie__title h1 { font-size: 3.5rem;}
@@ -144,7 +152,7 @@ export default {
     .movie__info li { font-size:1.2rem; text-align: left; padding:10px 5px; }
     .movie__info li span {color:gray;}
     /* 영화 줄거리  */
-    .movie__intro__ctnt { background-color: #32485388; padding: 15px 10px; border-radius: 10px; line-height: 2rem;}
+    .movie__intro__ctnt { border-top:1px solid #F29B21; padding: 15px 10px; line-height: 2rem;}
 
     /* ----- 상영날짜 선택 ----- */
     .movie__time input[type=date] { background-color: #32485388; padding: 5px; border: none; border-radius: 5px;}
@@ -202,6 +210,7 @@ export default {
         height:100%;
         box-sizing: border-box;
         border: 1px solid#F29B21; border-radius: 10px;
+        background: transparent;
     }
     #movie-review .review__input .review__limit {
         position: absolute;
@@ -218,7 +227,7 @@ export default {
         padding: 5px 20px;
     }
 
-    .review__box .more__btn { border:none;}
+    .review__box .more__btn { border:none; background: transparent;}
 
 
 </style>
