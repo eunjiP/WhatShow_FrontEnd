@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>{{ item.movie_nm }}</div>
-    <img :src="`${item.movie_poster}`">
+    <video class="videoPreview" muted width="800" height="500" :src="`${item.preview }`" :poster="`${item.movie_poster }`" @click="this.previewPlay"></video>
   </div>
 </template>
 
@@ -9,10 +9,17 @@
 export default {
     props: {
         item: Object
+    },
+    methods:{
+      previewPlay() {
+        this.play()
+      }
     }
 }
 </script>
 
 <style>
-
+  .videoPreview{
+      transition: 0.5s;
+  }
 </style>
