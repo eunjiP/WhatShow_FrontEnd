@@ -39,7 +39,7 @@
               <input id="input-file" type="file" @change="uploadImages" accept="image/*" style="display: none"/>
               <div>
                 <label for="input-username" style="font-size:20px;">닉네임</label>
-                <b-form-input id="input-username" class="login__form__username__input" type="text" style="background:white"/>
+                <b-form-input id="input-username" class="username__input" type="text" style="background:white"/>
                 <br>
                 <div>#드라마 #액션 #멜로 #코미디 #호러</div>
                 
@@ -63,14 +63,35 @@
     <!-- 헤더 오른쪽 -->
     <div class="header__right">
       <div class="header__search">
-          <form action="#" method="post">
-              <input type="text" name="search" placeholder="Search">
-              <input type="submit" value="🔍">
-          </form>
-          <div v-b-modal.modal-search class="search__bottom">상세검색</div>
+        <form action="#" method="post">
+            <input type="text" name="search" placeholder="검색">
+            <input type="submit" value="🔍">
+        </form>
+        <div v-b-modal.modal-search class="search__bottom">상세검색</div>
 
-          <b-modal id="modal-search" title="상세검색" hide-footer style="background-color: rgba(0, 0, 0, 0.5);">
-          
+        <b-modal id="modal-search" title="검색하기" hide-footer style="background-color: rgba(0, 0, 0, 0.5);">
+          <b-form-input id="modal-search" class="detail__search" type="text" style="background:white"/>
+          <br>
+          <div>#태그설정</div>
+          <br>
+          <div class="container">
+            <div class="row">
+              <div class="col-3">
+                <label><input type="checkbox" name="genre"> 드라마</label>
+              </div>
+              <div class="col-3">
+              <label><input type="checkbox" name="genre"> 멜로</label>
+              </div>
+              <div class="col-3">
+              <label><input type="checkbox" name="genre"> 로맨스</label>
+              </div>
+              <div class="col-3">
+              <label><input type="checkbox" name="genre"> 다큐멘터리</label>
+              </div>
+              <label><input type="checkbox" name="genre"> 전쟁</label>
+              <label><input type="checkbox" name="genre"> 코미디</label>
+            </div>
+          </div>
         </b-modal>
       </div>
     </div>
@@ -117,6 +138,8 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
+
+  /* 상세검색 css */
 
 </style>
 
