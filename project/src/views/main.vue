@@ -51,7 +51,9 @@ export default {
 
 <style scoped>
   .slide {
+      width: 100vw;
       position: relative;
+      overflow: hidden;
   }
 
   .slide__list {
