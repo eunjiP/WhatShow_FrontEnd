@@ -135,7 +135,6 @@
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     color: #fff;
-    background: #152A35;
   }
   .header__left {
     margin-top: 15px;
