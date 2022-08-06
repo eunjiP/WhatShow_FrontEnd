@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div>{{WSuuid}}, {{WSnickname}}</div>
+    <div>{{WSuuid}}, {{WSnickname}}</div>  
     <div class="slide__box">
       <div class="slide__list" @click="moveRight">
         <MovieItem v-for="(item, idx) in movieList" :key="idx" :item="item"></MovieItem>
