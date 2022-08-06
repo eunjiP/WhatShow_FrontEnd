@@ -1,5 +1,6 @@
 <template>
   <main>
+    <div>{{WSuuid}}, {{WSnickname}}</div>
     <div class="slide__box">
       <div class="slide__list" @click="moveRight">
         <MovieItem v-for="(item, idx) in movieList" :key="idx" :item="item"></MovieItem>
@@ -17,16 +18,19 @@ export default {
     return {
       movieList: [],
       itemIdx: 0,
+      WSuuid: localStorage.getItem('WSuuid'),
+      WSnickname: localStorage.getItem('WSnickname'),
     }
   },
   methods:{
     async getMovieList() {
       this.movieList = await this.$get('/movie/main', {})
-    },/*
+    },
+
     async send_uid(){
-      const senduid = localStorage.getItem(key, value)
-      senduid = await this.$post('',{})
-    },*/
+      senduid = await this.$post('/user/',{})
+    },
+    
     moveSlide() {
       const slideList = document.querySelector('.slide__list');
       for (let i = 0; i < this.moveList.length; i++) {
@@ -44,15 +48,18 @@ export default {
       
     },
     create_uid(){
-      if(!localStorage.getItem('uid')){
-        localStorage.setItem('uid', 'user' + Math.floor(Math.random()*1000));
+      if(!localStorage.getItem('WSuuid')){
+        localStorage.setItem('WSuuid', Math.floor(Math.random()*1000));
+        localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random()*1000));
+        let uuid = localStorage.getItem('uuid', value);
+        let nickname = localStorage.getItem('nickname', value);
       }
     }
   },
   created() {
     this.getMovieList(),
-    this.create_uid(),
-    this.send_uid()
+    this.create_uid()
+    
   },
   components: {
     MovieItem,
