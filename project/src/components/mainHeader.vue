@@ -41,7 +41,7 @@
       <div>
         <div v-b-modal.modal-mypage>마이페이지</div>
 
-        <b-modal id="modal-mypage" title="마이페이지" header-bg-variant="secondary" body-bg-variant="secondary" footer-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" ok-only>
+        <b-modal id="modal-mypage" title="마이페이지" header-bg-variant="secondary" body-bg-variant="secondary" footer-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" ok-only ok-title="확인" ok-variant="warning">
           <div>
             <div class="mypage__user">
               <label for="input-file">
@@ -78,8 +78,8 @@
     <div class="header__right">
       <div class="header__search">
         <div class="search__input" method="post">
-          <input type="text" @input="search" :value="searchKeyword" placeholder="검색어"/>
-          <button class="search" type="submit" style="border:#F29B21;"><i class="fa-solid fa-play" style="color: #C57F1E;"></i></button>
+          <input id="search__text" type="text" @input="search" :value="searchKeyword" placeholder="검색어"/>
+          <button class="search" type="submit"><i class="fa-solid fa-play" style="background-color: #F29B21; padding: 10px;"></i></button>
         </div>
         
         <!-- 상세검색 -->
@@ -179,6 +179,20 @@
   }
 
   /* 검색 css */
+
+  .search__input {
+    overflow: hidden;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .search__input > #search__text {
+    height: 30px;
+    background: #00000088;
+    border: none;
+    font-size: 10pt;
+    width: 200px;
+  }
 
   .search__btn {
     background-color: #F29B21;
