@@ -72,6 +72,9 @@ export default {
 </script>
 
 <style scoped>
+  main {
+    color: #fff;
+  }
   .slide {
       width: 100vw;
       position: relative;
