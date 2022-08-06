@@ -28,7 +28,7 @@ export default {
     },/*
     async send_uid(){
       const senduid = localStorage.getItem(key, value)
-      senduid = await this.$post('',{})
+      senduid = await this.$post('',{});
     },*/
     moveSlide() {
       const slideList = document.querySelector('.slide__list');
