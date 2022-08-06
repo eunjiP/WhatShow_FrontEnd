@@ -59,8 +59,7 @@ export default {
   },
   created() {
     this.getMovieList(),
-    this.create_uid(),
-    this.send_uid()
+    this.create_uid()
   },
   components: {
     MovieItem,
