@@ -143,7 +143,7 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
     @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
     * { color:#fff; }
     img { display: inline-block; width:100%; height:auto; border-radius: 15px;}
