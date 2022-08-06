@@ -22,11 +22,11 @@ export default {
   methods:{
     async getMovieList() {
       this.movieList = await this.$get('/movie/main', {})
-    },/*
+    },
     async send_uid(){
       const senduid = localStorage.getItem(key, value)
       senduid = await this.$post('',{})
-    },*/
+    },
     moveSlide() {
       const slideList = document.querySelector('.slide__list');
       for (let i = 0; i < this.moveList.length; i++) {
