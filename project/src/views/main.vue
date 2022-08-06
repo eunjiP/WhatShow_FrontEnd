@@ -26,15 +26,15 @@ export default {
     async getMovieList() {
       this.movieList = await this.$get('/movie/main', {})
     },
-    // async ins_uid(){
-    //   const param = [this.WSuuid, this.WSnickname];
-    //   const senduid = await this.$post(`/user/signup`,param);
-    //   if(senduid){
-    //     console.log();
-    //   } else{
-    //     console.error('error');
-    //   }
-    // },
+    async ins_uid(){
+      const param = [this.WSuuid, this.WSnickname];
+      const senduid = await this.$post(`/user/signup`,param);
+      if(senduid){
+        console.log();
+      } else{
+        console.error('error');
+      }
+    },
     async sel_uid(){
       const seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`,{});
       console.log(seluid);
@@ -68,7 +68,7 @@ export default {
     this.sel_uid()
   },
   mounted(){
-    // this.ins_uid()
+    this.ins_uid()
   },
   components: {
     MovieItem,
