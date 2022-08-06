@@ -22,11 +22,7 @@ export default {
   methods:{
     async getMovieList() {
       this.movieList = await this.$get('/movie/main', {})
-    },/*
-    async send_uid(){
-      const senduid = localStorage.getItem(key, value)
-      senduid = await this.$post('',{})
-    },*/
+    },
     moveSlide() {
       const slideList = document.querySelector('.slide__list');
       for (let i = 0; i < this.moveList.length; i++) {
@@ -42,17 +38,10 @@ export default {
       const slideList = document.querySelector('.slide__list');
       slideList.style.transform = `translate(-${this.itemIdx * 100}%)`;
       
-    },
-    create_uid(){
-      if(!localStorage.getItem('uid')){
-        localStorage.setItem('uid', 'user' + Math.floor(Math.random()*1000));
-      }
     }
   },
   created() {
-    this.getMovieList(),
-    this.create_uid(),
-    this.send_uid()
+    this.getMovieList()
   },
   components: {
     MovieItem,
