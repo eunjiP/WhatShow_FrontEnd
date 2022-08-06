@@ -210,7 +210,6 @@
     methods: {
       changeOption1() {
         this.option2 = '';
-        this.option2
       },
       uploadImages() {
 
