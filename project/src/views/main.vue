@@ -34,6 +34,11 @@ export default {
         slideList.style.transform = `translate(-${trans}%)`;
       }
     },
+    create_uid(){
+      if(!localStorage.getItem('uid')){
+        localStorage.setItem('uid', 'user' + Math.floor(Math.random()*1000));
+      }
+    },
     moveRight() {
       this.itemIdx++;
       if(this.itemIdx === this.movieList.length) {
@@ -45,7 +50,9 @@ export default {
     }
   },
   created() {
-    this.getMovieList()
+    this.getMovieList(),
+    this.create_uid(),
+    this.send_uid()
   },
   components: {
     MovieItem,
