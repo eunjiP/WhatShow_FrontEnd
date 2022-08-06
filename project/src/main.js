@@ -6,6 +6,18 @@ import App from './App.vue'
 import router from './router'
 import mixins from './mixin'
 
+// //event bus
+// export const eventBus = new Vue()
+// Vue.config.productionTip = false
+// /* eslint-disable no-new */
+// new Vue({
+//     el: '#app',
+//     router,
+//     components: { App },
+//     template: '<App/>'
+//     })
+// //
+
 createApp(App)
 .use(router)
 .use(BootstrapVue3)
