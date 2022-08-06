@@ -55,7 +55,7 @@
         <div class="movie__time  my-5 col-12">
             <h4 class="fc-oran text-start">영화 상영시간</h4>
             <div class="day__selecte text-start">
-                <input type="date" id="start-day"> - <input type="date" id="end-day">
+                <input type="date" id="select-day" v-model="selectedDate">
             </div>
 
             <div class="movie__timeList">
@@ -88,15 +88,17 @@
         </div>
 
          <div class="review__box">
-          <!--  <div class="review__list" v-for="review in rev_list" :key="review.i_review">
+            <div class="review__list" v-for="review in rev_list" :key="review.i_review">
                 <div class="review__comment">
-                    <div class="writer_info">
-                        <div class="writer">{{ review.iuser }}</div>
-                        <div class="writer__cre">{{ review.created_at }}</div>
-                    </div>
+                    <div class="writer__score">★★★★★</div>
                     <div class="review__cnt">{{ review.ctnt }}</div>
+
+                    <div class="writer__info">
+                        <span class="writer">{{ review.iuser }}</span>
+                        <span class="writer__cre">{{ review.created_at }}</span>
+                    </div>
                 </div>
-            </div>-->
+            </div>
             <div class="review__more">
                 <button class="more__btn mt-3">
                     <span> 더 보기 <i class="fa-solid fa-angle-down"></i></span>
@@ -113,18 +115,13 @@ export default {
         return {
             limit: 0,
             rev_list: [],
+            movie_code: 81888,
+            selectedDate: '',
+            selectedMovieTime: [],
+            
         }
     },
-    // created() {
-    //     axios.get('/detail/reviewList')
-    //     .then(res => {
-    //         if(res.status === 200 && res.data.length > 0) {
-    //             res.data.forEach(item => {
-    //                 this.rev_list.push(item);
-    //             })
-    //         }
-    //     });
-    // },
+   
     methods: {
         revLimit() { // 리뷰 글 수 제한
             const review_txt = document.querySelector('.review__txt');
@@ -132,8 +129,27 @@ export default {
             if(this.limit > 100) {
                 review_txt.value = review_txt.value.substring(0, 100);
             }
+        },
+       async getReview() { // 리뷰 리스트 
+             this.rev_list = await this.$get(`/detail/reviewList/${this.movie_code}`, {});
+        },
+        async getData() { // 상영시간
+            const param = {};
+            param['code'] = this.movie_code;
+            param['date'] = this.selectedDate;
+            this.selectedMovieTime = await this.$get('/movie/movieTime', param);
+            console.log(this.selectedMovieTime);
         }
+        
     },
+    
+    created() {
+        this.getReview();
+    },
+    updated() {
+        this.getData();
+    }
+
 
     
     
@@ -143,7 +159,7 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
     @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
     * { color:#fff; }
     img { display: inline-block; width:100%; height:auto; border-radius: 15px;}
@@ -222,6 +238,12 @@ export default {
     }
 
     .review__box .more__btn { border:none; background: transparent;}
+
+    /* ----- 리뷰 리스트 ----- */
+    .review__comment { border-bottom:1px solid #535e6488; margin:10px auto; padding:15px; width:90%; overflow: hidden; text-align: left; }
+    .writer__score { display: inline-block; width:100px;}
+    .writer__info .writer__cre { font-size:0.8rem; color:gray;  }
+    .writer__info .writer { color: #F29B21; font-family: 'round'; margin-right:10px; }
 
 
 </style>
