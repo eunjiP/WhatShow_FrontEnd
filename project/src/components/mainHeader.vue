@@ -15,18 +15,20 @@
 
         <b-modal id="modal-regin2" title="수동 설정" header-bg-variant="secondary" body-bg-variant="secondary" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <div class="mr-2">수동으로 위치 설정</div>
-          <select calss="form-select" @change="changeOption1" v-model="option1List">
-              <option selected>시/도</option>
-              <option v-for="item in option1" :key="item.root_code">
+          <select @change="changeOption1" v-model="optionList1">
+              <option value="" selected>시/도</option>
+              <option v-for="item in option1" :key="item.root_code" :value="item.root_code">
                 {{ item.region_nm }}
               </option>
           </select>
-          <select calss="form-select" @change="getLocaList" v-model="option2List" v-if="option1List !== ''">
-            <option selected >군/구</option>
-            <option v-for="item in option2" :key="item.root_code" :value="item.subregion_nm" >
-              {{ item.subregion_nm }}
+
+          <select v-model="optionList2" v-if="optionList1 !== ''">
+            <option value="0" selected>군/구</option>
+            <option v-for="item in option2" :key="item.sub_code" :value="item.sub_code">
+              {{ item.sub_nm }}
             </option>
           </select>
+
           <div>
             <b-button size="sm" variant="success" @click="ok()">설정</b-button>
             <b-button size="sm" variant="danger" @click="close()">취소</b-button> 
@@ -129,6 +131,40 @@
   </header>
 </template>
 
+<script>
+  export default {
+    name: 'mainHeader',
+    data() {
+      return {
+        option1: [],
+        option2: [],
+        optionList1: '',
+        optionList2: 0,
+      }
+    },
+    created() {
+      this.getOptionList1();
+    },
+    methods: {
+      changeOption1() {
+        this.optionList2 = 0;
+        this.option2 = [];
+        this.getOptionList2(this.optionList1);
+      },
+      async getOptionList1() {
+        this.option1 = await this.$get(`/location/optionList1`, {})
+      },
+      async getOptionList2(optionList1) {
+        this.option2 = await this.$get(`/location/optionList2/${optionList1}`, {})
+      },
+      uploadImages() {
+
+      },
+    }
+
+  }
+</script>
+
 <style scoped>
   header {
     margin: 1% 5% 0 5%;
@@ -177,51 +213,3 @@
   /* 상세검색 css */
 
 </style>
-
-<script>
-  export default {
-    name: 'mainHeader',
-    data() {
-      return {
-        LocationList:[],
-        option1: [],
-        option2: [],
-        option1List: '',
-        option2List: 0,
-      }
-    },
-    created() {
-      this.getLocaList();
-      this.getOption1List();
-    },
-    methods: {
-      changeOption1() {
-        this.option2List = 0;
-        this.option2 = [];
-        this.getOption2List(this.option1List);
-        this.getLocaList();
-      },
-      async getLocaList() {
-        const param = {};
-        if(this.option2List > 0 ) {
-          param['subregion_nm'] = this.option2List;
-        } else {
-          if(this.option1List !== '') {
-            param['region_nm'] = this.option1List;
-          }
-        }
-        this.LocationList = await this.$get('/api/LocationList', param);
-      },
-      async getOption1List() {
-        this.option1List = await this.$get(`/api/option1List`, {})
-      },
-      async getOption2List(option1) {
-        this.option2List = await this.$get(`/api/option1List/${option1}`, {})
-      },
-      uploadImages() {
-
-      },
-    }
-
-  }
-</script>
