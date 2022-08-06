@@ -87,22 +87,22 @@
             <button class="review__btn ms-2 col-2">등록</button>
         </div>
 
-        <div class="review__box">
-            <div class="review__list">
+         <div class="review__box">
+          <!--  <div class="review__list" v-for="review in rev_list" :key="review.i_review">
                 <div class="review__comment">
                     <div class="writer_info">
-                        <div class="writer__img"></div>
-                        <div class="writer__cre"></div>
+                        <div class="writer">{{ review.iuser }}</div>
+                        <div class="writer__cre">{{ review.created_at }}</div>
                     </div>
-                    <div class="review__cnt"></div>
+                    <div class="review__cnt">{{ review.ctnt }}</div>
                 </div>
-            </div>
+            </div>-->
             <div class="review__more">
                 <button class="more__btn mt-3">
                     <span> 더 보기 <i class="fa-solid fa-angle-down"></i></span>
                 </button>
             </div>
-        </div>
+        </div> 
     </div>
   </div>
 </template>
@@ -112,30 +112,40 @@ export default {
     data() {
         return {
             limit: 0,
+            rev_list: [],
+        }
+    },
+    // created() {
+    //     axios.get('/detail/reviewList')
+    //     .then(res => {
+    //         if(res.status === 200 && res.data.length > 0) {
+    //             res.data.forEach(item => {
+    //                 this.rev_list.push(item);
+    //             })
+    //         }
+    //     });
+    // },
+    methods: {
+        revLimit() { // 리뷰 글 수 제한
+            const review_txt = document.querySelector('.review__txt');
+            this.limit = review_txt.value.length;
+            if(this.limit > 100) {
+                review_txt.value = review_txt.value.substring(0, 100);
+            }
+        }
+    },
 
-        }
-    },
-    mounted() {
-        this.initStarOffsets();
-    },
-   methods: {
-    revLimit() { // 리뷰 글 수 제한
-        const review_txt = document.querySelector('.review__txt');
-        this.limit = review_txt.value.length;
-        if(this.limit > 100) {
-            review_txt.value = review_txt.value.substring(0, 100);
-        }
-    },
+    
     
 
 
-   }
 }
+
 </script>
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
-    *{ color:#fff; }
+    * { color:#fff; }
     img { display: inline-block; width:100%; height:auto; border-radius: 15px;}
     li{ list-style: none;}
 
@@ -143,6 +153,7 @@ export default {
     .fc-oran { color: #F29B21; }
 
     .container { background: #00000088; border-radius: 10px;}
+
     /* ----- 영화 정보 ----- */
     .movie__title h1, .movie__title span { color: #F9F871; display: inline-block; font-family: 'Do Hyeon', sans-serif;}
     .movie__title h1 { font-size: 3.5rem;}
@@ -158,47 +169,30 @@ export default {
     .movie__time input[type=date] { background-color: #32485388; padding: 5px; border: none; border-radius: 5px;}
     .movie__timeList { background-color: #32485388; border-radius: 5px; margin-top: 20px; height: 250px; text-align: center; line-height:250px;}
 
-    /* ----- 별점 ----- 
-    #myform { display: inline-block; direction: rtl; }
-    #myform input[type=radio]{ display: none; }
-    #myform label{
-        font-size: 3em;
-        color: transparent;
-        text-shadow: 0 0 0 #f0f0f0;
+    /* ----- 별점 ----- */
+    .star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    font-size: 3rem;
+    line-height: 3.25rem;
+    justify-content: space-around;
+    padding: 0 0.2em;
+    text-align: center;
+    width: 5em;
     }
-    #myform label:hover{ text-shadow: 0 0 0 #F9F871; }
-    #myform label:hover ~ label{ text-shadow: 0 0 0 #F9F871; }
-    #myform input[type=radio]:checked ~ label{ text-shadow: 0 0 0 #F9F871; }*/
-
-.star-rating {
-  display: flex;
-  flex-direction: row-reverse;
-  font-size: 3rem;
-  line-height: 3.25rem;
-  justify-content: space-around;
-  padding: 0 0.2em;
-  text-align: center;
-  width: 5em;
-}
- 
-.star-rating input {
-  display: none;
-}
- 
-.star-rating label {
-  -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
-  -webkit-text-stroke-width: 1px;
-  cursor: pointer;
-}
- 
-.star-rating :checked ~ label {
-  -webkit-text-fill-color: gold;
-}
- 
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-    -webkit-text-fill-color: gold;
-}
+    
+    .star-rating input { display: none; }
+    
+    .star-rating label {
+    -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 1px;
+    cursor: pointer;
+    }
+    
+    .star-rating :checked ~ label { -webkit-text-fill-color: gold; }
+    
+    .star-rating label:hover,
+    .star-rating label:hover ~ label { -webkit-text-fill-color: gold; }
 
     /* ----- 리뷰 ----- */
     #movie-review .review__input { position: relative; height:90px; }
