@@ -15,13 +15,13 @@
 
         <b-modal id="modal-regin2" title="수동 설정" header-bg-variant="secondary" body-bg-variant="secondary" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <div class="mr-2">수동으로 위치 설정</div>
-          <select calss="form-select" v-model="option1">
+          <select calss="form-select" @change="changeOption1" v-model="option1List">
               <option selected>시/도</option>
-              <option v-for="item in option1" :key="item.root_code" :value="item.region_nm">
+              <option v-for="item in option1" :key="item.root_code">
                 {{ item.region_nm }}
               </option>
           </select>
-          <select calss="form-select" v-model="option2" v-if="option1 !== ''" >
+          <select calss="form-select" @change="getLocalList" v-model="option2List" v-if="option1List !== ''">
             <option selected >군/구</option>
             <option v-for="item in option2" :key="item.root_code" :value="item.subregion_nm" >
               {{ item.subregion_nm }}
@@ -183,33 +183,40 @@
     name: 'mainHeader',
     data() {
       return {
-        name: '',
-        option1: [
-          { region_nm: '서울', root_code: '1'},
-          { region_nm: '경기', root_code: '2'},
-          { region_nm: '대구', root_code: '3'},
-          { region_nm: '부산', root_code: '4'},
-        ],
-        option2: [
-          { subregion_nm: '용산구', root_code: '1'},
-          { subregion_nm: '구로구', root_code: '1'},
-          { subregion_nm: '서초구', root_code: '1'},
-          { subregion_nm: '안양', root_code: '2'},
-          { subregion_nm: '용산', root_code: '2'},
-          { subregion_nm: '경기', root_code: '2'},
-          { subregion_nm: '수성구', root_code: '3'},
-          { subregion_nm: '동구', root_code: '3'},
-          { subregion_nm: '동래구', root_code: '4'},
-          { subregion_nm: '동작구', root_code: '4'},
-        ]
+        LocationList:[],
+        option1: [],
+        option2: [],
+        option1List: '',
+        option2List: 0,
       }
     },
     created() {
-
+      this.getLocalList();
+      this.getOption1List();
     },
     methods: {
-      changeLocal() {
-
+      changeOption1() {
+        this.option2List = 0;
+        this.option2 = [];
+        this.getOption2List(this.option1List);
+        this.getLocalList();
+      },
+      async getLocalList() {
+        const param = {};
+        if(this.option2List > 0 ) {
+          param['subregion_nm'] = this.option2List;
+        } else {
+          if(this.option1List !== '') {
+            param['region_nm'] = this.option1List;
+          }
+        }
+        this.LocalList = await this.$get('/api/LocalList', param);
+      },
+      async getOption1List() {
+        this.option1List = await this.$get(`/api/option1List`, {})
+      },
+      async getOption2List(option1) {
+        this.option2List = await this.$get(`/api/option1List/${option1}`, {})
       },
       uploadImages() {
 
