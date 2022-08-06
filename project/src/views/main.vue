@@ -25,11 +25,16 @@ export default {
   methods:{
     async getMovieList() {
       this.movieList = await this.$get('/movie/main', {})
-    },/*
-    async send_uid(){
-      const senduid = localStorage.getItem(key, value)
-      senduid = await this.$post('',{});
-    },*/
+    },
+    async ins_uid(){
+      const param = [this.WSuuid, this.WSnickname];
+      const senduid = await this.$post(`/user/signup`,param);
+      if(senduid){
+        console.log();
+      } else{
+        console.error('error');
+      }
+    },
     moveSlide() {
       const slideList = document.querySelector('.slide__list');
       for (let i = 0; i < this.moveList.length; i++) {
@@ -39,7 +44,7 @@ export default {
     },
     create_uid(){
       if(!localStorage.getItem('WSuuid')){
-        localStorage.setItem('WSuuid', 'user' + Math.floor(Math.random()*1000),
+        localStorage.setItem('WSuuid', Math.floor(Math.random()*1000),
         localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random()*1000)));
       }
     },
@@ -56,6 +61,9 @@ export default {
   created() {
     this.getMovieList(),
     this.create_uid()
+  },
+  mounted(){
+    this.ins_uid()
   },
   components: {
     MovieItem,
