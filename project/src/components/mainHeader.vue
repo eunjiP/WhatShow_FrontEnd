@@ -16,8 +16,8 @@
         <b-modal id="modal-regin2" title="수동 설정" header-bg-variant="secondary" body-bg-variant="secondary" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <div class="mr-2">수동으로 위치 설정</div>
           <select calss="form-select" v-model="option1">
-              <option value="" selected>시/도</option>
-              <option v-for="item in option1" :key="item.root_code">
+              <option selected>시/도</option>
+              <option v-for="item in option1" :key="item.root_code" :value="item.region_nm">
                 {{ item.region_nm }}
               </option>
           </select>
@@ -162,8 +162,7 @@
     background: #fff;
   }
   /* 위치지정_수동 */
-  #modal-regin2 { color: black;}
-  #modal-regin2 select { margin: 0 20px; width: 100px; height: 30px;
+  .form-select select { margin: 0 20px; width: 100px; height: 30px;
     text-align: center; font-size: 1rem; color: black;
   }
   #modal-regin2 select option { color: black; }
@@ -184,6 +183,7 @@
     name: 'mainHeader',
     data() {
       return {
+        name: '',
         option1: [
           { region_nm: '서울', root_code: '1'},
           { region_nm: '경기', root_code: '2'},
@@ -208,6 +208,9 @@
 
     },
     methods: {
+      changeLocal() {
+
+      },
       uploadImages() {
 
       },
