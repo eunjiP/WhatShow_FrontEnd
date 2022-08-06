@@ -6,25 +6,25 @@
         <!-- 현재 위치 -->
         <div v-b-modal.modal-regin>현재 위치</div>
 
-        <b-modal id="modal-regin" size="lg" title="위치 설정" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
+        <b-modal id="modal-regin" size="lg" title="위치 설정" header-bg-variant="secondary" body-bg-variant="secondary" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
           <p class="my-2">현재 위치로 설정하시겠습니까?</p>
           <br>
           <b-button>현재 위치로 설정</b-button>
           <b-button v-b-modal.modal-regin2>수동 위치로 설정</b-button>
         </b-modal>
 
-        <b-modal id="modal-regin2" hide-footer title="수동 설정" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
+        <b-modal id="modal-regin2" title="수동 설정" header-bg-variant="secondary" body-bg-variant="secondary" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <div class="mr-2">수동으로 위치 설정</div>
-          <select class="my-3" @change="changeLoca1" >
+          <select calss="form-select" v-model="option1">
               <option value="" selected>시/도</option>
-              <option v-for="item in localList1" :key="item.region_nm">
+              <option v-for="item in option1" :key="item.root_code">
                 {{ item.region_nm }}
               </option>
           </select>
-          <select>
-            <option value="" selected>군/구</option>
-            <option v-for="item in localList1" :key="item.region_nm">
-              {{ item.region_nm }}
+          <select calss="form-select" v-model="option2" v-if="option1 !== ''" >
+            <option selected >군/구</option>
+            <option v-for="item in option2" :key="item.root_code" :value="item.subregion_nm" >
+              {{ item.subregion_nm }}
             </option>
           </select>
           <div>
@@ -41,7 +41,7 @@
       <div>
         <div v-b-modal.modal-mypage>마이페이지</div>
 
-        <b-modal id="modal-mypage" title="마이페이지" ok-only style="background-color: rgba(0, 0, 0, 0.5);">
+        <b-modal id="modal-mypage" title="마이페이지" header-bg-variant="secondary" body-bg-variant="secondary" footer-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" ok-only>
           <div>
             <div class="mypage__user">
               <label for="input-file">
@@ -79,14 +79,14 @@
     <div class="header__right">
       <div class="header__search">
         <form action="#" method="post">
-            <input type="text" name="search" placeholder="검색"/>
+            <input type="text" @input="search" :value="searchKeyword" placeholder="검색어"/>
             <button style="border:none;" type="submit"><i class="fa-solid fa-play" style="width:30px; color: #C57F1E;" ></i></button>
         </form>
 
         <!-- 상세검색 -->
         <div v-b-modal.modal-search class="search__bottom">상세검색</div>
 
-        <b-modal id="modal-search" title="검색하기" hide-footer style="background-color: rgba(0, 0, 0, 0.5);">
+        <b-modal id="modal-search" title="검색하기" header-bg-variant="secondary" body-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <b-form-input id="modal-search" class="detail__search" type="text" placeholder="검색어 입력"/>
           <br>
           <div class="search__seltag" style="font-size:20px; color:#F9F871;">#태그설정</div>
@@ -162,9 +162,11 @@
     background: #fff;
   }
   /* 위치지정_수동 */
+  #modal-regin2 { color: black;}
   #modal-regin2 select { margin: 0 20px; width: 100px; height: 30px;
     text-align: center; font-size: 1rem; color: black;
   }
+  #modal-regin2 select option { color: black; }
 
   /* 마이페이지 css */
 
@@ -182,46 +184,33 @@
     name: 'mainHeader',
     data() {
       return {
-        localList1: [],
-        localList2: [],
-        selectedLoca1: '',
-        selectedLoca2: ''
+        option1: [
+          { region_nm: '서울', root_code: '1'},
+          { region_nm: '경기', root_code: '2'},
+          { region_nm: '대구', root_code: '3'},
+          { region_nm: '부산', root_code: '4'},
+        ],
+        option2: [
+          { subregion_nm: '용산구', root_code: '1'},
+          { subregion_nm: '구로구', root_code: '1'},
+          { subregion_nm: '서초구', root_code: '1'},
+          { subregion_nm: '안양', root_code: '2'},
+          { subregion_nm: '용산', root_code: '2'},
+          { subregion_nm: '경기', root_code: '2'},
+          { subregion_nm: '수성구', root_code: '3'},
+          { subregion_nm: '동구', root_code: '3'},
+          { subregion_nm: '동래구', root_code: '4'},
+          { subregion_nm: '동작구', root_code: '4'},
+        ]
       }
     },
     created() {
-      this.getLocalList();
-      this.getLocalList1();
+
     },
     methods: {
-      changeLoca1() {
-        this.selectedLoca1 = '';
-        this.localList2 = [];
-        this.getLocalList2(this.selectedLoca1);
-        this.getLocalList();
-      },
-      async getLocalList() {
-        const param = {};
-        if(this.selectedLoca2 > 0) {
-          param['sub_nm'] = this.selectedLoca2;
-        } else {
-          if(this.selectedLoca1 !== '') {
-            param['region_nm'] = this.selectedLoca1;
-          }
-          if(this.selectedLoca2 !== '') {
-            param['sub_nm'] = this.selectedLoca2;
-          }
-        }
-        this.localList = await this.$get('/src/main', param);
-      },
-      async getLocalList1() {
-        this.localList1 = await this.getLocalList('/api/localList1', {});
-      },
-      async getLocalList2() {
-        this.localList2 = await this.$get( `/api/localList2/${region_nm}`, {});
-      },
       uploadImages() {
 
-      }
+      },
     }
 
   }

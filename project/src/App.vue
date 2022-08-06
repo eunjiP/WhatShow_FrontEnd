@@ -15,7 +15,7 @@ import mainHeader from './components/mainHeader.vue'
 export default {
   name: 'main',
   components: {
-  mainHeader
+    mainHeader
   }
 }
 </script>
