@@ -28,7 +28,7 @@ export default {
     },/*
     async send_uid(){
       const senduid = localStorage.getItem(key, value)
-      senduid = await this.$post('',{})
+      senduid = await this.$post('',{});
     },*/
     moveSlide() {
       const slideList = document.querySelector('.slide__list');
@@ -38,8 +38,9 @@ export default {
       }
     },
     create_uid(){
-      if(!localStorage.getItem('uid')){
-        localStorage.setItem('uid', 'user' + Math.floor(Math.random()*1000));
+      if(!localStorage.getItem('WSuuid')){
+        localStorage.setItem('WSuuid', 'user' + Math.floor(Math.random()*1000),
+        localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random()*1000)));
       }
     },
     moveRight() {
@@ -51,11 +52,6 @@ export default {
       slideList.style.transform = `translate(-${this.itemIdx * 100}%)`;
       
     },
-    create_uid(){
-      if(!localStorage.getItem('uid')){
-        localStorage.setItem('uid', 'user' + Math.floor(Math.random()*1000));
-      }
-    }
   },
   created() {
     this.getMovieList(),
