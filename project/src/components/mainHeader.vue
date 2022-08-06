@@ -21,7 +21,7 @@
                 {{ item.region_nm }}
               </option>
           </select>
-          <select calss="form-select" @change="getLocalList" v-model="option2List" v-if="option1List !== ''">
+          <select calss="form-select" @change="getLocaList" v-model="option2List" v-if="option1List !== ''">
             <option selected >군/구</option>
             <option v-for="item in option2" :key="item.root_code" :value="item.subregion_nm" >
               {{ item.subregion_nm }}
@@ -191,7 +191,7 @@
       }
     },
     created() {
-      this.getLocalList();
+      this.getLocaList();
       this.getOption1List();
     },
     methods: {
@@ -199,9 +199,9 @@
         this.option2List = 0;
         this.option2 = [];
         this.getOption2List(this.option1List);
-        this.getLocalList();
+        this.getLocaList();
       },
-      async getLocalList() {
+      async getLocaList() {
         const param = {};
         if(this.option2List > 0 ) {
           param['subregion_nm'] = this.option2List;
@@ -210,7 +210,7 @@
             param['region_nm'] = this.option1List;
           }
         }
-        this.LocalList = await this.$get('/api/LocalList', param);
+        this.LocationList = await this.$get('/api/LocationList', param);
       },
       async getOption1List() {
         this.option1List = await this.$get(`/api/option1List`, {})
