@@ -81,7 +81,7 @@
 
         <div class="review__form row justify-content-center">
             <div class="review__input col-10">
-                <textarea class="review__txt" @keyup="revLimit" placeholder="감상평을 남겨주세요. 영화와 상관없는 내용은 관리자에 의해 재재를 받을 수 있습니다."></textarea>
+                <textarea class="review__txt" @keyup="revLimit" placeholder="감상평을 남겨주세요. 영화와 상관없는 내용은 관리자에 의해 제재를 받을 수 있습니다."></textarea>
                 <div class="review__limit">({{ limit }} / 100)</div>
             </div>
             <button class="review__btn ms-2 col-2">등록</button>

@@ -11,6 +11,7 @@
 
 <script>
 import mainHeader from './components/mainHeader.vue'
+
 export default {
   name: 'main',
   components: {
@@ -34,7 +35,9 @@ export default {
     border-collapse: collapse;
     font-family: roundAir;
   }
+
   body {background: #152A35;}
+
   .router {
     text-align: center;
     margin: 0 auto;
