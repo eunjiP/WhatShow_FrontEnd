@@ -37,6 +37,11 @@ export default {
         slideList.style.transform = `translate(-${trans}%)`;
       }
     },
+    create_uid(){
+      if(!localStorage.getItem('uid')){
+        localStorage.setItem('uid', 'user' + Math.floor(Math.random()*1000));
+      }
+    },
     moveRight() {
       this.itemIdx++;
       if(this.itemIdx === this.movieList.length) {
@@ -65,7 +70,9 @@ export default {
 
 <style scoped>
   .slide {
+      width: 100vw;
       position: relative;
+      overflow: hidden;
   }
 
   .slide__list {
