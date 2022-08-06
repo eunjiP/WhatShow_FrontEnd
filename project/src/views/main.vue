@@ -36,8 +36,18 @@ export default {
       }
     },
     async sel_uid(){
-      const seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`,{});
-      console.log(seluid);
+      let seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`,{});
+      let selresult = seluid.result 
+      console.log(seluid.result);
+      console.log(typeof(seluid));
+      selresult.forEach((item) => {
+        console.log(item.value);
+      })
+
+      // for(let key in selresult){
+      //   console.log(key, obj[key]);
+      // }
+
     },
     moveSlide() {
       const slideList = document.querySelector('.slide__list');
