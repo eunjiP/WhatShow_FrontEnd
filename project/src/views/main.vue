@@ -25,11 +25,30 @@ export default {
   methods:{
     async getMovieList() {
       this.movieList = await this.$get('/movie/main', {})
-    },/*
-    async send_uid(){
-      const senduid = localStorage.getItem(key, value)
-      senduid = await this.$post('',{});
-    },*/
+    },
+    async ins_uid(){
+      const param = [this.WSuuid, this.WSnickname];
+      const senduid = await this.$post(`/user/signup`,param);
+      if(senduid){
+        console.log();
+      } else{
+        console.error('error');
+      }
+    },
+    async sel_uid(){
+      let seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`,{});
+      let selresult = seluid.result 
+      console.log(seluid.result);
+      console.log(typeof(seluid));
+      selresult.forEach((item) => {
+        console.log(item.value);
+      })
+
+      // for(let key in selresult){
+      //   console.log(key, obj[key]);
+      // }
+
+    },
     moveSlide() {
       const slideList = document.querySelector('.slide__list');
       for (let i = 0; i < this.moveList.length; i++) {
@@ -39,7 +58,7 @@ export default {
     },
     create_uid(){
       if(!localStorage.getItem('WSuuid')){
-        localStorage.setItem('WSuuid', 'user' + Math.floor(Math.random()*1000),
+        localStorage.setItem('WSuuid', Math.floor(Math.random()*1000),
         localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random()*1000)));
       }
     },
@@ -55,7 +74,11 @@ export default {
   },
   created() {
     this.getMovieList(),
-    this.create_uid()
+    this.create_uid(),
+    this.sel_uid()
+  },
+  mounted(){
+    this.ins_uid()
   },
   components: {
     MovieItem,
@@ -64,6 +87,9 @@ export default {
 </script>
 
 <style scoped>
+  main {
+    color: #fff;
+  }
   .slide {
       width: 100vw;
       position: relative;
