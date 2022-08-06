@@ -25,12 +25,11 @@ export default {
   methods:{
     async getMovieList() {
       this.movieList = await this.$get('/movie/main', {})
-    },
-
+    },/*
     async send_uid(){
-      senduid = await this.$post('/user/',{})
-    },
-    
+      const senduid = localStorage.getItem(key, value)
+      senduid = await this.$post('',{})
+    },*/
     moveSlide() {
       const slideList = document.querySelector('.slide__list');
       for (let i = 0; i < this.moveList.length; i++) {
@@ -48,18 +47,15 @@ export default {
       
     },
     create_uid(){
-      if(!localStorage.getItem('WSuuid')){
-        localStorage.setItem('WSuuid', Math.floor(Math.random()*1000));
-        localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random()*1000));
-        let uuid = localStorage.getItem('uuid', value);
-        let nickname = localStorage.getItem('nickname', value);
+      if(!localStorage.getItem('uid')){
+        localStorage.setItem('uid', 'user' + Math.floor(Math.random()*1000));
       }
     }
   },
   created() {
     this.getMovieList(),
-    this.create_uid()
-    
+    this.create_uid(),
+    this.send_uid()
   },
   components: {
     MovieItem,
