@@ -6,14 +6,15 @@
       <div>
         <div v-b-modal.modal-regin>현재 위치</div>
 
-        <b-modal id="modal-regin" size="lg" title="위치 설정" header-bg-variant="secondary" body-bg-variant="secondary" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
+        <b-modal id="modal-regin" size="lg" title="위치 설정" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
           <p class="my-2">현재 위치로 설정하시겠습니까?</p>
           <br>
           <b-button>현재 위치로 설정</b-button>
           <b-button v-b-modal.modal-regin2>수동 위치로 설정</b-button>
         </b-modal>
 
-        <b-modal id="modal-regin2" title="수동 설정" header-bg-variant="secondary" body-bg-variant="secondary" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
+        <b-modal id="modal-regin2" title="수동 설정" header-bg-variant="secondary" 
+        header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <div class="mr-2">수동으로 위치 설정</div>
           <select calss="form-select" v-model="option1">
               <option value="" selected>시/도</option>
@@ -41,7 +42,7 @@
       <div>
         <div v-b-modal.modal-mypage>마이페이지</div>
 
-        <b-modal id="modal-mypage" title="마이페이지" header-bg-variant="secondary" body-bg-variant="secondary" footer-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" ok-only ok-title="확인" ok-variant="warning">
+        <b-modal id="modal-mypage" title="마이페이지" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" footer-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" ok-only ok-title="확인" ok-variant="warning">
           <div>
             <div class="mypage__user">
               <label for="input-file">
@@ -79,13 +80,13 @@
       <div class="header__search">
         <div class="search__input" method="post">
           <input id="search__text" type="text" @input="search" :value="searchKeyword" placeholder="검색어"/>
-          <button class="search" type="submit"><i class="fa-solid fa-play" style="background-color: #F29B21; padding: 10px;"></i></button>
+          <button class="search" type="submit"><i class="fa-solid fa-play" style="color:#fff; background-color: #F29B21; padding: 10px;"></i></button>
         </div>
         
         <!-- 상세검색 -->
         <div v-b-modal.modal-search class="search__bottom">상세검색</div>
 
-        <b-modal id="modal-search" title="검색하기" header-bg-variant="secondary" body-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
+        <b-modal id="modal-search" title="검색하기" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <b-form-input id="modal-search" type="text" @input="search" :value="searchKeyword" placeholder="검색어"/>
           <br>
           <div class="search__seltag" style="font-size:20px; color:#F9F871;">#태그설정</div>
@@ -189,6 +190,7 @@
   .search__input > #search__text {
     height: 30px;
     background: #00000088;
+    color: #fff;
     border: none;
     font-size: 10pt;
     width: 200px;
