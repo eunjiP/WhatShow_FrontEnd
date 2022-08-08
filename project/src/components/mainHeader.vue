@@ -97,7 +97,7 @@
             <div class="row">
               <div>
                 <label v-for="item in gsTag" :key="item" class="col-3">
-                  <input type="checkbox" name="genre" >{{ item }}
+                  <input type="checkbox" name="genre" > {{ item }}
                 </label>
               </div>
             </div>
@@ -263,6 +263,7 @@ import modal from 'bootstrap/js/dist/modal';
     background-color: #F29B21;
     border: none;
     border-radius: 10px;
+    padding: 5px;
     color: #fff;
   }
 
