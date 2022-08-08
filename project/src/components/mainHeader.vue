@@ -44,7 +44,7 @@
       <div>
         <div v-b-modal.modal-mypage>마이페이지</div>
 
-        <b-modal id="modal-mypage" title="마이페이지" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" footer-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" ok-only ok-title="확인" ok-variant="warning">
+        <b-modal id="modal-mypage" title="마이페이지" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" footer-bg-variant="secondary"  style="background-color: rgba(0, 0, 0, 0.5);" ok-only ok-title="확인" ok-variant="dark">
           <div>
             <div class="mypage__user">
               <label for="input-file">
@@ -82,7 +82,7 @@
       <div class="header__search">
         <div class="search__input" method="post">
           <input id="search__text" type="text" @input="search" :value="searchKeyword" placeholder="검색어"/>
-          <button class="search" type="submit"><i class="fa-solid fa-play" style="color:#fff; background-color: #F29B21; padding: 10px;"></i></button>
+          <button class="search" type="submit"><i class="fa-solid fa-play" style="color:#fff; background-color: #F29B21;"></i></button>
         </div>
         
         <!-- 상세검색 -->
@@ -95,29 +95,10 @@
           <br>
           <div class="container2">
             <div class="row">
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> 드라마</label>
-              </div>
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> 멜로</label>
-              </div>
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> 로맨스</label>
-              </div>
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> 코미디</label>
-              </div>
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> 전쟁</label>
-              </div>
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> 호러</label>
-              </div>
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> SF</label>
-              </div>
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> 액션</label>
+              <div>
+                <label v-for="item in gsTag" :key="item" class="col-3">
+                  <input type="checkbox" name="genre" >{{ item }}
+                </label>
               </div>
             </div>
           </div>
@@ -144,11 +125,17 @@
         option2: [],
         optionList1: '',
         optionList2: 0,
+        gsTag: []
       }
     },
     created() {
-      this.getOptionList1();
+      this.getOptionList1()
     },
+
+    mounted() {
+      this.getSelectTag()
+    },
+
     methods: {
       changeOption1() {
         this.optionList2 = 0;
@@ -164,6 +151,12 @@
       uploadImages() {
 
       },
+
+      // 상세검색-장르 체크박스
+      async getSelectTag() {
+        this.gsTag = await this.$get(`/movie/getTag/`, {});
+        console.log(this.gsTag);
+      }
     }
 
   }
@@ -235,7 +228,7 @@
     background-color: #F29B21;
     border: none;
     border-radius: 10px;
-    padding: 5px 20px;
+    color: #fff;
   }
 
 </style>
