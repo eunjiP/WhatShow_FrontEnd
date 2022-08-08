@@ -117,6 +117,8 @@
 </template>
 
 <script>
+import modal from 'bootstrap/js/dist/modal';
+
   export default {
     name: 'mainHeader',
     data() {
@@ -162,15 +164,29 @@
       showPosition(pos) {
         let lat = pos.coords.latitude;
         let lng = pos.coords.longitude;
-        console.log(lat);
-        console.log(lng);
-
-        // this.getAddr(lat, lng);
+        // console.log(lat);
+        // console.log(lng);
+        this.getAddr(lat, lng);
       },
       getAddr(lat, lng) {
         let geocoder = new kakao.maps.services.Geocoder();
-        console.log(geocoder);
-
+        let coord = new kakao.maps.LatLng(lat, lng);
+        console.log(coord);
+        let callback = function(result, status) {
+          if (status === kakao.maps.services.Status.OK) {
+              let detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
+  detailAddr += result[0].address.address_name;
+              localStorage.removeItem('rootCode');
+              localStorage.removeItem('subCode');
+              localStorage.setItem('my_addr', detailAddr);
+          }
+        }
+        geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+      },
+      ok() {
+        localStorage.removeItem('my_addr');
+        localStorage.setItem('rootCode', this.optionList1);
+        localStorage.setItem('subCode', this.optionList2);
       },
       // 상세검색-장르 체크박스
       async getSelectTag() {
