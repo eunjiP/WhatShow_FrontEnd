@@ -1,105 +1,106 @@
 <template>
-  <div class="container p-5">
-    <div id="movie-detail">
-        <div id="detail-header" class="row justify-content-center">
-            <div class="movie__title text-start">
-                <!-- 영화 제목 -->
-            </div>
-        </div>
-
-        <div id="detail-main" class="row row-cols-2 justify-content-center">
-            <div class="movie__poster col">
-                <img :src="movie_info.movie_poster" alt="poster">
+    <div class="container p-5">
+        <div id="movie-detail">
+            <div id="detail-header" class="row justify-content-center">
+                <div class="movie__title text-start"></div>
             </div>
 
-            <div class="movie__info col">
-                <ul>
-                    <li><strong>개요</strong> : {{ movie_info.movie_genre }} <span>|</span> {{ movie_info.country }} <span>|</span> {{ movie_info.runing_time}} </li>
-                    <li><strong>개봉</strong> :  {{ openDate }} </li>
-                    <li><strong>등급</strong> :  {{ movie_info.view_level }} </li>
-                    <li><strong>감독</strong> :  {{ movie_info.director }} </li>
-                    <li><strong>배우</strong> :  {{ movie_info.actor }} </li>
-                </ul>
+            <div id="detail-main" class="row row-cols-2 justify-content-center">
+                <div class="movie__poster col">
+                    <img :src="movie_info.movie_poster" alt="poster">
+                </div>
 
-                <div class="movie__recom row">
-                    <div class="movie__score col-5">
-                        평점
+                <div class="movie__info col">
+                    <ul>
+                        <li><strong>개요</strong> : {{ movie_info.movie_genre }} <span>|</span> {{ movie_info.country }} <span>|</span> {{ movie_info.runing_time}} </li>
+                        <li><strong>개봉</strong> :  {{ openDate }} </li>
+                        <li><strong>등급</strong> :  {{ movie_info.view_level }} </li>
+                        <li><strong>감독</strong> :  {{ movie_info.director }} </li>
+                        <li><strong>배우</strong> :  {{ movie_info.actor }} </li>
+                    </ul>
+
+                    <div class="movie__recom row">
+                        <div class="movie__score col-5">
+                            평점
+                        </div>
+                        <div class="recom_good col">
+                            <div>추천 수</div>
+                            <i class="fa-solid fa-thumbs-up"></i>
+                        </div>
+                        <div class="recom_bad col">
+                            <div>비추천 수</div>
+                            <i class="fa-solid fa-thumbs-down"></i>
+                        </div>
                     </div>
-                    <div class="recom_good col">
-                        <div>추천 수</div>
-                        <i class="fa-solid fa-thumbs-up"></i>
-                    </div>
-                    <div class="recom_bad col">
-                        <div>비추천 수</div>
-                        <i class="fa-solid fa-thumbs-down"></i>
+                </div>
+
+                <div class="movie__intro my-5 col-12">
+                    <h4 class="fc-oran text-start">줄거리</h4>
+                    <div class="movie__intro__ctnt">
+                    <video :src="movie_info.preview" autoplay></video>
                     </div>
                 </div>
             </div>
 
-            <div class="movie__intro my-5 col-12">
-                <h4 class="fc-oran text-start">줄거리</h4>
-                <div class="movie__intro__ctnt">
-                   <video :src="movie_info.preview" autoplay></video>
+            <div id="movie__time"  class= "my-5 col-12">
+                <h4 class="fc-oran text-start">영화 상영시간</h4>
+                <div class="day__selecte text-start">
+                    <input type="date" id="select-day" v-model="selectedDate">
+                </div>
+
+                <div class="movie__timeList">
+                    <ul class="theater__List">
+                        <li v-for="movie in movieScheduleList" :key="movie.gcode">
+                            <div class="movie__place">{{ movie.gname }}</div>
+                        </li>
+                    </ul> 
                 </div>
             </div>
         </div>
-        <div class="movie__time  my-5 col-12">
-            <h4 class="fc-oran text-start">영화 상영시간</h4>
-            <div class="day__selecte text-start">
-                <input type="date" id="select-day" v-model="selectedDate">
+
+        <div id="movie-review">
+            <h4 class="fc-oran">당신의 감상을 들려주세요.</h4>
+            <!-- <div class="star-rating space-x-4 mx-auto my-3">
+                <input type="radio" id="5-stars" name="rating" value="5" v-model="ratings"/>
+                <label for="5-stars" class="star pr-4">★</label>
+                <input type="radio" id="4-stars" name="rating" value="4" v-model="ratings"/>
+                <label for="4-stars" class="star">★</label>
+                <input type="radio" id="3-stars" name="rating" value="3" v-model="ratings"/>
+                <label for="3-stars" class="star">★</label>
+                <input type="radio" id="2-stars" name="rating" value="2" v-model="ratings"/>
+                <label for="2-stars" class="star">★</label>
+                <input type="radio" id="1-star" name="rating" value="1" v-model="ratings" />
+                <label for="1-star" class="star">★</label>
+            </div> -->
+
+            <div class="review__form row justify-content-center">
+                <div class="review__input col-10">
+                    <textarea class="review__txt" @keyup="revLimit" placeholder="감상평을 남겨주세요. 영화와 상관없는 내용은 관리자에 의해 제재를 받을 수 있습니다."></textarea>
+                    <div class="review__limit">({{ limit }} / 100)</div>
+                </div>
+                <button class="review__btn ms-2 col-2">등록</button>
             </div>
 
-            <div class="movie__timeList">
-                <!-- <ul v-for="movie in movieTimeList" :key="movie.gname">
-                    <li>{{ movie.gname }}</li>
-                </ul> -->
-            </div>
+            <div class="review__box">
+                <div class="review__list" v-for="review in rev_list" :key="review.i_review">
+                    <div class="review__comment">
+                        <div class="writer__score">★★★★★</div>
+                        <div class="review__cnt">{{ review.ctnt }}</div>
+
+                        <div class="writer__info">
+                            <span class="writer">{{ review.iuser }}</span>
+                            <span class="writer__cre">{{ review.created_at }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="review__more">
+                    <button class="more__btn mt-3">
+                        <span> 더 보기 <i class="fa-solid fa-angle-down"></i></span>
+                    </button>
+                </div>
+            </div> 
         </div>
     </div>
-
-    <div id="movie-review">
-        <h4 class="fc-oran">당신의 감상을 들려주세요.</h4>
-        <div class="star-rating space-x-4 mx-auto my-3">
-            <input type="radio" id="5-stars" name="rating" value="5" v-model="ratings"/>
-            <label for="5-stars" class="star pr-4">★</label>
-            <input type="radio" id="4-stars" name="rating" value="4" v-model="ratings"/>
-            <label for="4-stars" class="star">★</label>
-            <input type="radio" id="3-stars" name="rating" value="3" v-model="ratings"/>
-            <label for="3-stars" class="star">★</label>
-            <input type="radio" id="2-stars" name="rating" value="2" v-model="ratings"/>
-            <label for="2-stars" class="star">★</label>
-            <input type="radio" id="1-star" name="rating" value="1" v-model="ratings" />
-            <label for="1-star" class="star">★</label>
-        </div>
-
-        <div class="review__form row justify-content-center">
-            <div class="review__input col-10">
-                <textarea class="review__txt" @keyup="revLimit" placeholder="감상평을 남겨주세요. 영화와 상관없는 내용은 관리자에 의해 제재를 받을 수 있습니다."></textarea>
-                <div class="review__limit">({{ limit }} / 100)</div>
-            </div>
-            <button class="review__btn ms-2 col-2">등록</button>
-        </div>
-
-         <div class="review__box">
-            <div class="review__list" v-for="review in rev_list" :key="review.i_review">
-                <div class="review__comment">
-                    <div class="writer__score">★★★★★</div>
-                    <div class="review__cnt">{{ review.ctnt }}</div>
-
-                    <div class="writer__info">
-                        <span class="writer">{{ review.iuser }}</span>
-                        <span class="writer__cre">{{ review.created_at }}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="review__more">
-                <button class="more__btn mt-3">
-                    <span> 더 보기 <i class="fa-solid fa-angle-down"></i></span>
-                </button>
-            </div>
-        </div> 
-    </div>
-  </div>
 </template>
 
 <script>
@@ -109,15 +110,20 @@ export default {
             movie_code: 81888,
             movie_info: [],
             selectedDate: '2022-08-08',
-            movieTimeList: [],
+            movieScheduleList: [],
+            theaterList: [],
             limit: 0,
             rev_list: [],
+            rootCode: localStorage.getItem('rootCode'),
+            subCode: localStorage.getItem('subCode')
+
+
         }
     },
     created() {
         this.getMovieInfo(); // 영화 상세 정보
         this.getDate(); // 상영시간
-        this.getReview(); // 리뷰 리스트 
+        this.getReview(); // 리뷰 리스트
     },
     computed: {
         openDate() { // 영화 개봉일 가공
@@ -132,7 +138,8 @@ export default {
         },
 
         movieTitle(movie_nm) { // 영화 제목
-            const movie__title = document.querySelector('.movie__title');
+            const movieTitleBox = document.querySelector('movie__title');
+            console.log(movieTitleBox);
             const movie__mainTitle = document.createElement('h1');
             const movie__serveTitle = document.createElement('span');
             movie__mainTitle.style.cssText = 
@@ -144,10 +151,10 @@ export default {
                  const movieTitle = movie_nm.split(':');
                  movie__mainTitle.append(movieTitle[0]);
                  movie__serveTitle.append(":" + movieTitle[1]);
-                 movie__title.append(movie__mainTitle, movie__serveTitle);
+                 movieTitleBox.append(movie__mainTitle, movie__serveTitle);
              } else {
                 movie__mainTitle.append(movie_nm);
-                movie__title.append(movie__mainTitle);
+                movieTitleBox.append(movie__mainTitle);
              }
         },
 
@@ -155,8 +162,15 @@ export default {
             const param = {};
             param['code'] = this.movie_code;
             param['date'] = this.selectedDate;
-            this.movieTimeList = await this.$get('/movie/movieTime', param);
-            console.log(this.movieTimeList);
+            param['rootCode'] = this.rootCode;
+            param['subCode'] = this.subCode;
+            this.movieScheduleList = await this.$get('/movie/movieTime', param);
+            const slist = this.movieScheduleList;
+            console.log(slist);
+            slist.forEach(e => {
+                console.log(e.theaterScheduleList[0].timetableList[0].ticketPcUrl);
+            })
+            
         },
 
         async getReview() { // 리뷰 리스트 
@@ -200,9 +214,10 @@ export default {
     .movie__intro__ctnt { border-top:1px solid #F29B21; padding: 15px 10px; line-height: 2rem;}
     .movie__intro__ctnt video { width:80%; height:auto;}
 
-    /* ----- 상영날짜 선택 ----- */
-    .movie__time input[type=date] { background-color: #32485388; padding: 5px; border: none; border-radius: 5px;}
-    .movie__timeList { background-color: #32485388; border-radius: 5px; margin-top: 20px; height: 250px; text-align: center; line-height:250px;}
+    /* ----- 상영날짜 ----- */
+    #movie-time input[type=date] { background-color: #32485388; padding: 5px; border: none; border-radius: 5px;}
+    .movie__timeList { background-color: #32485388; border-radius: 5px; margin-top: 20px; height: auto; overflow:hidden;}
+    .theater__List li { padding: 10px 15px; border: 1px solid #fff;}
 
     /* ----- 별점 ----- */
     .star-rating {
