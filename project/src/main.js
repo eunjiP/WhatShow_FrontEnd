@@ -22,4 +22,6 @@ createApp(App)
 .use(router)
 .use(BootstrapVue3)
 .mixin(mixins)
-.mount('#app')
+.mount('#app');
+
+

@@ -24,7 +24,7 @@ export default {
   },
   methods:{
     async getMovieList() {
-      this.movieList = await this.$get('/movie/main', {})
+      this.movieList = await this.$get('/movie/main', {});
     },
     async ins_uid(){
       const param = [this.WSuuid, this.WSnickname];
@@ -91,10 +91,10 @@ export default {
     color: #fff;
   }
   .slide {
-      width: 100vw;
+      width: 100%;
+      height: 100%;
       position: relative;
-      overflow: hidden;
-  }
+      }
 
   .slide__list {
       display: flex;

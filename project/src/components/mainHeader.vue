@@ -9,7 +9,7 @@
         <b-modal id="modal-regin" size="lg" title="위치 설정" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
           <p class="my-2">현재 위치로 설정하시겠습니까?</p>
           <br>
-          <b-button>현재 위치로 설정</b-button>
+          <b-button @click="getLocation">현재 위치로 설정</b-button>
           <b-button v-b-modal.modal-regin2>수동 위치로 설정</b-button>
         </b-modal>
 
@@ -44,7 +44,7 @@
       <div>
         <div v-b-modal.modal-mypage>마이페이지</div>
 
-        <b-modal id="modal-mypage" title="마이페이지" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" footer-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" ok-only ok-title="확인" ok-variant="warning">
+        <b-modal id="modal-mypage" title="마이페이지" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" footer-bg-variant="secondary"  style="background-color: rgba(0, 0, 0, 0.5);" ok-only ok-title="확인" ok-variant="dark">
           <div>
             <div class="mypage__user">
               <label for="input-file">
@@ -82,7 +82,7 @@
       <div class="header__search">
         <div class="search__input" method="post">
           <input id="search__text" type="text" @input="search" :value="searchKeyword" placeholder="검색어"/>
-          <button class="search" type="submit"><i class="fa-solid fa-play" style="color:#fff; background-color: #F29B21; padding: 10px;"></i></button>
+          <button class="search" type="submit"><i class="fa-solid fa-play" style="color:#fff; background-color: #F29B21;"></i></button>
         </div>
         
         <!-- 상세검색 -->
@@ -95,29 +95,10 @@
           <br>
           <div class="container2">
             <div class="row">
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> 드라마</label>
-              </div>
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> 멜로</label>
-              </div>
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> 로맨스</label>
-              </div>
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> 코미디</label>
-              </div>
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> 전쟁</label>
-              </div>
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> 호러</label>
-              </div>
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> SF</label>
-              </div>
-              <div class="col-3">
-                <label><input type="checkbox" name="genre"> 액션</label>
+              <div>
+                <label v-for="item in gsTag" :key="item" class="col-3">
+                  <input type="checkbox" name="genre" > {{ item }}
+                </label>
               </div>
             </div>
           </div>
@@ -136,6 +117,8 @@
 </template>
 
 <script>
+import modal from 'bootstrap/js/dist/modal';
+
   export default {
     name: 'mainHeader',
     data() {
@@ -144,11 +127,18 @@
         option2: [],
         optionList1: '',
         optionList2: 0,
+        userLocation:'',
+        gsTag: []
       }
     },
     created() {
-      this.getOptionList1();
+      this.getOptionList1()
     },
+
+    mounted() {
+      this.getSelectTag()
+    },
+
     methods: {
       changeOption1() {
         this.optionList2 = 0;
@@ -164,8 +154,46 @@
       uploadImages() {
 
       },
+      getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(this.showPosition);
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+      },
+      showPosition(pos) {
+        let lat = pos.coords.latitude;
+        let lng = pos.coords.longitude;
+        // console.log(lat);
+        // console.log(lng);
+        this.getAddr(lat, lng);
+      },
+      getAddr(lat, lng) {
+        let geocoder = new kakao.maps.services.Geocoder();
+        let coord = new kakao.maps.LatLng(lat, lng);
+        console.log(coord);
+        let callback = function(result, status) {
+          if (status === kakao.maps.services.Status.OK) {
+              let detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
+  detailAddr += result[0].address.address_name;
+              localStorage.removeItem('rootCode');
+              localStorage.removeItem('subCode');
+              localStorage.setItem('my_addr', detailAddr);
+          }
+        }
+        geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+      },
+      ok() {
+        localStorage.removeItem('my_addr');
+        localStorage.setItem('rootCode', this.optionList1);
+        localStorage.setItem('subCode', this.optionList2);
+      },
+      // 상세검색-장르 체크박스
+      async getSelectTag() {
+        this.gsTag = await this.$get(`/movie/getTag/`, {});
+        console.log(this.gsTag);
+      }
     }
-
   }
 </script>
 
@@ -235,7 +263,8 @@
     background-color: #F29B21;
     border: none;
     border-radius: 10px;
-    padding: 5px 20px;
+    padding: 5px;
+    color: #fff;
   }
 
 </style>
