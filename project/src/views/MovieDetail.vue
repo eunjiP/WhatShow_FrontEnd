@@ -3,23 +3,22 @@
     <div id="movie-detail">
         <div id="detail-header" class="row justify-content-center">
             <div class="movie__title text-start">
-                <h1> 미니언즈2 </h1>
-                <span class="ms-2">Minions: The Rise of Gru, 2022</span>
+                <!-- 영화 제목 -->
             </div>
         </div>
 
         <div id="detail-main" class="row row-cols-2 justify-content-center">
             <div class="movie__poster col">
-                <img src="http://www.joseilbo.com/gisa_img/16552590641655259064_joseedu.jpg" alt="poster">
+                <img :src="movie_info.movie_poster" alt="poster">
             </div>
 
             <div class="movie__info col">
                 <ul>
-                    <li><strong>개요</strong> : 애니메이션, 모험, 코미디 <span>|</span> 미국 <span>|</span> 87분 </li>
-                    <li><strong>개봉</strong> :  2022.07.20 </li>
-                    <li><strong>등급</strong> :  전체관람가 </li>
-                    <li><strong>감독</strong> :  카밀 발다 </li>
-                    <li><strong>배우</strong> :  스티브 카렐, 타라지 P 헨슨, 양자경, 루시 로리스, 장 끌로드 반담, 피에르 꼬펑 </li>
+                    <li><strong>개요</strong> : {{ movie_info.movie_genre }} <span>|</span> {{ movie_info.country }} <span>|</span> {{ movie_info.runing_time}} </li>
+                    <li><strong>개봉</strong> :  {{ openDate }} </li>
+                    <li><strong>등급</strong> :  {{ movie_info.view_level }} </li>
+                    <li><strong>감독</strong> :  {{ movie_info.director }} </li>
+                    <li><strong>배우</strong> :  {{ movie_info.actor }} </li>
                 </ul>
 
                 <div class="movie__recom row">
@@ -40,15 +39,7 @@
             <div class="movie__intro my-5 col-12">
                 <h4 class="fc-oran text-start">줄거리</h4>
                 <div class="movie__intro__ctnt">
-                    세계 최고의 슈퍼 악당을 꿈꾸는 미니보스 ‘그루’와 그를 따라다니는 미니언들.
-                    어느 날 그루는 
-                    최고의 악당 조직 ‘빌런6’의 마법 스톤을 훔치는데 성공하지만 뉴페이스 미니언 
-                    ‘오토’의 실수로 
-                    스톤을 잃어버리고 빌런6에게 납치까지 당한다. 미니보스를 구하기 위해 잃어버린
-                    스톤을 
-                    되찾아야 하는 ‘오토’, 그리고 쿵푸를 마스터해야 하는 ‘케빈’, ‘스튜어트’, ‘밥’! 
-
-                    올여름 극장가를 점령할 MCU(미니언즈 시네마틱 유니버스)가 돌아온다!
+                   <video :src="movie_info.preview" autoplay></video>
                 </div>
             </div>
         </div>
@@ -59,7 +50,9 @@
             </div>
 
             <div class="movie__timeList">
-                선택한 날의 상영시간
+                <!-- <ul v-for="movie in movieTimeList" :key="movie.gname">
+                    <li>{{ movie.gname }}</li>
+                </ul> -->
             </div>
         </div>
     </div>
@@ -113,16 +106,63 @@
 export default {
     data() {
         return {
+            movie_code: 81888,
+            movie_info: [],
+            selectedDate: '2022-08-08',
+            movieTimeList: [],
             limit: 0,
             rev_list: [],
-            movie_code: 81888,
-            selectedDate: '',
-            selectedMovieTime: [],
-            
         }
     },
-   
-    methods: {
+    created() {
+        this.getMovieInfo(); // 영화 상세 정보
+        this.getDate(); // 상영시간
+        this.getReview(); // 리뷰 리스트 
+    },
+    computed: {
+        openDate() { // 영화 개봉일 가공
+            return this.movie_info.open_date.replaceAll('-', '.');
+        }
+    },
+    methods: {   
+        async getMovieInfo() { // 영화 상세 정보
+             this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
+             const movie_nm = this.movie_info.movie_nm;
+             this.movieTitle(movie_nm);
+        },
+
+        movieTitle(movie_nm) { // 영화 제목
+            const movie__title = document.querySelector('.movie__title');
+            const movie__mainTitle = document.createElement('h1');
+            const movie__serveTitle = document.createElement('span');
+            movie__mainTitle.style.cssText = 
+            "color: #F9F871; display: inline-block; font-family: 'Do Hyeon', sans-serif; font-size: 3.5rem;";
+            movie__serveTitle.style.cssText = 
+            "color: #F9F871; display: inline-block; font-family: 'Do Hyeon', sans-serif; margin-left:10px; font-size: 1.8rem;";
+
+             if(movie_nm.indexOf(':') !== -1) {
+                 const movieTitle = movie_nm.split(':');
+                 movie__mainTitle.append(movieTitle[0]);
+                 movie__serveTitle.append(":" + movieTitle[1]);
+                 movie__title.append(movie__mainTitle, movie__serveTitle);
+             } else {
+                movie__mainTitle.append(movie_nm);
+                movie__title.append(movie__mainTitle);
+             }
+        },
+
+        async getDate() { // 상영시간
+            const param = {};
+            param['code'] = this.movie_code;
+            param['date'] = this.selectedDate;
+            this.movieTimeList = await this.$get('/movie/movieTime', param);
+            console.log(this.movieTimeList);
+        },
+
+        async getReview() { // 리뷰 리스트 
+             this.rev_list = await this.$get(`/detail/reviewList/${this.movie_code}`, {});
+        },
+
         revLimit() { // 리뷰 글 수 제한
             const review_txt = document.querySelector('.review__txt');
             this.limit = review_txt.value.length;
@@ -130,30 +170,10 @@ export default {
                 review_txt.value = review_txt.value.substring(0, 100);
             }
         },
-       async getReview() { // 리뷰 리스트 
-             this.rev_list = await this.$get(`/detail/reviewList/${this.movie_code}`, {});
-        },
-        async getData() { // 상영시간
-            const param = {};
-            param['code'] = this.movie_code;
-            param['date'] = this.selectedDate;
-            this.selectedMovieTime = await this.$get('/movie/movieTime', param);
-            console.log(this.selectedMovieTime);
-        }
         
     },
     
-    created() {
-        this.getReview();
-    },
-    updated() {
-        this.getData();
-    }
-
-
-    
-    
-
+ 
 
 }
 
@@ -171,15 +191,14 @@ export default {
     .container { background: #00000088; border-radius: 10px;}
 
     /* ----- 영화 정보 ----- */
-    .movie__title h1, .movie__title span { color: #F9F871; display: inline-block; font-family: 'Do Hyeon', sans-serif;}
-    .movie__title h1 { font-size: 3.5rem;}
-    .movie__title span { font-size: 1.5rem;}
     .movie__poster { width: 340px;}
 
     .movie__info li { font-size:1.2rem; text-align: left; padding:10px 5px; }
     .movie__info li span {color:gray;}
+
     /* 영화 줄거리  */
     .movie__intro__ctnt { border-top:1px solid #F29B21; padding: 15px 10px; line-height: 2rem;}
+    .movie__intro__ctnt video { width:80%; height:auto;}
 
     /* ----- 상영날짜 선택 ----- */
     .movie__time input[type=date] { background-color: #32485388; padding: 5px; border: none; border-radius: 5px;}
