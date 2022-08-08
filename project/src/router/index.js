@@ -13,7 +13,6 @@ const routes = [
     name: 'detail',
     component: MovieDetail
   },
- 
 ]
 
 const router = createRouter({
