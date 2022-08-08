@@ -24,5 +24,4 @@ createApp(App)
 .mixin(mixins)
 .mount('#app');
 
-// window.Kakao.init('c4bab976007a46fb60430c8c25bd5a16');
 
