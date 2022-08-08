@@ -97,7 +97,11 @@
             <div class="row">
               <div>
                 <label v-for="item in gsTag" :key="item" class="col-3">
+<<<<<<< HEAD
                   <input type="checkbox" name="genre"> {{ item }}
+=======
+                  <input type="checkbox" name="genre" > {{ item }}
+>>>>>>> ffeb1c58da563466a9705529e3886dddc6b3f76e
                 </label>
               </div>
             </div>
