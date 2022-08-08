@@ -44,7 +44,7 @@
       <div>
         <div v-b-modal.modal-mypage>마이페이지</div>
 
-        <b-modal id="modal-mypage" title="마이페이지" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" footer-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" ok-only ok-title="확인" ok-variant="warning">
+        <b-modal id="modal-mypage" title="마이페이지" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" footer-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <div>
             <div class="mypage__user">
               <label for="input-file">
@@ -65,6 +65,8 @@
               </div>
             <br>
             </div>
+
+  
             <div style="font-size: 20px; color:#F9F871;">내가 쓴 댓글</div>
             <div>[미니언즈2] 너무 귀여워요~</div>
             <div>[한산] 애국심이 불타오른다!!!!!</div>
@@ -129,11 +131,27 @@ import modal from 'bootstrap/js/dist/modal';
         option2: [],
         optionList1: '',
         optionList2: 0,
+        WSuuid: localStorage.getItem('WSuuid'),
+        WSnickname: localStorage.getItem('WSnickname'),
+        userFav:[],
+        fav:'',
+        userLocation:'',
+        gsTag: []
       }
     },
     created() {
       this.getOptionList1();
+      this.create_uid();
+      this.sel_uid();
     },
+    mounted(){
+    this.ins_uid();
+  },
+        
+    created() {
+      this.getOptionList1()
+    },
+
     methods: {
       changeOption1() {
         this.optionList2 = 0;
@@ -149,8 +167,95 @@ import modal from 'bootstrap/js/dist/modal';
       uploadImages() {
 
       },
-    }
+      async ins_uid(){
+      const param = [this.WSuuid, this.WSnickname];
+      const senduid = await this.$post(`/user/signup`,param);
+      if(senduid){
+        console.log();
+      } else{
+        console.error('error');
+      }
+    },
+    async sel_uid(){
+      let seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`,{});
+      let selresult = seluid.result 
+      console.log(seluid.result);
+      console.log(typeof(seluid));
+      selresult.forEach((item) => {
+        console.log(item.value);
+      })
 
+      // for(let key in selresult){
+      //   console.log(key, obj[key]);
+      // }
+    },
+    async change_nick(){
+      this.WSnickname = this.WSnickname;
+      localStorage.setItem('WSnickname', this.WSnickname);
+      let chNick = await this.$post(`/user/upd_nick/${this.WSnickname}`,{});
+    },
+    async inputFav(){
+      console.log(this.fav);
+      let inputfav = this.userFav.push(this.fav);
+      await this.$post(`/user/ins_fav/${this.WSuuid}/${this.userFav}`,{});
+      this.fav = '';
+      console.log(this.userFav);
+    },
+    delFav(key){
+      this.userFav.forEach((item,idx)=>{
+        if(idx === key){
+            this.userFav.splice(idx, 1);
+        }
+      })
+    },
+    create_uid(){
+      if(!localStorage.getItem('WSuuid')){
+        localStorage.setItem('WSuuid', Math.floor(Math.random()*1000),
+        localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random()*1000)));
+      }
+    },
+
+    
+      getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(this.showPosition);
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+      },
+      showPosition(pos) {
+        let lat = pos.coords.latitude;
+        let lng = pos.coords.longitude;
+        // console.log(lat);
+        // console.log(lng);
+        this.getAddr(lat, lng);
+      },
+      getAddr(lat, lng) {
+        let geocoder = new kakao.maps.services.Geocoder();
+        let coord = new kakao.maps.LatLng(lat, lng);
+        console.log(coord);
+        let callback = function(result, status) {
+          if (status === kakao.maps.services.Status.OK) {
+              let detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
+  detailAddr += result[0].address.address_name;
+              localStorage.removeItem('rootCode');
+              localStorage.removeItem('subCode');
+              localStorage.setItem('my_addr', detailAddr);
+          }
+        }
+        geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+      },
+      ok() {
+        localStorage.removeItem('my_addr');
+        localStorage.setItem('rootCode', this.optionList1);
+        localStorage.setItem('subCode', this.optionList2);
+      },
+      // 상세검색-장르 체크박스
+      async getSelectTag() {
+        this.gsTag = await this.$get(`/movie/getTag/`, {});
+        console.log(this.gsTag);
+      }
+    }
   }
 </script>
 
@@ -220,7 +325,23 @@ import modal from 'bootstrap/js/dist/modal';
     background-color: #F29B21;
     border: none;
     border-radius: 10px;
-    padding: 5px 20px;
+    padding: 5px;
+    color: #fff;
+  }
+
+  .favtag{
+    display: inline-block;
+    background-color: #F29B21;
+    border-radius: 5px;
+    margin: 2px;
+    padding: 0 2px;
+  }
+  .d-inline{
+    display: inline-block;
+    cursor: pointer;
+  }
+  .user-info{
+    text-align: center;
   }
 
 </style>
