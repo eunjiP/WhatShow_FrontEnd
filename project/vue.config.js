@@ -6,7 +6,7 @@ module.exports = defineConfig({
     proxy: {
       '/': {
         target : 'http://localhost'
-      }
+      },
     }
   }
 })
