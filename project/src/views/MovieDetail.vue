@@ -52,6 +52,9 @@
                     <ul class="theater__List">
                         <li v-for="movie in movieScheduleList" :key="movie.gcode">
                             <div class="movie__place">{{ movie.gname }}</div>
+                            <ul>
+                                
+                            </ul>
                         </li>
                     </ul> 
                 </div>
@@ -69,7 +72,7 @@
                 <label for="3-stars" class="star">★</label>
                 <input type="radio" id="2-stars" name="rating" value="2" v-model="ratings"/>
                 <label for="2-stars" class="star">★</label>
-                <input type="radio" id="1-star" name="rating" value="1" v-model="ratings" />
+                <input type="radio" id="1-star" name="rating" value="1" v-model="ratings"/>
                 <label for="1-star" class="star">★</label>
             </div> -->
 
@@ -116,8 +119,6 @@ export default {
             rev_list: [],
             rootCode: localStorage.getItem('rootCode'),
             subCode: localStorage.getItem('subCode')
-
-
         }
     },
     created() {
@@ -125,21 +126,20 @@ export default {
         this.getDate(); // 상영시간
         this.getReview(); // 리뷰 리스트
     },
+    
     computed: {
         openDate() { // 영화 개봉일 가공
             return this.movie_info.open_date.replaceAll('-', '.');
-        }
+        },
     },
     methods: {   
         async getMovieInfo() { // 영화 상세 정보
              this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
              const movie_nm = this.movie_info.movie_nm;
-             this.movieTitle(movie_nm);
+             movieTitle(movie_nm);
         },
-
-        movieTitle(movie_nm) { // 영화 제목
+        movieTitle(nm) { // 영화 제목
             const movieTitleBox = document.querySelector('movie__title');
-            console.log(movieTitleBox);
             const movie__mainTitle = document.createElement('h1');
             const movie__serveTitle = document.createElement('span');
             movie__mainTitle.style.cssText = 
@@ -147,17 +147,16 @@ export default {
             movie__serveTitle.style.cssText = 
             "color: #F9F871; display: inline-block; font-family: 'Do Hyeon', sans-serif; margin-left:10px; font-size: 1.8rem;";
 
-             if(movie_nm.indexOf(':') !== -1) {
-                 const movieTitle = movie_nm.split(':');
+             if(nm.indexOf(':') !== -1) {
+                 const movieTitle = nm.split(':');
                  movie__mainTitle.append(movieTitle[0]);
                  movie__serveTitle.append(":" + movieTitle[1]);
                  movieTitleBox.append(movie__mainTitle, movie__serveTitle);
              } else {
-                movie__mainTitle.append(movie_nm);
+                movie__mainTitle.append(nm);
                 movieTitleBox.append(movie__mainTitle);
              }
         },
-
         async getDate() { // 상영시간
             const param = {};
             param['code'] = this.movie_code;
@@ -186,8 +185,6 @@ export default {
         },
         
     },
-    
- 
 
 }
 
