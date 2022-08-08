@@ -24,7 +24,7 @@ export default {
   },
   methods:{
     async getMovieList() {
-      this.movieList = await this.$get('/movie/main', {})
+      this.movieList = await this.$get('/movie/main', {});
     },
     async ins_uid(){
       const param = [this.WSuuid, this.WSnickname];
