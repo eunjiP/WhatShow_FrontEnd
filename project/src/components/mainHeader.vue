@@ -44,7 +44,7 @@
       <div>
         <div v-b-modal.modal-mypage>마이페이지</div>
 
-        <b-modal id="modal-mypage" title="마이페이지" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" footer-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" ok-only ok-title="확인" ok-variant="warning">
+        <b-modal id="modal-mypage" title="마이페이지" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" footer-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <div>
             <div class="mypage__user">
               <label for="input-file">
@@ -55,11 +55,13 @@
               <input id="input-file" type="file" @change="uploadImages" accept="image/*" style="display: none"/>
               <div>
                 <label for="input-nickname" style="font-size:20px; color:#F9F871;">닉네임</label>
-                <b-form-input id="input-nickname" class="nickname__input" placeholder="닉네임을 입력해주세요"/>
+                <button @click="change_nick">변경</button>
+                <b-form-input id="input-nickname" class="nickname__input" placeholder="닉네임을 입력해주세요" v-model="WSnickname" @keyup.enter="change_nick"></b-form-input>
                 <br>
                 <label for="input-favtag" style="font-size:20px; color:#F9F871;">관심 태그</label>
-                <div>#드라마 #액션 #멜로 #코미디 #호러</div>
-                <b-form-input id="input-nickname" class="favtag__input" @keyup.enter="this.value" placeholder="태그를 입력해주세요"/>
+                <br>
+                <div class="d-inline" v-for="(item, idx) in userFav" :key="idx" :item="item" @click="delFav(idx)"><span class="favtag">#{{item}}</span></div>
+                <b-form-input id="input-nickname" v-model="fav" class="favtag__input" @keyup.enter="inputFav()" placeholder="태그를 입력해주세요"/>
               </div>
             <br>
             </div>
@@ -144,11 +146,20 @@
         option2: [],
         optionList1: '',
         optionList2: 0,
+        WSuuid: localStorage.getItem('WSuuid'),
+        WSnickname: localStorage.getItem('WSnickname'),
+        userFav:[],
+        fav:''
       }
     },
     created() {
       this.getOptionList1();
+      this.create_uid();
+      this.sel_uid();
     },
+    mounted(){
+    this.ins_uid()
+  },
     methods: {
       changeOption1() {
         this.optionList2 = 0;
@@ -164,6 +175,55 @@
       uploadImages() {
 
       },
+      async ins_uid(){
+      const param = [this.WSuuid, this.WSnickname];
+      const senduid = await this.$post(`/user/signup`,param);
+      if(senduid){
+        console.log();
+      } else{
+        console.error('error');
+      }
+    },
+    async sel_uid(){
+      let seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`,{});
+      let selresult = seluid.result 
+      console.log(seluid.result);
+      console.log(typeof(seluid));
+      selresult.forEach((item) => {
+        console.log(item.value);
+      })
+
+      // for(let key in selresult){
+      //   console.log(key, obj[key]);
+      // }
+    },
+    async change_nick(){
+      this.WSnickname = this.WSnickname;
+      localStorage.setItem('WSnickname', this.WSnickname);
+      let chNick = await this.$post(`/user/upd_nick/${this.WSnickname}`,{});
+    },
+    async inputFav(){
+      console.log(this.fav);
+      let inputfav = this.userFav.push(this.fav);
+      await this.$post(`/user/ins_fav/${this.WSuuid}/${this.userFav}`,{});
+      this.fav = '';
+      console.log(this.userFav);
+    },
+    delFav(key){
+      this.userFav.forEach((item,idx)=>{
+        if(idx === key){
+            this.userFav.splice(idx, 1);
+        }
+      })
+    },
+    create_uid(){
+      if(!localStorage.getItem('WSuuid')){
+        localStorage.setItem('WSuuid', Math.floor(Math.random()*1000),
+        localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random()*1000)));
+      }
+    },
+
+    
     }
 
   }
@@ -236,6 +296,21 @@
     border: none;
     border-radius: 10px;
     padding: 5px 20px;
+  }
+
+  .favtag{
+    display: inline-block;
+    background-color: #F29B21;
+    border-radius: 5px;
+    margin: 2px;
+    padding: 0 2px;
+  }
+  .d-inline{
+    display: inline-block;
+    cursor: pointer;
+  }
+  .user-info{
+    text-align: center;
   }
 
 </style>
