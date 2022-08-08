@@ -1,8 +1,19 @@
 <template>
-
+    <div>
+        <div></div>
+    </div>
 </template>
 
 <script>
+// const axios = require("axios");
+const axios = await axios.get("https://openapi.naver.com/v1/search/movie.json");
+
+axios.get(URL, {
+    Headers: {
+
+    }
+})
+
 export default ({
     // data () {
     //   return {
