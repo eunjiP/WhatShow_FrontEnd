@@ -41,5 +41,6 @@ export default {
   .router {
     text-align: center;
     margin: 0 auto;
+    overflow: hidden;
   }
 </style>
