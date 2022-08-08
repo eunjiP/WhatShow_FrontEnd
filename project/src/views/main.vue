@@ -91,9 +91,9 @@ export default {
     color: #fff;
   }
   .slide {
-      width: 100vw;
+      width: 100%;
+      height: 100%;
       position: relative;
-      overflow-y: hidden;
       }
 
   .slide__list {
