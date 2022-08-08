@@ -9,7 +9,7 @@
         <b-modal id="modal-regin" size="lg" title="위치 설정" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
           <p class="my-2">현재 위치로 설정하시겠습니까?</p>
           <br>
-          <b-button>현재 위치로 설정</b-button>
+          <b-button @click="getLocation">현재 위치로 설정</b-button>
           <b-button v-b-modal.modal-regin2>수동 위치로 설정</b-button>
         </b-modal>
 
@@ -144,6 +144,7 @@
         option2: [],
         optionList1: '',
         optionList2: 0,
+        userLocation:''
       }
     },
     created() {
@@ -164,6 +165,25 @@
       uploadImages() {
 
       },
+      getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(this.showPosition);
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+      },
+      showPosition(pos) {
+        let lat = pos.coords.latitude;
+        let lng = pos.coords.longitude;
+        console.log(lat);
+        console.log(lng);
+
+        // this.getAddr(lat, lng);
+      },
+      getAddr(lat, lng) {
+        let geocoder = new kakao.maps.services.Geocoder();
+        console.log(geocoder);
+      }
     }
 
   }

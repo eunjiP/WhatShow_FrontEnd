@@ -93,8 +93,8 @@ export default {
   .slide {
       width: 100vw;
       position: relative;
-      overflow: hidden;
-  }
+      overflow-y: hidden;
+      }
 
   .slide__list {
       display: flex;
