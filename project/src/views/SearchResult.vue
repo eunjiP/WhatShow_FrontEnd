@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div></div>
+        <div>영화제목 : {{ SearchMovie.title }}</div>
+        <div>영화예고편 : {{ SearchMovie.link }}</div>
     </div>
 </template>
 
