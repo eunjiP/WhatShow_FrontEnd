@@ -13,7 +13,7 @@
                 <div class="movie__info col">
                     <ul>
                         <li><strong>개요</strong> : {{ movie_info.movie_genre }} <span>|</span> {{ movie_info.country }} <span>|</span> {{ movie_info.runing_time}} </li>
-                        <li><strong>개봉</strong> :  {{ openDate }} </li>
+                        <li><strong>개봉</strong> :  {{ movie_info.open_date }} </li>
                         <li><strong>등급</strong> :  {{ movie_info.view_level }} </li>
                         <li><strong>감독</strong> :  {{ movie_info.director }} </li>
                         <li><strong>배우</strong> :  {{ movie_info.actor }} </li>
@@ -50,11 +50,8 @@
 
                 <div class="movie__timeList">
                     <ul class="theater__List">
-                        <li v-for="movie in movieScheduleList" :key="movie.gcode">
-                            <div class="movie__place">{{ movie.gname }}</div>
-                            <ul>
-                                
-                            </ul>
+                        <li v-for="(theater) in scheduleList" :key="theater.idx">
+                            <div class="movie__place"> {{ theater }} </div>
                         </li>
                     </ul> 
                 </div>
@@ -113,8 +110,7 @@ export default {
             movie_code: 81888,
             movie_info: [],
             selectedDate: '2022-08-08',
-            movieScheduleList: [],
-            theaterList: [],
+            scheduleList: [], //극장별 상영정보
             limit: 0,
             rev_list: [],
             rootCode: localStorage.getItem('rootCode'),
@@ -127,19 +123,19 @@ export default {
         this.getReview(); // 리뷰 리스트
     },
     
-    computed: {
-        openDate() { // 영화 개봉일 가공
-            return this.movie_info.open_date.replaceAll('-', '.');
-        },
-    },
+    // computed: {
+    //     openDate() { // 영화 개봉일 가공
+    //         return this.movie_info.open_date.replaceAll('-', '.');
+    //     },
+    // },
     methods: {   
         async getMovieInfo() { // 영화 상세 정보
              this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
              const movie_nm = this.movie_info.movie_nm;
-             movieTitle(movie_nm);
+             this.movieTitle(movie_nm);
         },
         movieTitle(nm) { // 영화 제목
-            const movieTitleBox = document.querySelector('movie__title');
+            const movieTitleBox = document.querySelector('.movie__title');
             const movie__mainTitle = document.createElement('h1');
             const movie__serveTitle = document.createElement('span');
             movie__mainTitle.style.cssText = 
@@ -163,13 +159,20 @@ export default {
             param['date'] = this.selectedDate;
             param['rootCode'] = this.rootCode;
             param['subCode'] = this.subCode;
-            this.movieScheduleList = await this.$get('/movie/movieTime', param);
-            const slist = this.movieScheduleList;
-            console.log(slist);
-            slist.forEach(e => {
-                console.log(e.theaterScheduleList[0].timetableList[0].ticketPcUrl);
-            })
-            
+
+            this.scheduleList = await this.$get('/movie/movieTime', param);
+
+            const theater = this.scheduleList;// 극장 리스트
+            console.log(theater);
+            for(let a=0; a<theater.length; a++) {
+                const t_list = theater[a].theaterScheduleList; // 극장 상영관
+                for(let b=0; b<t_list.length; b++) {   
+                    this.scheduleList = t_list[b].timetableList; // 상영관별 상영시간
+                    console.log(this.scheduleList[b]); 
+                }
+                    
+            }
+
         },
 
         async getReview() { // 리뷰 리스트 
