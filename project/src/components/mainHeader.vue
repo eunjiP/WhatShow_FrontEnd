@@ -48,9 +48,7 @@
           <div>
             <div class="mypage__user">
               <label for="input-file">
-                <div class="user_img">
-                  <img :src="`/static/img/${this.WSuuid}/0/${this.userImg}`">
-                </div>
+                  <img :src="`/static/img/${this.WSuuid}/0/${this.userImg}`" class="user_img">
               </label>
               <input id="input-file" type="file" @change="uploadImages($event.target.files)" accept="image/*" style="display: none"/>
               <div>
@@ -399,13 +397,7 @@ import modal from 'bootstrap/js/dist/modal';
   }
 
   .user_img{
-  width: 200px;
-  height: 200px;
-  margin: 0 auto;
-}
-
-  .user_img img{
-    width: 100%;
+    width: 90%;
     height: 100%;
     border-radius: 20%;
     padding-top: 10px;
