@@ -134,10 +134,11 @@ export default {
     },
     methods: {   
         async getMovieInfo() { // 영화 상세 정보
-             this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
-             const movie_nm = this.movie_info.movie_nm;
-             movieTitle(movie_nm);
+            this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
+            const movie_nm = this.movie_info.movie_nm;
+            movieTitle(movie_nm);
         },
+
         movieTitle(nm) { // 영화 제목
             const movieTitleBox = document.querySelector('movie__title');
             const movie__mainTitle = document.createElement('h1');
@@ -147,16 +148,17 @@ export default {
             movie__serveTitle.style.cssText = 
             "color: #F9F871; display: inline-block; font-family: 'Do Hyeon', sans-serif; margin-left:10px; font-size: 1.8rem;";
 
-             if(nm.indexOf(':') !== -1) {
-                 const movieTitle = nm.split(':');
-                 movie__mainTitle.append(movieTitle[0]);
-                 movie__serveTitle.append(":" + movieTitle[1]);
-                 movieTitleBox.append(movie__mainTitle, movie__serveTitle);
-             } else {
+            if(nm.indexOf(':') !== -1) {
+                const movieTitle = nm.split(':');
+                movie__mainTitle.append(movieTitle[0]);
+                movie__serveTitle.append(":" + movieTitle[1]);
+                movieTitleBox.append(movie__mainTitle, movie__serveTitle);
+            } else {
                 movie__mainTitle.append(nm);
                 movieTitleBox.append(movie__mainTitle);
-             }
+            }
         },
+
         async getDate() { // 상영시간
             const param = {};
             param['code'] = this.movie_code;
@@ -169,11 +171,10 @@ export default {
             slist.forEach(e => {
                 console.log(e.theaterScheduleList[0].timetableList[0].ticketPcUrl);
             })
-            
         },
 
         async getReview() { // 리뷰 리스트 
-             this.rev_list = await this.$get(`/detail/reviewList/${this.movie_code}`, {});
+            this.rev_list = await this.$get(`/detail/reviewList/${this.movie_code}`, {});
         },
 
         revLimit() { // 리뷰 글 수 제한
