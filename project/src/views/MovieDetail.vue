@@ -50,8 +50,13 @@
 
                 <div class="movie__timeList">
                     <ul class="theater__List">
-                        <li v-for="(theater) in scheduleList" :key="theater.idx">
-                            <div class="movie__place"> {{ theater }} </div>
+                        <li v-for="(theater) in theater_list" :key="theater.idx">
+                            <div class="movie__place"> {{ theater.gname }} </div>
+                            <ul>
+                                <li v-for="schedule in theater_schedule" :key="schedule.idx">
+                                    {{ schedule }}
+                                </li>
+                            </ul>
                         </li>
                     </ul> 
                 </div>
@@ -110,7 +115,9 @@ export default {
             movie_code: 81888,
             movie_info: [],
             selectedDate: '2022-08-08',
-            scheduleList: [], //극장별 상영정보
+            theater_list: [], //상영 극장
+            theater_schedule: [], // 극장별 상영관
+            theater_time: [],
             limit: 0,
             rev_list: [],
             rootCode: localStorage.getItem('rootCode'),
@@ -160,19 +167,20 @@ export default {
             param['rootCode'] = this.rootCode;
             param['subCode'] = this.subCode;
 
-            this.scheduleList = await this.$get('/movie/movieTime', param);
-
-            const theater = this.scheduleList;// 극장 리스트
-            console.log(theater);
-            for(let a=0; a<theater.length; a++) {
-                const t_list = theater[a].theaterScheduleList; // 극장 상영관
-                for(let b=0; b<t_list.length; b++) {   
-                    this.scheduleList = t_list[b].timetableList; // 상영관별 상영시간
-                    console.log(this.scheduleList[b]); 
-                }
+            const list = await this.$get('/movie/movieTime', param); // 상영 극장 정보
+            for(let a=0; a<list.length; a++) {
+                this.theater_list[a] = list[a]; // 극장
+                let sche_list = this.theater_list[a].theaterScheduleList;
+                for(let b=0; b<sche_list.length; b++) {
+                    this.theater_schedule[a] = this.theater_list[a].theaterScheduleList; // 극장별 상영관
                     
-            }
+                }
 
+            }
+             console.log(this.theater_list);
+             console.log('-------------------------------');
+             console.log(this.theater_schedule);
+            // console.log(this.theater_schedule); 극장별 상영관 정보
         },
 
         async getReview() { // 리뷰 리스트 
