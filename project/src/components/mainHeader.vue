@@ -6,14 +6,14 @@
       <div>
         <div v-b-modal.modal-regin>현재 위치</div>
 
-        <b-modal id="modal-regin" size="lg" title="위치 설정" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
+        <b-modal id="modal-regin"  ref="modal-regin" size="lg" title="위치 설정" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
           <p class="my-2">현재 위치로 설정하시겠습니까?</p>
           <br>
           <b-button @click="getLocation">현재 위치로 설정</b-button>
           <b-button v-b-modal.modal-regin2>수동 위치로 설정</b-button>
         </b-modal>
 
-        <b-modal id="modal-regin2" title="수동 설정" header-bg-variant="secondary" 
+        <b-modal id="modal-regin2" ref="modal-regin2" title="수동 설정" header-bg-variant="secondary" 
         header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <div class="mr-2">수동으로 위치 설정</div>
           <select @change="changeOption1" v-model="optionList1">
@@ -101,7 +101,7 @@
             <div class="row">
               <div>
                 <label v-for="item in gsTag" :key="item" class="col-3">
-                  <input type="checkbox" name="genre" > {{ item }}
+                  <input type="checkbox" name="genre"> {{ item }}
                 </label>
               </div>
             </div>
@@ -265,8 +265,6 @@ import modal from 'bootstrap/js/dist/modal';
         }
       },
 
-
-      
       showPosition(pos) {
         let lat = pos.coords.latitude;
         let lng = pos.coords.longitude;
@@ -288,14 +286,25 @@ import modal from 'bootstrap/js/dist/modal';
           }
         }
         geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+
+        const close = document.querySelector('div.modal-header.bg-secondary.text-light > button')
+        close.click();
       },
       async ok() {
+        const close = document.querySelector('#modal-regin2 button');
         localStorage.removeItem('my_addr');
         localStorage.setItem('rootCode', this.optionList1);
         localStorage.setItem('subCode', this.optionList2);
+        close.click();
 
         await this.$post(`/user/ins_rootcode/${this.WSuuid}/${this.optionList1}`,{});
       },
+
+      close() {
+        const close = document.querySelector('#modal-regin2 button');
+        close.click();
+      },
+
       // 상세검색-장르 체크박스
       async getSelectTag() {
         this.gsTag = await this.$get(`/movie/getTag/`, {});
