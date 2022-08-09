@@ -256,10 +256,7 @@ import modal from 'bootstrap/js/dist/modal';
             alert("Geolocation is not supported by this browser.");
         }
       },
-<<<<<<< HEAD
 
-=======
->>>>>>> 889286bf0c4239131b4d7dd3508ece0a90cbd670
       showPosition(pos) {
         let lat = pos.coords.latitude;
         let lng = pos.coords.longitude;
