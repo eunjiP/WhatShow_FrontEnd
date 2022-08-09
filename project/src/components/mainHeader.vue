@@ -90,7 +90,7 @@
         </div>
         
         <!-- 상세검색 -->
-        <div v-b-modal.modal-search class="search__bottom">상세검색</div>
+        <div v-b-modal.modal-search class="search__bottom" @click="getSelectTag">상세검색</div>
 
         <b-modal id="modal-search" title="검색하기" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <b-form-input id="modal-search" type="text" @input="search" :value="searchKeyword" placeholder="검색어"/>
