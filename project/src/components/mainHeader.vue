@@ -6,14 +6,14 @@
       <div>
         <div v-b-modal.modal-regin>현재 위치</div>
 
-        <b-modal id="modal-regin" ref="modal-regin" size="lg" title="위치 설정" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
+        <b-modal id="modal-regin" size="lg" title="위치 설정" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
           <p class="my-2">현재 위치로 설정하시겠습니까?</p>
           <br>
-          <b-button @click="getLocation(); $modal-regin.hide('modal-regin')">현재 위치로 설정</b-button>
+          <b-button @click="getLocation">현재 위치로 설정</b-button>
           <b-button v-b-modal.modal-regin2>수동 위치로 설정</b-button>
         </b-modal>
 
-        <b-modal id="modal-regin2" ref="modal-regin2" title="수동 설정" header-bg-variant="secondary" 
+        <b-modal id="modal-regin2" title="수동 설정" header-bg-variant="secondary" 
         header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <div class="mr-2">수동으로 위치 설정</div>
           <select @change="changeOption1" v-model="optionList1">
@@ -48,11 +48,11 @@
           <div>
             <div class="mypage__user">
               <label for="input-file">
-                <div>
-                  <img src="../assets/mypage/avatar.svg" style="width:200px; cursor: pointer;"/>
+                <div class="user_img">
+                  <img :src="`/static/img/${this.WSuuid}/0/${this.userImg}`">
                 </div>
               </label>
-              <input id="input-file" type="file" @change="uploadImages" accept="image/*" style="display: none"/>
+              <input id="input-file" type="file" @change="uploadImages($event.target.files)" accept="image/*" style="display: none"/>
               <div>
                 <label for="input-nickname" style="font-size:20px; color:#F9F871;">닉네임</label>
                 <button @click="change_nick">변경</button>
@@ -90,7 +90,7 @@
         </div>
         
         <!-- 상세검색 -->
-        <div v-b-modal.modal-search class="search__bottom" @click="getSelectTag">상세검색</div>
+        <div v-b-modal.modal-search class="search__bottom">상세검색</div>
 
         <b-modal id="modal-search" title="검색하기" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <b-form-input id="modal-search" type="text" @input="search" :value="searchKeyword" placeholder="검색어"/>
@@ -121,6 +121,8 @@
 </template>
 
 <script>
+import modal from 'bootstrap/js/dist/modal';
+
   export default {
     name: 'mainHeader',
     data() {
@@ -134,7 +136,8 @@
         userFav:[],
         fav:'',
         userLocation:'',
-        gsTag: []
+        gsTag: [],
+        userImg:'',
       }
     },
     created() {
@@ -144,12 +147,13 @@
     mounted(){
     this.ins_uid();
     this.create_uid();
-    this.sel_uid();
     this.selFav();
   },
         
     created() {
-      this.getOptionList1()
+      this.getOptionList1();
+      this.getUserImage();
+      this.sel_uid();
     },
 
     methods: {
@@ -164,17 +168,18 @@
       async getOptionList2(optionList1) {
         this.option2 = await this.$get(`/location/optionList2/${optionList1}`, {})
       },
-      uploadImages() {
 
-      },
+      
+
       //유저 메소드 시작//
       //로컬 스토로지에 유저 생성
       create_uid(){
-      if(!localStorage.getItem('WSuuid')){
-        localStorage.setItem('WSuuid', Math.floor(Math.random()*1000),
-        localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random()*1000)));
+        if(!localStorage.getItem('WSuuid')){
+          localStorage.setItem('WSuuid', Math.floor(Math.random()*1000),
+          localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random()*1000)));
       }
       },
+
       //유저 uuid, nick DB 저장
       async ins_uid(){
         const param = [this.WSuuid, this.WSnickname];
@@ -185,22 +190,29 @@
           console.error('error');
         }
       },
+
       //유저 uuid, nick DB 불러옴
       async sel_uid(){
         let seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`,{});
-        let selresult = seluid.result 
-        // console.log(seluid.result);
-        // console.log(typeof(seluid));
-        selresult.forEach((item) => {
-          // console.log(item.value);
-      })},
-    //닉네임 변경
+        let selResult = seluid.result[0];
+        let userImg = selResult.user_img;
+        console.log(userImg);
+        this.userImg = userImg;
+        // selResult.forEach((item) => {
+        //   console.log(item);
+        // });
+        // let selImg = selResult.user_img;
+        // consoel.log(selImg);
+      },
+
+      //닉네임 변경
       async change_nick(){
         this.WSnickname = this.WSnickname;
         localStorage.setItem('WSnickname', this.WSnickname);
         let chNick = await this.$post(`/user/upd_nick/${this.WSnickname}/${this.WSuuid}`,{});
       },
-    //유저 favtag DB불러옴
+
+      //유저 favtag DB불러옴
       async selFav(){
         let selfav = await this.$get(`/user/sel_fav/${this.WSuuid}`,{});
         const selFavVal = Object.values(selfav.result);
@@ -212,7 +224,7 @@
         })
 
       },
-    //유저 favtag 태그 추가
+      //유저 favtag 태그 추가
       async inputFav(){
         //console.log(this.fav);
         let inputfav = this.userFav.push(this.fav);
@@ -220,7 +232,7 @@
         this.fav = '';
       },
 
-    //유저 favtag 삭제
+      //유저 favtag 삭제
       async delFav(key){
         this.userFav.forEach((item,idx)=>{
           if(idx === key){
@@ -229,6 +241,22 @@
           await this.$post(`/user/ins_fav/${this.WSuuid}/${this.userFav}`,{});
       },
 
+      //유저 프로필 이미지 추가
+      async uploadImages(files) {
+        // console.log(files);
+        const image = await this.$base64(files[0]);
+        // console.log(image);
+        const formData = { image };
+        const { error } = await this.$post(`/user/upd_img/${this.WSuuid}`, formData);
+        // console.log(error);
+      },
+
+      //유저 프로필 이미지 불러오기
+      async getUserImage(){
+        this.getImg = await this.$get(`/user/sel_img/${this.WSuuid}`,{});
+      },
+
+      //위치 메소드 시작//
       getLocation() {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(this.showPosition);
@@ -236,6 +264,9 @@
             alert("Geolocation is not supported by this browser.");
         }
       },
+
+
+      
       showPosition(pos) {
         let lat = pos.coords.latitude;
         let lng = pos.coords.longitude;
@@ -257,12 +288,12 @@
           }
         }
         geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
-        this.$refs.modal-regin.hide();
       },
       async ok() {
         localStorage.removeItem('my_addr');
         localStorage.setItem('rootCode', this.optionList1);
         localStorage.setItem('subCode', this.optionList2);
+
         await this.$post(`/user/ins_rootcode/${this.WSuuid}/${this.optionList1}`,{});
       },
       // 상세검색-장르 체크박스
@@ -359,4 +390,17 @@
     text-align: center;
   }
 
+  .user_img{
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+  .user_img img{
+    width: 100%;
+    height: 100%;
+    border-radius: 20%;
+    padding-top: 10px;
+    object-fit: cover;
+  }
 </style>
