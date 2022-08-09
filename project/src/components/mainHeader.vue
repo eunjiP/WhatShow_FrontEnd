@@ -85,15 +85,15 @@
     <div class="header__right">
       <div class="header__search">
         <div class="search__input" method="post">
-          <input id="search__text" type="text" @input="search" :value="searchKeyword" placeholder="검색어"/>
-          <button class="search" type="submit"><i class="fa-solid fa-play" style="color:#fff; background-color: #F29B21;"></i></button>
+          <input id="header__search" type="text" v-model="keyword" placeholder="검색어" @keyup.enter="searchPage()"/>
+          <button class="search" type="submit" @click="searchPage()"><i class="fa-solid fa-play" style="color:#fff; background-color: #F29B21;"></i></button>
         </div>
         
         <!-- 상세검색 -->
-        <div v-b-modal.modal-search class="search__bottom">상세검색</div>
+        <div v-b-modal.modal-search class="search__bottom" @click="getSelectTag">상세검색</div>
 
         <b-modal id="modal-search" title="검색하기" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
-          <b-form-input id="modal-search" type="text" @input="search" :value="searchKeyword" placeholder="검색어"/>
+          <b-form-input id="modal__search" type="text" v-model="keyword" placeholder="검색어"/>
           <br>
           <div class="search__seltag" style="font-size:20px; color:#F9F871;">#태그설정</div>
           <br>
@@ -112,7 +112,7 @@
           <br>
           <div>액션 범죄도시2 한산 멜로</div>
           <br>
-          <button class="search__btn col-12" type="submit">검색하기</button>
+          <button class="search__btn col-12" type="submit" @click="searchPage()">검색하기</button>
         </b-modal>
       </div>
     </div>
@@ -135,9 +135,8 @@ import modal from 'bootstrap/js/dist/modal';
         WSnickname: localStorage.getItem('WSnickname'),
         userFav:[],
         fav:'',
-        userLocation:'',
-        gsTag: [],
-        userImg:'',
+        userLocation: '',
+        gsTag: []
       }
     },
     created() {
@@ -151,32 +150,30 @@ import modal from 'bootstrap/js/dist/modal';
   },
         
     created() {
-      this.getOptionList1();
-      this.getUserImage();
-      this.sel_uid();
+      this.getOptionList1()
     },
 
-    methods: {
-      changeOption1() {
-        this.optionList2 = 0;
-        this.option2 = [];
-        this.getOptionList2(this.optionList1);
-      },
-      async getOptionList1() {
-        this.option1 = await this.$get(`/location/optionList1`, {})
-      },
-      async getOptionList2(optionList1) {
-        this.option2 = await this.$get(`/location/optionList2/${optionList1}`, {})
-      },
+  methods: {
+    changeOption1() {
+      this.optionList2 = 0;
+      this.option2 = [];
+      this.getOptionList2(this.optionList1);
+    },
+    async getOptionList1() {
+      this.option1 = await this.$get(`/location/optionList1`, {})
+    },
+    async getOptionList2(optionList1) {
+      this.option2 = await this.$get(`/location/optionList2/${optionList1}`, {})
+    },
+    uploadImages() {
 
-      
-
+      },
       //유저 메소드 시작//
       //로컬 스토로지에 유저 생성
       create_uid(){
-        if(!localStorage.getItem('WSuuid')){
-          localStorage.setItem('WSuuid', Math.floor(Math.random()*1000),
-          localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random()*1000)));
+      if(!localStorage.getItem('WSuuid')){
+        localStorage.setItem('WSuuid', Math.floor(Math.random()*1000),
+        localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random()*1000)));
       }
       },
 
@@ -251,12 +248,7 @@ import modal from 'bootstrap/js/dist/modal';
         // console.log(error);
       },
 
-      //유저 프로필 이미지 불러오기
-      async getUserImage(){
-        this.getImg = await this.$get(`/user/sel_img/${this.WSuuid}`,{});
-      },
-
-      //위치 메소드 시작//
+    
       getLocation() {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(this.showPosition);
@@ -264,7 +256,10 @@ import modal from 'bootstrap/js/dist/modal';
             alert("Geolocation is not supported by this browser.");
         }
       },
+<<<<<<< HEAD
 
+=======
+>>>>>>> 889286bf0c4239131b4d7dd3508ece0a90cbd670
       showPosition(pos) {
         let lat = pos.coords.latitude;
         let lng = pos.coords.longitude;
@@ -305,6 +300,11 @@ import modal from 'bootstrap/js/dist/modal';
         close.click();
       },
 
+      // 검색페이지 이동
+      async searchPage() {
+        this.$router.push('/search')
+      },
+
       // 상세검색-장르 체크박스
       async getSelectTag() {
         this.gsTag = await this.$get(`/movie/getTag/`, {});
@@ -312,6 +312,7 @@ import modal from 'bootstrap/js/dist/modal';
       }
     }
   }
+
 </script>
 
 <style scoped>
@@ -367,7 +368,7 @@ import modal from 'bootstrap/js/dist/modal';
     white-space: nowrap;
   }
 
-  .search__input > #search__text {
+  .search__input > #header__search {
     height: 30px;
     background: #00000088;
     color: #fff;
