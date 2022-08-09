@@ -6,14 +6,14 @@
       <div>
         <div v-b-modal.modal-regin>현재 위치</div>
 
-        <b-modal id="modal-regin" size="lg" title="위치 설정" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
+        <b-modal id="modal-regin" ref="modal-regin" size="lg" title="위치 설정" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
           <p class="my-2">현재 위치로 설정하시겠습니까?</p>
           <br>
-          <b-button @click="getLocation">현재 위치로 설정</b-button>
+          <b-button @click="getLocation(); $modal-regin.hide('modal-regin')">현재 위치로 설정</b-button>
           <b-button v-b-modal.modal-regin2>수동 위치로 설정</b-button>
         </b-modal>
 
-        <b-modal id="modal-regin2" title="수동 설정" header-bg-variant="secondary" 
+        <b-modal id="modal-regin2" ref="modal-regin2" title="수동 설정" header-bg-variant="secondary" 
         header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <div class="mr-2">수동으로 위치 설정</div>
           <select @change="changeOption1" v-model="optionList1">
@@ -121,8 +121,6 @@
 </template>
 
 <script>
-import modal from 'bootstrap/js/dist/modal';
-
   export default {
     name: 'mainHeader',
     data() {
@@ -230,9 +228,7 @@ import modal from 'bootstrap/js/dist/modal';
           }})
           await this.$post(`/user/ins_fav/${this.WSuuid}/${this.userFav}`,{});
       },
-    
 
-    
       getLocation() {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(this.showPosition);
@@ -261,12 +257,12 @@ import modal from 'bootstrap/js/dist/modal';
           }
         }
         geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+        this.$refs.modal-regin.hide();
       },
       async ok() {
         localStorage.removeItem('my_addr');
         localStorage.setItem('rootCode', this.optionList1);
         localStorage.setItem('subCode', this.optionList2);
-
         await this.$post(`/user/ins_rootcode/${this.WSuuid}/${this.optionList1}`,{});
       },
       // 상세검색-장르 체크박스
