@@ -140,9 +140,9 @@ export default {
     // },
     methods: {   
         async getMovieInfo() { // 영화 상세 정보
-             this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
-             const movie_nm = this.movie_info.movie_nm;
-             this.movieTitle(movie_nm);
+            this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
+            const movie_nm = this.movie_info.movie_nm;
+            this.movieTitle(movie_nm);
         },
 
         movieTitle(nm) { // 영화 제목

@@ -48,11 +48,11 @@
           <div>
             <div class="mypage__user">
               <label for="input-file">
-                <div>
-                  <img src="../assets/mypage/avatar.svg" style="width:200px; cursor: pointer;"/>
+                <div class="user_img">
+                  <img :src="`/static/img/${this.WSuuid}/0/${this.userImg}`">
                 </div>
               </label>
-              <input id="input-file" type="file" @change="uploadImages" accept="image/*" style="display: none"/>
+              <input id="input-file" type="file" @change="uploadImages($event.target.files)" accept="image/*" style="display: none"/>
               <div>
                 <label for="input-nickname" style="font-size:20px; color:#F9F871;">닉네임</label>
                 <button @click="change_nick">변경</button>
@@ -85,15 +85,15 @@
     <div class="header__right">
       <div class="header__search">
         <div class="search__input" method="post">
-          <input id="search__text" type="text" @input="search" :value="searchKeyword" placeholder="검색어"/>
-          <button class="search" type="submit"><i class="fa-solid fa-play" style="color:#fff; background-color: #F29B21;"></i></button>
+          <input id="header__search" type="text" v-model="keyword" placeholder="검색어" @keyup.enter="searchPage()"/>
+          <button class="search" type="submit" @click="searchPage()"><i class="fa-solid fa-play" style="color:#fff; background-color: #F29B21;"></i></button>
         </div>
         
         <!-- 상세검색 -->
         <div v-b-modal.modal-search class="search__bottom" @click="getSelectTag">상세검색</div>
 
         <b-modal id="modal-search" title="검색하기" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
-          <b-form-input id="modal-search" type="text" @input="search" :value="searchKeyword" placeholder="검색어"/>
+          <b-form-input id="modal__search" type="text" v-model="keyword" placeholder="검색어"/>
           <br>
           <div class="search__seltag" style="font-size:20px; color:#F9F871;">#태그설정</div>
           <br>
@@ -112,7 +112,7 @@
           <br>
           <div>액션 범죄도시2 한산 멜로</div>
           <br>
-          <button class="search__btn col-12" type="submit">검색하기</button>
+          <button class="search__btn col-12" type="submit" @click="searchPage()">검색하기</button>
         </b-modal>
       </div>
     </div>
@@ -135,7 +135,7 @@ import modal from 'bootstrap/js/dist/modal';
         WSnickname: localStorage.getItem('WSnickname'),
         userFav:[],
         fav:'',
-        userLocation:'',
+        userLocation: '',
         gsTag: []
       }
     },
@@ -146,7 +146,6 @@ import modal from 'bootstrap/js/dist/modal';
     mounted(){
     this.ins_uid();
     this.create_uid();
-    this.sel_uid();
     this.selFav();
   },
         
@@ -154,19 +153,19 @@ import modal from 'bootstrap/js/dist/modal';
       this.getOptionList1()
     },
 
-    methods: {
-      changeOption1() {
-        this.optionList2 = 0;
-        this.option2 = [];
-        this.getOptionList2(this.optionList1);
-      },
-      async getOptionList1() {
-        this.option1 = await this.$get(`/location/optionList1`, {})
-      },
-      async getOptionList2(optionList1) {
-        this.option2 = await this.$get(`/location/optionList2/${optionList1}`, {})
-      },
-      uploadImages() {
+  methods: {
+    changeOption1() {
+      this.optionList2 = 0;
+      this.option2 = [];
+      this.getOptionList2(this.optionList1);
+    },
+    async getOptionList1() {
+      this.option1 = await this.$get(`/location/optionList1`, {})
+    },
+    async getOptionList2(optionList1) {
+      this.option2 = await this.$get(`/location/optionList2/${optionList1}`, {})
+    },
+    uploadImages() {
 
       },
       //유저 메소드 시작//
@@ -177,6 +176,7 @@ import modal from 'bootstrap/js/dist/modal';
         localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random()*1000)));
       }
       },
+
       //유저 uuid, nick DB 저장
       async ins_uid(){
         const param = [this.WSuuid, this.WSnickname];
@@ -187,22 +187,29 @@ import modal from 'bootstrap/js/dist/modal';
           console.error('error');
         }
       },
+
       //유저 uuid, nick DB 불러옴
       async sel_uid(){
         let seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`,{});
-        let selresult = seluid.result 
-        // console.log(seluid.result);
-        // console.log(typeof(seluid));
-        selresult.forEach((item) => {
-          // console.log(item.value);
-      })},
-    //닉네임 변경
+        let selResult = seluid.result[0];
+        let userImg = selResult.user_img;
+        console.log(userImg);
+        this.userImg = userImg;
+        // selResult.forEach((item) => {
+        //   console.log(item);
+        // });
+        // let selImg = selResult.user_img;
+        // consoel.log(selImg);
+      },
+
+      //닉네임 변경
       async change_nick(){
         this.WSnickname = this.WSnickname;
         localStorage.setItem('WSnickname', this.WSnickname);
         let chNick = await this.$post(`/user/upd_nick/${this.WSnickname}/${this.WSuuid}`,{});
       },
-    //유저 favtag DB불러옴
+
+      //유저 favtag DB불러옴
       async selFav(){
         let selfav = await this.$get(`/user/sel_fav/${this.WSuuid}`,{});
         const selFavVal = Object.values(selfav.result);
@@ -214,7 +221,7 @@ import modal from 'bootstrap/js/dist/modal';
         })
 
       },
-    //유저 favtag 태그 추가
+      //유저 favtag 태그 추가
       async inputFav(){
         //console.log(this.fav);
         let inputfav = this.userFav.push(this.fav);
@@ -222,7 +229,7 @@ import modal from 'bootstrap/js/dist/modal';
         this.fav = '';
       },
 
-    //유저 favtag 삭제
+      //유저 favtag 삭제
       async delFav(key){
         this.userFav.forEach((item,idx)=>{
           if(idx === key){
@@ -230,7 +237,16 @@ import modal from 'bootstrap/js/dist/modal';
           }})
           await this.$post(`/user/ins_fav/${this.WSuuid}/${this.userFav}`,{});
       },
-    
+
+      //유저 프로필 이미지 추가
+      async uploadImages(files) {
+        // console.log(files);
+        const image = await this.$base64(files[0]);
+        // console.log(image);
+        const formData = { image };
+        const { error } = await this.$post(`/user/upd_img/${this.WSuuid}`, formData);
+        // console.log(error);
+      },
 
     
       getLocation() {
@@ -269,6 +285,10 @@ import modal from 'bootstrap/js/dist/modal';
 
         await this.$post(`/user/ins_rootcode/${this.WSuuid}/${this.optionList1}`,{});
       },
+      // 검색페이지 이동
+      async searchPage() {
+        this.$router.push('/search')
+      },
       // 상세검색-장르 체크박스
       async getSelectTag() {
         this.gsTag = await this.$get(`/movie/getTag/`, {});
@@ -276,6 +296,7 @@ import modal from 'bootstrap/js/dist/modal';
       }
     }
   }
+
 </script>
 
 <style scoped>
@@ -331,7 +352,7 @@ import modal from 'bootstrap/js/dist/modal';
     white-space: nowrap;
   }
 
-  .search__input > #search__text {
+  .search__input > #header__search {
     height: 30px;
     background: #00000088;
     color: #fff;
@@ -363,4 +384,17 @@ import modal from 'bootstrap/js/dist/modal';
     text-align: center;
   }
 
+  .user_img{
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+  .user_img img{
+    width: 100%;
+    height: 100%;
+    border-radius: 20%;
+    padding-top: 10px;
+    object-fit: cover;
+  }
 </style>
