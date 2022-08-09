@@ -165,9 +165,7 @@ import modal from 'bootstrap/js/dist/modal';
     async getOptionList2(optionList1) {
       this.option2 = await this.$get(`/location/optionList2/${optionList1}`, {})
     },
-    uploadImages() {
-
-    },
+    
     //유저 메소드 시작//
     //로컬 스토로지에 유저 생성
     create_uid() {
