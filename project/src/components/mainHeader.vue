@@ -48,11 +48,11 @@
           <div>
             <div class="mypage__user">
               <label for="input-file">
-                <div>
-                  <img src="../assets/mypage/avatar.svg" style="width:200px; cursor: pointer;"/>
+                <div class="user_img">
+                  <img :src="`/static/img/${this.WSuuid}/0/${this.userImg}`">
                 </div>
               </label>
-              <input id="input-file" type="file" @change="uploadImages" accept="image/*" style="display: none"/>
+              <input id="input-file" type="file" @change="uploadImages($event.target.files)" accept="image/*" style="display: none"/>
               <div>
                 <label for="input-nickname" style="font-size:20px; color:#F9F871;">닉네임</label>
                 <button @click="change_nick">변경</button>
@@ -136,7 +136,8 @@ import modal from 'bootstrap/js/dist/modal';
         userFav:[],
         fav:'',
         userLocation:'',
-        gsTag: []
+        gsTag: [],
+        userImg:'',
       }
     },
     created() {
@@ -146,12 +147,13 @@ import modal from 'bootstrap/js/dist/modal';
     mounted(){
     this.ins_uid();
     this.create_uid();
-    this.sel_uid();
     this.selFav();
   },
         
     created() {
-      this.getOptionList1()
+      this.getOptionList1();
+      this.getUserImage();
+      this.sel_uid();
     },
 
     methods: {
@@ -166,17 +168,18 @@ import modal from 'bootstrap/js/dist/modal';
       async getOptionList2(optionList1) {
         this.option2 = await this.$get(`/location/optionList2/${optionList1}`, {})
       },
-      uploadImages() {
 
-      },
+      
+
       //유저 메소드 시작//
       //로컬 스토로지에 유저 생성
       create_uid(){
-      if(!localStorage.getItem('WSuuid')){
-        localStorage.setItem('WSuuid', Math.floor(Math.random()*1000),
-        localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random()*1000)));
+        if(!localStorage.getItem('WSuuid')){
+          localStorage.setItem('WSuuid', Math.floor(Math.random()*1000),
+          localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random()*1000)));
       }
       },
+
       //유저 uuid, nick DB 저장
       async ins_uid(){
         const param = [this.WSuuid, this.WSnickname];
@@ -187,22 +190,29 @@ import modal from 'bootstrap/js/dist/modal';
           console.error('error');
         }
       },
+
       //유저 uuid, nick DB 불러옴
       async sel_uid(){
         let seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`,{});
-        let selresult = seluid.result 
-        // console.log(seluid.result);
-        // console.log(typeof(seluid));
-        selresult.forEach((item) => {
-          // console.log(item.value);
-      })},
-    //닉네임 변경
+        let selResult = seluid.result[0];
+        let userImg = selResult.user_img;
+        console.log(userImg);
+        this.userImg = userImg;
+        // selResult.forEach((item) => {
+        //   console.log(item);
+        // });
+        // let selImg = selResult.user_img;
+        // consoel.log(selImg);
+      },
+
+      //닉네임 변경
       async change_nick(){
         this.WSnickname = this.WSnickname;
         localStorage.setItem('WSnickname', this.WSnickname);
         let chNick = await this.$post(`/user/upd_nick/${this.WSnickname}/${this.WSuuid}`,{});
       },
-    //유저 favtag DB불러옴
+
+      //유저 favtag DB불러옴
       async selFav(){
         let selfav = await this.$get(`/user/sel_fav/${this.WSuuid}`,{});
         const selFavVal = Object.values(selfav.result);
@@ -214,7 +224,7 @@ import modal from 'bootstrap/js/dist/modal';
         })
 
       },
-    //유저 favtag 태그 추가
+      //유저 favtag 태그 추가
       async inputFav(){
         //console.log(this.fav);
         let inputfav = this.userFav.push(this.fav);
@@ -222,7 +232,7 @@ import modal from 'bootstrap/js/dist/modal';
         this.fav = '';
       },
 
-    //유저 favtag 삭제
+      //유저 favtag 삭제
       async delFav(key){
         this.userFav.forEach((item,idx)=>{
           if(idx === key){
@@ -230,9 +240,23 @@ import modal from 'bootstrap/js/dist/modal';
           }})
           await this.$post(`/user/ins_fav/${this.WSuuid}/${this.userFav}`,{});
       },
-    
 
-    
+      //유저 프로필 이미지 추가
+      async uploadImages(files) {
+        // console.log(files);
+        const image = await this.$base64(files[0]);
+        // console.log(image);
+        const formData = { image };
+        const { error } = await this.$post(`/user/upd_img/${this.WSuuid}`, formData);
+        // console.log(error);
+      },
+
+      //유저 프로필 이미지 불러오기
+      async getUserImage(){
+        this.getImg = await this.$get(`/user/sel_img/${this.WSuuid}`,{});
+      },
+
+      //위치 메소드 시작//
       getLocation() {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(this.showPosition);
@@ -240,6 +264,9 @@ import modal from 'bootstrap/js/dist/modal';
             alert("Geolocation is not supported by this browser.");
         }
       },
+
+
+      
       showPosition(pos) {
         let lat = pos.coords.latitude;
         let lng = pos.coords.longitude;
@@ -363,4 +390,17 @@ import modal from 'bootstrap/js/dist/modal';
     text-align: center;
   }
 
+  .user_img{
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+  .user_img img{
+    width: 100%;
+    height: 100%;
+    border-radius: 20%;
+    padding-top: 10px;
+    object-fit: cover;
+  }
 </style>
