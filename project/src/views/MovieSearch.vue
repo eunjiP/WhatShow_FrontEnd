@@ -93,7 +93,7 @@ export default {
 
     }
 
-    #search__body {
+    .movie__poster {
         text-align: center;
     }
 </style>
