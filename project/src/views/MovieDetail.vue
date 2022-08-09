@@ -2,7 +2,7 @@
     <div class="container p-5">
         <div id="movie-detail">
             <div id="detail-header" class="row justify-content-center">
-                <div class="movie__title text-start"></div>
+                <div class="movie__title text-start"><!-- 영화 제목 --></div>
             </div>
 
             <div id="detail-main" class="row row-cols-2 justify-content-center">
@@ -37,11 +37,12 @@
                 <div class="movie__intro my-5 col-12">
                     <h4 class="fc-oran text-start">줄거리</h4>
                     <div class="movie__intro__ctnt">
-                    <video :src="movie_info.preview" autoplay></video>
+                        {{ movie_info.movie_summary }}
+                    <!-- <video :src="movie_info.preview" autoplay></video> -->
                     </div>
                 </div>
             </div>
-
+            <!-- 영화 상영 스케줄 -->
             <div id="movie__time"  class= "my-5 col-12">
                 <h4 class="fc-oran text-start">영화 상영시간</h4>
                 <div class="day__selecte text-start">
@@ -54,16 +55,16 @@
                             <div class="movie__place"> {{ theater.gname }} </div>
                             <ul>
                                 <li v-for="schedule in theater_schedule" :key="schedule.idx">
-                                    {{ schedule }}
+                                    {{ schedule.tname }}
                                 </li>
                             </ul>
                         </li>
                     </ul> 
                 </div>
             </div>
-            
-        </div>
 
+        </div>
+        <!-- 영화 감상평 -->
         <div id="movie-review">
             <h4 class="fc-oran">당신의 감상을 들려주세요.</h4>
             <!-- <div class="star-rating space-x-4 mx-auto my-3">
@@ -81,7 +82,7 @@
 
             <div class="review__form row justify-content-center">
                 <div class="review__input col-10">
-                    <textarea class="review__txt" @keyup="revLimit" placeholder="감상평을 남겨주세요. 영화와 상관없는 내용은 관리자에 의해 제재를 받을 수 있습니다."></textarea>
+                    <textarea class="review__txt" @keyup="revLimit" placeholder="감상평을 남겨주세요. 영화와 상관없는 내용은 관리자에 의해 제재를 받을 수 있습니다." v-model="review_cnt"></textarea>
                     <div class="review__limit">({{ limit }} / 100)</div>
                 </div>
                 <button class="review__btn ms-2 col-2">등록</button>
@@ -121,6 +122,7 @@ export default {
             theater_time: [],
             limit: 0,
             rev_list: [],
+            review_cnt:'',
             rootCode: localStorage.getItem('rootCode'),
             subCode: localStorage.getItem('subCode')
         }
@@ -171,18 +173,39 @@ export default {
             param['subCode'] = this.subCode;
 
             const list = await this.$get('/movie/movieTime', param); // 상영 극장 정보
-            for(let a=0; a<list.length; a++) {
-                this.theater_list[a] = list[a]; // 극장
-                let sche_list = this.theater_list[a].theaterScheduleList;
+             for(let a=0; a<list.length; a++) {
+                 this.theater_list[a] = list[a]; // 극장
+                 let sche_list = this.theater_list[a].theaterScheduleList;
+
                 for(let b=0; b<sche_list.length; b++) {
-                    this.theater_schedule[a] = this.theater_list[a].theaterScheduleList; // 극장별 상영관
-                    
+                     this.theater_schedule[a] = this.theater_list[a].theaterScheduleList; // 극장별 상영관
+                    // for(let c=0; c<time_list.length; c++){
+                        
+                    // }
                 }
             }
-             console.log(this.theater_list);
+
+           
+
+            // 
+            // for(let c=0; c<list3.length; c++) {
+            //     this.theater_time[c] = list3[c];
+            // }
+            
+            console.log(this.theater_list);// 극장
              console.log('-------------------------------');
-             console.log(this.theater_schedule);
+             console.log(this.theater_schedule);// 극장별 상영관
+             console.log('-------------------------------');
+             //console.log(this.theater_time);
+             //console.log( this.theater_time);
+
             // console.log(this.theater_schedule); 극장별 상영관 정보
+        },
+        async insertReview() {
+            const result = await this.$post('detail/insertReview', this.review_cnt);
+            if(result) {
+                console.log(result);
+            }
         },
 
         async getReview() { // 리뷰 리스트 
