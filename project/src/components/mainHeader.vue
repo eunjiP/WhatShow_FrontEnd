@@ -90,7 +90,7 @@
         </div>
         
         <!-- 상세검색 -->
-        <div v-b-modal.modal-search class="search__bottom">상세검색</div>
+        <div v-b-modal.modal-search class="search__bottom" @click="getSelectTag">상세검색</div>
 
         <b-modal id="modal-search" title="검색하기" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <b-form-input id="modal-search" type="text" @input="search" :value="searchKeyword" placeholder="검색어"/>
@@ -141,11 +141,13 @@ import modal from 'bootstrap/js/dist/modal';
     },
     created() {
       this.getOptionList1();
-      this.create_uid();
-      this.sel_uid();
+      
     },
     mounted(){
     this.ins_uid();
+    this.create_uid();
+    this.sel_uid();
+    this.selFav();
   },
         
     created() {
@@ -167,53 +169,68 @@ import modal from 'bootstrap/js/dist/modal';
       uploadImages() {
 
       },
-      async ins_uid(){
-      const param = [this.WSuuid, this.WSnickname];
-      const senduid = await this.$post(`/user/signup`,param);
-      if(senduid){
-        console.log();
-      } else{
-        console.error('error');
-      }
-    },
-    async sel_uid(){
-      let seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`,{});
-      let selresult = seluid.result 
-      console.log(seluid.result);
-      console.log(typeof(seluid));
-      selresult.forEach((item) => {
-        console.log(item.value);
-      })
-
-      // for(let key in selresult){
-      //   console.log(key, obj[key]);
-      // }
-    },
-    async change_nick(){
-      this.WSnickname = this.WSnickname;
-      localStorage.setItem('WSnickname', this.WSnickname);
-      let chNick = await this.$post(`/user/upd_nick/${this.WSnickname}`,{});
-    },
-    async inputFav(){
-      console.log(this.fav);
-      let inputfav = this.userFav.push(this.fav);
-      await this.$post(`/user/ins_fav/${this.WSuuid}/${this.userFav}`,{});
-      this.fav = '';
-      console.log(this.userFav);
-    },
-    delFav(key){
-      this.userFav.forEach((item,idx)=>{
-        if(idx === key){
-            this.userFav.splice(idx, 1);
-        }
-      })
-    },
-    create_uid(){
+      //유저 메소드 시작//
+      //로컬 스토로지에 유저 생성
+      create_uid(){
       if(!localStorage.getItem('WSuuid')){
         localStorage.setItem('WSuuid', Math.floor(Math.random()*1000),
         localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random()*1000)));
       }
-    },
+      },
+      //유저 uuid, nick DB 저장
+      async ins_uid(){
+        const param = [this.WSuuid, this.WSnickname];
+        const senduid = await this.$post(`/user/signup`,param);
+        if(senduid){
+          console.log();
+        } else{
+          console.error('error');
+        }
+      },
+      //유저 uuid, nick DB 불러옴
+      async sel_uid(){
+        let seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`,{});
+        let selresult = seluid.result 
+        // console.log(seluid.result);
+        // console.log(typeof(seluid));
+        selresult.forEach((item) => {
+          // console.log(item.value);
+      })},
+    //닉네임 변경
+      async change_nick(){
+        this.WSnickname = this.WSnickname;
+        localStorage.setItem('WSnickname', this.WSnickname);
+        let chNick = await this.$post(`/user/upd_nick/${this.WSnickname}/${this.WSuuid}`,{});
+      },
+    //유저 favtag DB불러옴
+      async selFav(){
+        let selfav = await this.$get(`/user/sel_fav/${this.WSuuid}`,{});
+        const selFavVal = Object.values(selfav.result);
+        const selFavValstr = selFavVal[0];
+        const selFavValSpStr = selFavValstr.split(',');
+        // console.log(selFavValSpStr);
+        selFavValSpStr.forEach(item => {
+          this.userFav.push(item);
+        })
+
+      },
+    //유저 favtag 태그 추가
+      async inputFav(){
+        //console.log(this.fav);
+        let inputfav = this.userFav.push(this.fav);
+        await this.$post(`/user/ins_fav/${this.WSuuid}/${this.userFav}`,{});
+        this.fav = '';
+      },
+
+    //유저 favtag 삭제
+      async delFav(key){
+        this.userFav.forEach((item,idx)=>{
+          if(idx === key){
+              this.userFav.splice(idx, 1);
+          }})
+          await this.$post(`/user/ins_fav/${this.WSuuid}/${this.userFav}`,{});
+      },
+    
 
     
       getLocation() {
@@ -237,7 +254,7 @@ import modal from 'bootstrap/js/dist/modal';
         let callback = function(result, status) {
           if (status === kakao.maps.services.Status.OK) {
               let detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
-  detailAddr += result[0].address.address_name;
+              detailAddr += result[0].address.address_name;
               localStorage.removeItem('rootCode');
               localStorage.removeItem('subCode');
               localStorage.setItem('my_addr', detailAddr);
@@ -245,10 +262,12 @@ import modal from 'bootstrap/js/dist/modal';
         }
         geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
       },
-      ok() {
+      async ok() {
         localStorage.removeItem('my_addr');
         localStorage.setItem('rootCode', this.optionList1);
         localStorage.setItem('subCode', this.optionList2);
+
+        await this.$post(`/user/ins_rootcode/${this.WSuuid}/${this.optionList1}`,{});
       },
       // 상세검색-장르 체크박스
       async getSelectTag() {
