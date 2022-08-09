@@ -136,19 +136,19 @@ import modal from 'bootstrap/js/dist/modal';
         userFav:[],
         fav:'',
         userLocation: '',
-        gsTag: []
+        gsTag: [],
+        userImg:'',
       }
     },
-    created() {
-      this.getOptionList1();
-      
-    },
     mounted(){
-    this.ins_uid();
-    this.create_uid();
-    this.selFav();
-  },
-        
+      this.ins_uid();
+      this.create_uid();
+      this.selFav();
+      this.sel_uid();
+    },
+    updated(){
+      this.sel_uid();
+    },
     created() {
       this.getOptionList1()
     },
@@ -246,6 +246,7 @@ import modal from 'bootstrap/js/dist/modal';
         const formData = { image };
         const { error } = await this.$post(`/user/upd_img/${this.WSuuid}`, formData);
         // console.log(error);
+
       },
 
     
