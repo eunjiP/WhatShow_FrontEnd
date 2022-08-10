@@ -80,7 +80,7 @@
     <div class="header__right">
       <div class="header__search">
         <div class="search__input" method="post">
-        <input id="header__search" v-model="keyword"  placeholder="검색어" @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" />
+        <b-form-input id="header__search" v-model="keyword"  placeholder="검색어" @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
             <div class="autocomplete p-ab disabled">
               <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
             </div>
@@ -271,7 +271,7 @@
       } else {
         autocomplete.classList.add("disabled");
       }
-      console.log(this.filternm);
+      // console.log(this.filternm);
     },
 
 
@@ -331,10 +331,9 @@
       
       if (keyword !== '') {
         this.$router.push({
-          name: "search",
-          param: {
-            keyword: this.keyword,
-            searchResult: true
+          name: 'search',
+          params : {
+            keyword: this.keyword
           }
         })
         this.keyword = '';

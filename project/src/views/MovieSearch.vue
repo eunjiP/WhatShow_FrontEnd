@@ -2,7 +2,7 @@
     <div class="container p-5">
         <div id="movie-search">
             <div id="search-header" class="col-12">
-                <div class="search__title text-start">'빅샤크4' 검색 결과</div>
+                <div class="search__title text-start">{{ keyword }} 검색 결과</div>
             </div>
             <div id="search__subTitle">
                 <div id="sub1"> 영화</div>
@@ -49,25 +49,29 @@
 </template>
 
 <script>
-export default {
-    name: 'search',
-    props: ['keyword'],
-    
+export default {    
+    name: "search",
     data() {
 
         return {
             movie_code: 210931,
-            movie_info: []
+            movie_info: [],
+            keyword:this.$route.params.keyword  //nav.vue에서 라우터를 이용해 보낸 파라미터로부터 데이터 받음 
         }
     },
     created() {
         this.getMovieInfo(); // 영화 상세 정보
-
+    },
+    mounted(){
+        this.test();
     },
     methods: {   
         async getMovieInfo() { // 영화 상세 정보
             this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
         },
+        test(){
+            console.log(`keyword : ${this.$route.params.keyword}`);
+        }
     },
 }
 
