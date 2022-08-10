@@ -80,7 +80,7 @@
     <div class="header__right">
       <div class="header__search">
         <div class="search__input" method="post">
-        <b-form-input id="header__search" v-model="keyword"  placeholder="검색어" @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
+        <input id="header__search" v-model="keyword"  placeholder="검색어" @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
             <div class="autocomplete p-ab disabled">
               <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
             </div>
@@ -91,7 +91,7 @@
         <div v-b-modal.modal-search class="search__bottom" @click="getSelectTag">상세검색</div>
 
         <b-modal id="modal-search" title="검색하기" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
-          <b-form-input id="modal__search" type="text" v-model="keyword" placeholder="검색어" v-on:input="keywordChanged()" v-on:keyup.enter="searchPage(keyword)"/>
+          <b-form-input id="modal__search" type="text" v-model="keyword" placeholder="검색어" v-on:keyup.enter="searchPage(keyword)"/>
           <br>
           <div class="search__seltag" style="font-size:20px; color:#F9F871;">#태그설정</div>
           <br>
@@ -110,7 +110,7 @@
             <br>
               <div>액션 범죄도시2 한산 멜로</div>
             <br>
-          <button class="search__btn col-12" type="submit" @click="searchPage(keyword), searchClose()">검색하기</button>
+          <button class="search__btn col-12" type="submit" @click="searchPage(keyword)">검색하기</button>
         </b-modal>
       </div>
     </div>
@@ -194,7 +194,7 @@
       let seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`, {});
       let selResult = seluid.result[0];
       let userImg = selResult.user_img;
-      console.log(userImg);
+      // console.log(userImg);
       this.userImg = userImg;
       // selResult.forEach((item) => {
       //   console.log(item);
@@ -256,14 +256,14 @@
     async getMoive(){
       const movieList = await this.$get('/movie/main', {});
       movieList.forEach(item => {
-        // console.log(item.movie_nm);
+      // console.log(item.movie_nm);
         this.movienm.push(item.movie_nm);
       })
       // console.log(this.movienm);
     },
     submitAutoComplete() {
       const autocomplete = document.querySelector(".autocomplete");
-      if (this.keyword) {
+      if (!this.keyword == '') {
       autocomplete.classList.remove("disabled");
       this.filternm = this.movienm.filter((item) => {
           return item.match(new RegExp(this.keyword, "i"));
@@ -324,11 +324,14 @@
     },
 
     // 검색페이지 이동
+    
     async searchPage(keyword) {
       const autocomplete = document.querySelector(".autocomplete");
       autocomplete.classList.add("disabled");
       const close = document.querySelector('#modal-search button');
-      
+      this.keyword = keyword;
+      console.log(`send key:${keyword}`);
+
       if (keyword !== '') {
         this.$router.push({
           name: 'search',
@@ -337,21 +340,16 @@
           }
         })
         this.keyword = '';
-        console.log(keyword);
         close.click();
       } else {
         alert('검색어를 입력해주세요!');
       }
     },
 
-    async keywordChanged() {
-      this.searchResult = false
-    },
-
     // 상세검색-장르 체크박스
     async getSelectTag() {
       this.gsTag = await this.$get(`/movie/getTag/`, {});
-      console.log(this.gsTag);
+      // console.log(this.gsTag);
     },
   }
 }
