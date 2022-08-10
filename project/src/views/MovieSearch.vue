@@ -1,20 +1,24 @@
 <template>
     <div class="container p-5">
         <div id="movie-search">
-            <div id="search-header" class="col-12">
+            <div id="search-header">
                 <div class="search__title text-start">"{{ keyword }}" 검색 결과</div>
             </div>
             <div id="search__subTitle">
                 <div id="sub1"> 영화</div>
                 <div></div>
-                <div id="sub2">더보기</div>
+                <div id="sub2" @click="more" style="cursor:pointer;">더보기</div>
             </div>
             <br>
             <div id="search-body">
                 <br>
-                <div class="movie__poster col-12" v-for="(item, idx) in movie_info" :key="idx" :item="item">
-                    <img :src="`${item.movie_poster}`"/>
-                    <div>{{ item.movie_nm }}</div>
+                <div class="container">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+                        <div class="movie__poster col" v-for="(item, idx) in movie_info" :key="idx" :item="item">
+                            <img :src="`${item.movie_poster}`"/>
+                            <div>{{ item.movie_nm }}</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <br>
@@ -54,7 +58,7 @@ export default {
 
     data() {
         return {
-            movie_code: 81888,
+            movielimit: 4,
             movie_info: [],
             keyword: this.$route.params.keyword  //nav.vue에서 라우터를 이용해 보낸 파라미터로부터 데이터 받음 
         }
@@ -66,9 +70,14 @@ export default {
 
     methods: {   
         async getMovieInfo() { // 영화 상세 정보
-            this.movie_info = await this.$get(`/movie/selSearch/${this.keyword}`, {});
+            this.movie_info = await this.$get(`/movie/selSearch/${this.keyword}/${this.movielimit}`, {});
             console.log(this.movie_info);
         },
+
+        more() { // 검색 결과 더보기
+            this.movielimit += 4;
+            this.getMovieInfo();
+        }
     },
 }
 
