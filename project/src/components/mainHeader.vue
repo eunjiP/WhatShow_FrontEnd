@@ -467,7 +467,7 @@
     display: none;
   }
 
-  .filternm:hover div{
+  .filternm:hover{
     color: #F29B21;
   }
 </style>
