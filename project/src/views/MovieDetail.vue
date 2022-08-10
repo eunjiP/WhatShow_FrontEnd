@@ -44,27 +44,29 @@
             </div>
             <!-- 영화 상영 스케줄 -->
             <div id="movie__time"  class= "my-5 col-12">
-
                 <h4 class="fc-oran text-start">영화 상영시간</h4>
+                <div class=" text-start text-secondary mb-2" >관람을 원하는 날짜를 선택하여 검색해보세요.</div>
                 <div class="day__selecte text-start">
                     <input type="date" id="select-day" v-model="selectedDate">
                     <button class="dateBtn ms-3" @click="getDate"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
 
-                <div class="movie__timeList">
+                <div class="movie__timeList row justify-content-md-center">
                     <ul class="theater__List">
                         <li v-for="(schedule) in theater_schedule" :key="schedule.idx">
-                            <div v-for="(detail) in schedule" :key="detail.idx">
-                                <div v-for="time in detail.timetableList" :key="time.idx">
-                                    {{time.gname}} <!--극장이름-->
-                                    <button class="btn">
-                                        <a :href="time.ticketPcUrl" class="ticketUrl">
-                                            <span>{{ time.tname }}</span> <!-- 상영관 -->
-                                            <span>{{ time.rtime }} ~ {{ time.endTime }}</span> <!-- 상영시간 -->
-                                        </a>
-                                    </button>
-                                </div> 
-                            </div>
+                            <div class="theater__title"> {{ schedule[0].timetableList[0].gname }} </div> <!-- 극장 이름 -->
+                            <div class="theater__timeList">
+                                <ul v-for="(detail) in schedule" :key="detail.idx">
+                                    <li class="d-inline-block" v-for="time in detail.timetableList" :key="time.idx">
+                                        <button class="ticketBtn btn">
+                                            <a :href="time.ticketPcUrl" class="ticketUrl">
+                                                <div class="movie__runningTime">{{ time.rtime }} ~ {{ time.endTime }}</div> <!-- 상영시간 -->
+                                                <div class="movie__detailTheater">{{ time.tname }}</div> <!-- 상영관 -->
+                                            </a>
+                                        </button>
+                                    </li> 
+                                </ul>
+                            </div>  
                         </li>       
                     </ul> 
                 </div>
@@ -186,26 +188,25 @@ export default {
             param['date'] = this.selectedDate;
             param['rootCode'] = this.rootCode;
             param['subCode'] = this.subCode;
+            const nowDay = this.todayDate.substring(0, 10);
             const nowTime = this.todayDate.substring(11,16);
             const list = await this.$get('/movie/movieTime', param); // 상영 극장 정보
              for(let a=0; a<list.length; a++) {
                  this.theater_list[a] = list[a]; // 극장이름
                  this.theater_schedule[a] = list[a].theaterScheduleList; // 극장 상영관    
                  let sche_list = list[a].theaterScheduleList;
+
                  for(let b=0; b<sche_list.length; b++) {
                     let time_list = sche_list[b].timetableList;
                     for(let c=0; c<time_list.length; c++) {
-                        if(time_list[c].rtime < nowTime) { // 상영시간 지난건 배열에서 삭제
+                        if(time_list[c].rdate == nowDay && time_list[c].rtime < nowTime) { // 상영시간 지난건 배열에서 삭제
                             time_list.splice(c, 1);
                         }
                     }
                     this.theater_time[b] = time_list;
-                    console.log(this.theater_time);
-
                  }          
             }
-
-
+            console.log(list);
         },
 
         async insertReview() {
@@ -259,6 +260,7 @@ export default {
 
     .movie__info li { font-size:1.2rem; text-align: left; padding:10px 5px; }
     .movie__info li span {color:gray;}
+    .movie__title { font-size:2.5rem;}
 
     /* 영화 줄거리  */
     .movie__intro__ctnt { border-top:1px solid #F29B21; padding: 15px 10px; line-height: 2rem;}
@@ -267,8 +269,15 @@ export default {
     /* ----- 상영날짜 ----- */
     #select-day { background-color: #32485388; padding: 5px; border: none; border-radius: 5px;}
     .dateBtn {background-color: transparent; border:none;}
-    .movie__timeList { background-color: #32485388; border-radius: 5px; margin-top: 20px; height: auto; overflow:hidden;}
-    .theater__List li { padding: 10px 15px; border: 1px solid #fff;}
+    .movie__timeList { margin-top: 20px; height: auto; overflow:hidden;}
+    .theater__List li { margin:10px 0; text-align: left;}
+    .theater__timeList {background-color: #32485388; border-radius: 5px;}
+    .theater__title { margin-bottom: 7px; font-weight: 700;}
+    .theater__List .ticketBtn { border:1px solid #72727288; margin: 5px 8px}
+    .movie__detailTheater { color:#adadad;}
+    .ticketBtn:hover {background-color:#F29B21;}
+    .ticketBtn:hover div { color:#fff;}
+
 
     /* ----- 별점 ----- */
     .star-rating {
