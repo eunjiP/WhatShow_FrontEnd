@@ -39,21 +39,20 @@
 
       <!-- 채팅창 -->
       <div>채팅창</div>
-      
       <!-- 마이페이지 -->
       <div>
         <div v-b-modal.modal-mypage>마이페이지</div>
-
         <b-modal id="modal-mypage" title="마이페이지" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" footer-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <div>
             <div class="mypage__user">
               <label for="input-file">
-                  <img :src="`/static/img/${this.WSuuid}/0/${this.userImg}`" class="user_img">
+                  <img v-if="!this.userImg == ''" :src="`/static/img/${this.WSuuid}/0/${this.userImg}`" class="user_img" require>
+                  <img v-if="this.userImg == ''" :src="`/static/img/profile/avatar.svg`" class="user_img">
               </label>
               <input id="input-file" type="file" @change="uploadImages($event.target.files)" accept="image/*" style="display: none"/>
               <div>
                 <label for="input-nickname" style="font-size:20px; color:#F9F871;">닉네임</label>
-                <button @click="change_nick">변경</button>
+                <button @click="change_nick" class="btn-mod">변경</button>
                 <b-form-input id="input-nickname" class="nickname__input" placeholder="닉네임을 입력해주세요" v-model="WSnickname" @keyup.enter="change_nick"></b-form-input>
                 <br>
                 <label for="input-favtag" style="font-size:20px; color:#F9F871;">관심 태그</label>
@@ -63,8 +62,6 @@
               </div>
             <br>
             </div>
-
-  
             <div style="font-size: 20px; color:#F9F871;">내가 쓴 댓글</div>
             <div>[미니언즈2] 너무 귀여워요~</div>
             <div>[한산] 애국심이 불타오른다!!!!!</div>
@@ -83,7 +80,11 @@
     <div class="header__right">
       <div class="header__search">
         <div class="search__input" method="post">
-          <input id="header__search" type="text" v-model="keyword" placeholder="검색어" @keyup.enter="searchPage(keyword)"/>
+        <input id="header__search" v-model="keyword" @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" />
+
+            <div class="autocomplete p-ab disabled">
+              <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
+            </div>
           <button class="search" type="submit" @click="searchPage(keyword)"><i class="fa-solid fa-play" style="color:#fff; background-color: #F29B21;"></i></button>
         </div>
         
@@ -104,12 +105,12 @@
               </div>
             </div>
           </div>
-          <br>
-          <br>
+            <br>
+            <br>
           <div class="search__recommend" style="font-size:20px; color:#F9F871;">추천 검색어</div>
-          <br>
-          <div>액션 범죄도시2 한산 멜로</div>
-          <br>
+            <br>
+              <div>액션 범죄도시2 한산 멜로</div>
+            <br>
           <button class="search__btn col-12" type="submit" @click="searchPage(keyword), searchClose()">검색하기</button>
         </b-modal>
       </div>
@@ -137,7 +138,9 @@ import modal from 'bootstrap/js/dist/modal';
         userLocation: '',
         gsTag: [],
         userImg: '',
-        keyword: ''
+        movienm: [],
+        keyword: null,
+        filternm: ''
       }
     },
     mounted(){
@@ -145,6 +148,7 @@ import modal from 'bootstrap/js/dist/modal';
       this.create_uid();
       this.selFav();
       this.sel_uid();
+      this.getMoive();
     },
     updated(){
       this.sel_uid();
@@ -152,6 +156,7 @@ import modal from 'bootstrap/js/dist/modal';
     created() {
       this.getOptionList1()
     },
+
 
   methods: {
     changeOption1() {
@@ -248,6 +253,29 @@ import modal from 'bootstrap/js/dist/modal';
       const { error } = await this.$post(`/user/upd_img/${this.WSuuid}`, formData);
       // console.log(error);
 
+
+    },
+
+    //검색 자동완성
+    async getMoive(){
+      const movieList = await this.$get('/movie/main', {});
+      movieList.forEach(item => {
+        // console.log(item.movie_nm);
+        this.movienm.push(item.movie_nm);
+      })
+      // console.log(this.movienm);
+    },
+    submitAutoComplete() {
+      const autocomplete = document.querySelector(".autocomplete");
+      if (this.keyword) {
+      autocomplete.classList.remove("disabled");
+      this.filternm = this.movienm.filter((item) => {
+          return item.match(new RegExp(this.keyword, "i"));
+        });
+      } else {
+        autocomplete.classList.add("disabled");
+      }
+      console.log(this.filternm);
     },
 
 
@@ -301,6 +329,8 @@ import modal from 'bootstrap/js/dist/modal';
 
     // 검색페이지 이동
     async searchPage(keyword) {
+      const autocomplete = document.querySelector(".autocomplete");
+      autocomplete.classList.add("disabled");
       const close = document.querySelector('#modal-search button');
       
       if (keyword !== '') {
@@ -420,5 +450,21 @@ import modal from 'bootstrap/js/dist/modal';
     border-radius: 20%;
     padding-top: 10px;
     object-fit: cover;
+  }
+
+  .p-ab{
+    position: absolute;
+    z-index: 20;
+    background: rgba(0,0,0,0.5);
+    border-radius: 10px;
+    padding: 10px;
+  }
+
+  .disabled{
+    display: none;
+  }
+
+  .filternm:hover{
+    color: #F29B21;
   }
 </style>
