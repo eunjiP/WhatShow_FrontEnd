@@ -73,19 +73,18 @@
 
     <!-- 헤더 중앙(로고) -->
     <div class="header__logo">
-      <img src="../assets/img/logo.png">
+      <a href="/"><img src="../assets/img/logo.png"></a>
     </div>
 
     <!-- 헤더 오른쪽(검색) -->
     <div class="header__right">
       <div class="header__search">
         <div class="search__input" method="post">
-        <input id="header__search" v-model="keyword" @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" />
-
+        <input id="header__search" v-model="keyword"  placeholder="검색어" @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" />
             <div class="autocomplete p-ab disabled">
               <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
             </div>
-          <button class="search" type="submit" @click="searchPage(keyword)"><i class="fa-solid fa-play" style="color:#fff; background-color: #F29B21;"></i></button>
+          <div class="search__button" @click="searchPage(keyword)"><i class="fa-solid fa-play" style="color:#fff; background-color: #F29B21;"></i></div>
         </div>
         
         <!-- 상세검색 -->
@@ -120,9 +119,6 @@
 </template>
 
 <script>
-import { throwStatement } from '@babel/types';
-import modal from 'bootstrap/js/dist/modal';
-
   export default {
     name: 'mainHeader',
     data() {
@@ -381,7 +377,7 @@ import modal from 'bootstrap/js/dist/modal';
   .header__logo {
     text-align: center;
   }
-  .header__logo > img {
+  .header__logo a img {
     width: 5rem;
   }
   .header__search {
@@ -391,9 +387,14 @@ import modal from 'bootstrap/js/dist/modal';
     text-align:end ;
     line-height: 2rem;
   }
-  .header__search input[type=text] {
-    height: 1.5rem;
-    background: #fff;
+ .header__search .search__input {
+    display: grid;
+    grid-template-columns: 1fr 25px;
+  }
+  .header__search .search__button i {
+    font-size: 20px;
+    padding: 5px;
+    cursor: pointer;
   }
   /* 위치지정_수동 */
   .form-select select { margin: 0 20px; width: 100px; height: 30px;
@@ -410,19 +411,14 @@ import modal from 'bootstrap/js/dist/modal';
 
   /* 검색 css */
 
-  .search__input {
-    overflow: hidden;
-    vertical-align: middle;
-    white-space: nowrap;
-  }
-
   .search__input > #header__search {
     height: 30px;
     background: #00000088;
     color: #fff;
     border: none;
-    font-size: 10pt;
-    width: 200px;
+    font-size: 0.8rem;
+    padding-left: 5px;
+    width: 100%;
   }
 
   .search__btn {
