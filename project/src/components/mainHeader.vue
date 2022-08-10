@@ -387,13 +387,15 @@
     text-align:end ;
     line-height: 2rem;
   }
- .header__search .search__input {
+  .header__search .search__input {
     display: grid;
     grid-template-columns: 1fr 25px;
   }
   .header__search .search__button i {
     font-size: 20px;
     padding: 5px;
+    margin-left: 5px;
+    border-radius: 5px;
     cursor: pointer;
   }
   /* 위치지정_수동 */
@@ -458,6 +460,7 @@
     background: rgba(0,0,0,0.5);
     border-radius: 10px;
     padding: 10px;
+    top: 60px;
   }
 
   .disabled{
