@@ -56,13 +56,13 @@ export default {
         return {
             movie_code: 210931,
             movie_info: [],
-            keyword:this.$route.params.keyword  //nav.vue에서 라우터를 이용해 보낸 파라미터로부터 데이터 받음 
+            keyword:this.$route.params.keyword  //nav.vue에서 라우터를 이용해 보낸 파라미터로부터 데이터 받음
         }
     },
     created() {
         this.getMovieInfo(); // 영화 상세 정보
     },
-    mounted(){
+    updated(){
         this.test();
     },
     methods: {   
@@ -70,7 +70,7 @@ export default {
             this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
         },
         test(){
-            console.log(`keyword : ${this.$route.params.keyword}`);
+            console.log(`req keyword : ${this.keyword}`);
         }
     },
 }

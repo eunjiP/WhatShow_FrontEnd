@@ -80,7 +80,7 @@
     <div class="header__right">
       <div class="header__search">
         <div class="search__input" method="post">
-        <b-form-input id="header__search" v-model="keyword"  placeholder="검색어" @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
+        <input id="header__search" v-model="keyword"  placeholder="검색어" @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
             <div class="autocomplete p-ab disabled">
               <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
             </div>
@@ -256,14 +256,14 @@
     async getMoive(){
       const movieList = await this.$get('/movie/main', {});
       movieList.forEach(item => {
-        // console.log(item.movie_nm);
+      // console.log(item.movie_nm);
         this.movienm.push(item.movie_nm);
       })
       // console.log(this.movienm);
     },
     submitAutoComplete() {
       const autocomplete = document.querySelector(".autocomplete");
-      if (this.keyword) {
+      if (!this.keyword == '') {
       autocomplete.classList.remove("disabled");
       this.filternm = this.movienm.filter((item) => {
           return item.match(new RegExp(this.keyword, "i"));
@@ -324,11 +324,14 @@
     },
 
     // 검색페이지 이동
+    
     async searchPage(keyword) {
       const autocomplete = document.querySelector(".autocomplete");
       autocomplete.classList.add("disabled");
       const close = document.querySelector('#modal-search button');
-      
+      this.keyword = keyword;
+      console.log(`send key:${keyword}`);
+
       if (keyword !== '') {
         this.$router.push({
           name: 'search',
@@ -337,7 +340,6 @@
           }
         })
         this.keyword = '';
-        console.log(keyword);
         close.click();
       } else {
         alert('검색어를 입력해주세요!');
