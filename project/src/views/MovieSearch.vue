@@ -50,7 +50,11 @@
 
 <script>
 export default {
+    name: 'search',
+    props: ['keyword'],
+    
     data() {
+
         return {
             movie_code: 210931,
             movie_info: []
