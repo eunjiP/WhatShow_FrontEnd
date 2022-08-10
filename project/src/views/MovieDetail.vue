@@ -53,21 +53,19 @@
 
                 <div class="movie__timeList row justify-content-md-center">
                     <ul class="theater__List">
-                        <li v-for="(schedule) in theater_schedule" :key="schedule.idx">
-                            <div class="theater__title"> {{ schedule[0].timetableList[0].gname }} </div> <!-- 극장 이름 -->
-                            <div class="theater__timeList">
-                                <ul v-for="(detail) in schedule" :key="detail.idx">
-                                    <li class="d-inline-block" v-for="time in detail.timetableList" :key="time.idx">
-                                        <button class="ticketBtn btn">
-                                            <a :href="time.ticketPcUrl" class="ticketUrl">
-                                                <div class="movie__runningTime">{{ time.rtime }} ~ {{ time.endTime }}</div> <!-- 상영시간 -->
-                                                <div class="movie__detailTheater">{{ time.tname }}</div> <!-- 상영관 -->
-                                            </a>
-                                        </button>
-                                    </li> 
-                                </ul>
-                            </div>  
-                        </li>       
+                        <li  v-for="schedule in theater_list" :key="schedule.idx">
+                            {{ schedule.gname }}
+                            <ul v-for="theater in schedule.theaterScheduleList" :key="theater.idx">
+                                <li class="d-inline-block" v-for="time in theater.timetableList" :key="time.idx">
+                                    <button class="ticketBtn btn">
+                                        <a :href="time.ticketPcUrl" class="ticketUrl">
+                                            <div class="movie__runningTime">{{ time.rtime }} ~ {{ time.endTime }}</div> 
+                                            <div class="movie__detailTheater">{{ time.tname }}</div> 
+                                        </a>
+                                    </button>
+                                </li>
+                            </ul>
+                        </li>
                     </ul> 
                 </div>
             </div>
@@ -76,18 +74,18 @@
         <!-- 영화 감상평 -->
         <div id="movie-review">
             <h4 class="fc-oran">당신의 감상을 들려주세요.</h4>
-            <!-- <div class="star-rating space-x-4 mx-auto my-3">
-                <input type="radio" id="5-stars" name="rating" value="5" v-model="ratings"/>
+            <div class="star-rating space-x-4 mx-auto my-3">
+                <input type="radio" id="5-stars" name="rating" value="5" v-model="movie_score"/>
                 <label for="5-stars" class="star pr-4">★</label>
-                <input type="radio" id="4-stars" name="rating" value="4" v-model="ratings"/>
+                <input type="radio" id="4-stars" name="rating" value="4" v-model="movie_score"/>
                 <label for="4-stars" class="star">★</label>
-                <input type="radio" id="3-stars" name="rating" value="3" v-model="ratings"/>
+                <input type="radio" id="3-stars" name="rating" value="3" v-model="movie_score"/>
                 <label for="3-stars" class="star">★</label>
-                <input type="radio" id="2-stars" name="rating" value="2" v-model="ratings"/>
+                <input type="radio" id="2-stars" name="rating" value="2" v-model="movie_score"/>
                 <label for="2-stars" class="star">★</label>
-                <input type="radio" id="1-star" name="rating" value="1" v-model="ratings"/>
+                <input type="radio" id="1-star" name="rating" value="1" v-model="movie_score"/>
                 <label for="1-star" class="star">★</label>
-            </div> -->
+            </div> 
 
             <div class="review__form row justify-content-center">
                 <div class="review__input col-10">
@@ -126,11 +124,8 @@ export default {
             movie_code: 81888,
             movie_info: [],
             //today: new Date().toISOString().slice(0, 10),
-            todayDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString(),
-            selectedDate: '2022-08-10',
-            theater_list: [], //상영 극장
-            theater_schedule: [], // 극장별 상영관
-            theater_time: [],
+            selectedDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString(),
+            theater_list: [], //상영 극장 정보
             limit: 0,
             rev_list: [],
             more_rev: 5,
@@ -138,7 +133,7 @@ export default {
                 ctnt: '',
                 iuser: 1,
                 movie_code: 81888,
-                movie_score: 5 
+                movie_score: '' 
             },
             rootCode: localStorage.getItem('rootCode'),
             subCode: localStorage.getItem('subCode')
@@ -158,6 +153,7 @@ export default {
 
     methods: {   
         async getMovieInfo() { // 영화 상세 정보
+        console.log(this.review.movie_score);
             this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
             const movie_nm = this.movie_info.movie_nm;
             this.movieTitle(movie_nm);
@@ -189,21 +185,25 @@ export default {
             param['date'] = this.selectedDate;
             param['rootCode'] = this.rootCode;
             param['subCode'] = this.subCode;
-            const nowDay = this.todayDate.substring(0, 10);
-            const nowTime = this.todayDate.substring(11,16);
+            const nowDay = this.selectedDate.substring(0, 10);
+            const nowTime = this.selectedDate.substring(11,16);
             const list = await this.$get('/movie/movieTime', param); // 상영 극장 정보
              for(let a=0; a<list.length; a++) {
                  this.theater_list[a] = list[a]; // 극장이름
-                 this.theater_schedule[a] = list[a].theaterScheduleList; // 극장 상영관    
                  let sche_list = list[a].theaterScheduleList;
                  for(let b=0; b<sche_list.length; b++) {
                     let time_list = sche_list[b].timetableList;
-
-                    for(let c=0; c<time_list.length; c++) {
-                        console.log(time_list[c].rtime);
-                    }
+                     for(let c=0; c<time_list.length; c++) {
+                        if(time_list[c].rdate == nowDay && time_list[c].rtime < nowTime) {
+                           sche_list[b].timetableList.splice(c, 1); // 지난 상영시간 삭제
+                           c--;
+                         } 
+                       
+                     }
+                    
                  }          
             }
+                            
         },
 
         async insertReview() {
