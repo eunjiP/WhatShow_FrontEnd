@@ -124,6 +124,7 @@ export default {
             movie_code: 81888,
             movie_info: [],
             //today: new Date().toISOString().slice(0, 10),
+            todayDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString(),
             selectedDate: '2022-08-10',
             theater_list: [], //상영 극장
             theater_schedule: [], // 극장별 상영관
@@ -185,8 +186,7 @@ export default {
             param['date'] = this.selectedDate;
             param['rootCode'] = this.rootCode;
             param['subCode'] = this.subCode;
-            let nowTime = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString();
-            console.log(nowTime.substring(11,16));
+            const nowTime = this.todayDate.substring(11,16);
             const list = await this.$get('/movie/movieTime', param); // 상영 극장 정보
              for(let a=0; a<list.length; a++) {
                  this.theater_list[a] = list[a]; // 극장이름
@@ -195,10 +195,17 @@ export default {
                  for(let b=0; b<sche_list.length; b++) {
                     let time_list = sche_list[b].timetableList;
                     for(let c=0; c<time_list.length; c++) {
-                        console.log(time_list[c].rtime);
+                        if(time_list[c].rtime < nowTime) { // 상영시간 지난건 배열에서 삭제
+                            time_list.splice(c, 1);
+                        }
                     }
+                    this.theater_time[b] = time_list;
+                    console.log(this.theater_time);
+
                  }          
             }
+
+
         },
 
         async insertReview() {
