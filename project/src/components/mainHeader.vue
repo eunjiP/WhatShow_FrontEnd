@@ -91,7 +91,7 @@
         <div v-b-modal.modal-search class="search__bottom" @click="getSelectTag">상세검색</div>
 
         <b-modal id="modal-search" title="검색하기" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
-          <b-form-input id="modal__search" type="text" v-model="keyword" placeholder="검색어" v-on:input="keywordChanged()" v-on:keyup.enter="searchPage(keyword)"/>
+          <b-form-input id="modal__search" type="text" v-model="keyword" placeholder="검색어" v-on:keyup.enter="searchPage(keyword)"/>
           <br>
           <div class="search__seltag" style="font-size:20px; color:#F9F871;">#태그설정</div>
           <br>
@@ -110,7 +110,7 @@
             <br>
               <div>액션 범죄도시2 한산 멜로</div>
             <br>
-          <button class="search__btn col-12" type="submit" @click="searchPage(keyword), searchClose()">검색하기</button>
+          <button class="search__btn col-12" type="submit" @click="searchPage(keyword)">검색하기</button>
         </b-modal>
       </div>
     </div>
@@ -194,7 +194,7 @@
       let seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`, {});
       let selResult = seluid.result[0];
       let userImg = selResult.user_img;
-      console.log(userImg);
+      // console.log(userImg);
       this.userImg = userImg;
       // selResult.forEach((item) => {
       //   console.log(item);
@@ -344,14 +344,10 @@
       }
     },
 
-    async keywordChanged() {
-      this.searchResult = false
-    },
-
     // 상세검색-장르 체크박스
     async getSelectTag() {
       this.gsTag = await this.$get(`/movie/getTag/`, {});
-      console.log(this.gsTag);
+      // console.log(this.gsTag);
     },
   }
 }
