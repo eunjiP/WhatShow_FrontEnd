@@ -2,7 +2,7 @@
     <div class="container p-5">
         <div id="movie-search">
             <div id="search-header" class="col-12">
-                <div class="search__title text-start">{{ keyword }} 검색 결과</div>
+                <div class="search__title text-start">"{{ keyword }}" 검색 결과</div>
             </div>
             <div id="search__subTitle">
                 <div id="sub1"> 영화</div>
@@ -12,9 +12,9 @@
             <br>
             <div id="search-body">
                 <br>
-                <div class="movie__poster col-3">
-                    <img :src="movie_info.movie_poster" alt="poster">
-                    <div>{{ movie_info.movie_nm }}</div>
+                <div class="movie__poster col-12" v-for="(item, idx) in movie_info" :key="idx" :item="item">
+                    <img :src="`${item.movie_poster}`"/>
+                    <div>{{ item.movie_nm }}</div>
                 </div>
             </div>
             <br>
@@ -51,27 +51,24 @@
 <script>
 export default {    
     name: "search",
-    data() {
 
+    data() {
         return {
-            movie_code: 210931,
+            movie_code: 81888,
             movie_info: [],
-            keyword:this.$route.params.keyword  //nav.vue에서 라우터를 이용해 보낸 파라미터로부터 데이터 받음
+            keyword: this.$route.params.keyword  //nav.vue에서 라우터를 이용해 보낸 파라미터로부터 데이터 받음 
         }
     },
+
     created() {
         this.getMovieInfo(); // 영화 상세 정보
     },
-    updated(){
-        this.test();
-    },
+
     methods: {   
         async getMovieInfo() { // 영화 상세 정보
-            this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
+            this.movie_info = await this.$get(`/movie/selSearch/${this.keyword}`, {});
+            console.log(this.movie_info);
         },
-        test(){
-            console.log(`req keyword : ${this.keyword}`);
-        }
     },
 }
 
