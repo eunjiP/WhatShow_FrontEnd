@@ -12,7 +12,7 @@
 
                 <div class="movie__info col">
                     <ul>
-                        <li><strong>개요</strong> : {{ movie_info.movie_genre }} <span>|</span> {{ movie_info.country }} <span>|</span> {{ movie_info.runing_time}} </li>
+                        <li><strong>개요</strong> : {{ movie_info.movie_genre }} <span>|</span> {{ movie_info.country }} <span>|</span> {{ movie_info.runing_time+"분"}} </li>
                         <li><strong>개봉</strong> :  {{ movie_info.open_date }} </li>
                         <li><strong>등급</strong> :  {{ movie_info.view_level }} </li>
                         <li><strong>감독</strong> :  {{ movie_info.director }} </li>
@@ -155,6 +155,7 @@ export default {
     //         return this.movie_info.open_date.replaceAll('-', '.');
     //     },
     // },
+
     methods: {   
         async getMovieInfo() { // 영화 상세 정보
             this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
@@ -195,18 +196,14 @@ export default {
                  this.theater_list[a] = list[a]; // 극장이름
                  this.theater_schedule[a] = list[a].theaterScheduleList; // 극장 상영관    
                  let sche_list = list[a].theaterScheduleList;
-
                  for(let b=0; b<sche_list.length; b++) {
                     let time_list = sche_list[b].timetableList;
+
                     for(let c=0; c<time_list.length; c++) {
-                        if(time_list[c].rdate == nowDay && time_list[c].rtime < nowTime) { // 상영시간 지난건 배열에서 삭제
-                            time_list.splice(c, 1);
-                        }
+                        console.log(time_list[c].rtime);
                     }
-                    this.theater_time[b] = time_list;
                  }          
             }
-            console.log(list);
         },
 
         async insertReview() {
@@ -217,16 +214,16 @@ export default {
             } else {
                 alert('작성된 내용이 없습니다.');
             }
-           
         },
+
         more() { // 리뷰 더보기
             this.more_rev += 5;
             this.getReview();
         },
+
         async getReview() { // 리뷰 리스트 
             this.rev_list = await this.$get(`/detail/reviewList/${this.movie_code}/${this.more_rev}`, {});
         },
-        
 
         revLimit() { // 리뷰 글 수 제한
             const review_txt = document.querySelector('.review__txt');
@@ -235,10 +232,7 @@ export default {
                 review_txt.value = review_txt.value.substring(0, 100);
             }
         },
-
-        
     },
-
 }
 
 </script>
