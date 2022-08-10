@@ -54,7 +54,7 @@
                 <div class="movie__timeList">
                     <ul class="theater__List">
                         <li v-for="(schedule) in theater_schedule" :key="schedule.idx">
-                            <div v-for="(detail) in schedule" :key="detail.idx"> 
+                            <div v-for="(detail) in schedule" :key="detail.idx">
                                 <div v-for="time in detail.timetableList" :key="time.idx">
                                     {{time.gname}} <!--극장이름-->
                                     <button class="btn">
@@ -124,7 +124,7 @@ export default {
             movie_code: 81888,
             movie_info: [],
             //today: new Date().toISOString().slice(0, 10),
-            selectedDate: '2022-08-09',
+            selectedDate: '2022-08-10',
             theater_list: [], //상영 극장
             theater_schedule: [], // 극장별 상영관
             theater_time: [],
@@ -185,14 +185,22 @@ export default {
             param['date'] = this.selectedDate;
             param['rootCode'] = this.rootCode;
             param['subCode'] = this.subCode;
-
+            let nowTime = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString();
+            console.log(nowTime.substring(11,16));
             const list = await this.$get('/movie/movieTime', param); // 상영 극장 정보
              for(let a=0; a<list.length; a++) {
-                
                  this.theater_list[a] = list[a]; // 극장이름
-                 this.theater_schedule[a] = list[a].theaterScheduleList; // 극장 상영관               
+                 this.theater_schedule[a] = list[a].theaterScheduleList; // 극장 상영관    
+                 let sche_list = list[a].theaterScheduleList;
+                 for(let b=0; b<sche_list.length; b++) {
+                    let time_list = sche_list[b].timetableList;
+                    for(let c=0; c<time_list.length; c++) {
+                        console.log(time_list[c].rtime);
+                    }
+                 }          
             }
         },
+
         async insertReview() {
             if(this.review.ctnt !== '') {
                 const result = await this.$post('/detail/insertReview', this.review);
