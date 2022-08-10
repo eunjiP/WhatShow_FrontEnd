@@ -9,7 +9,9 @@
                 <div></div>
                 <div id="sub2">더보기</div>
             </div>
+            <br>
             <div id="search-body">
+                <br>
                 <div class="movie__poster col-3">
                     <img :src="movie_info.movie_poster" alt="poster">
                     <div>{{ movie_info.movie_nm }}</div>
@@ -17,11 +19,13 @@
             </div>
             <br>
             <div id="search__subTitle">
+                <br>
                 <div id="sub1"> 검색 장르 영화 추천</div>
                 <div></div>
                 <div id="sub2">더보기</div>
             </div>
             <div id="search-body">
+                <br>
                 <div class="movie__poster col-3">
                     <img :src="movie_info.movie_poster" alt="poster">
                     <div>{{ movie_info.movie_nm }}</div>
@@ -34,6 +38,7 @@
                 <div id="sub2">더보기</div>
             </div>
             <div id="search-body">
+                <br>
                 <div class="movie__poster col-3">
                     <img :src="movie_info.movie_poster" alt="poster">
                     <div>{{ movie_info.movie_nm }}</div>
@@ -45,7 +50,11 @@
 
 <script>
 export default {
+    name: 'search',
+    props: ['keyword'],
+    
     data() {
+
         return {
             movie_code: 210931,
             movie_info: []
@@ -65,22 +74,28 @@ export default {
 </script>
 
 <style scoped>
-    .container { background: #00000088; border-radius: 10px;}
-
-    #movie-search {
+    /* 검색페이지 전체 */
+    .container {
+        background: #00000088; border-radius: 10px;
         color: white;
     }
 
+    /* 검색어결과 타이틀 */
     .search__title {
         color: #F9F871; font-size: 2rem; font-weight: bold;
     }
 
+    /* 소제목 타이틀 */
     #search__subTitle {
         width: 100%;
         display: inline-block;
         vertical-align: middle;
+        border-bottom: 1px solid #F29B21;
+        padding: 15px 10px;
+        line-height: 2rem;
     }
 
+    /* 소제목 */
     #sub1 {
         float: left;
         font-size: 1.5rem;
@@ -88,6 +103,7 @@ export default {
         font-weight: bold;
     }
 
+    /* 더보기 */
     #sub2 {
         float: right;
 
@@ -95,5 +111,6 @@ export default {
 
     .movie__poster {
         text-align: center;
+
     }
 </style>
