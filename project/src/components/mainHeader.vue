@@ -197,6 +197,8 @@
       let selResult = seluid.result[0];
       let userImg = selResult.user_img;
       // console.log(userImg);
+      let iuser = selResult.iuser;
+      localStorage.setItem('iuser',iuser);
       this.userImg = userImg;
       // selResult.forEach((item) => {
       //   console.log(item);
@@ -208,8 +210,8 @@
     //닉네임 변경
     async change_nick() {
       this.WSnickname = this.WSnickname;
-      localStorage.setItem('WSnickname', this.WSnickname);
       let chNick = await this.$post(`/user/upd_nick/${this.WSnickname}/${this.WSuuid}`, {});
+      localStorage.setItem('WSnickname', this.WSnickname);
     },
 
     //유저 favtag DB불러옴
