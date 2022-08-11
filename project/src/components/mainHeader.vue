@@ -97,7 +97,7 @@
             <div class="row">
               <div>
                 <label v-for="item in gsTag" :key="item" class="col-3">
-                  <input type="checkbox" v-model="keyword" :value="item" name="genre"> {{ item }}
+                  <input type="checkbox" v-model="keytag" :value="item" name="genre"> {{ item }}
                 </label>
               </div>
             </div>
@@ -108,7 +108,7 @@
             <br>
               <div>액션 범죄도시2 한산 멜로</div>
             <br>
-          <button class="search__btn col-12" type="submit" @click="searchPage(keyword)">검색하기</button>
+          <button class="search__btn col-12" type="submit" @click="searchPageTag(keytag)">검색하기</button>
         </b-modal>
       </div>
     </div>
@@ -136,7 +136,8 @@
         movienm: [],
         keyword: null,
         filternm: '',
-        userCtnt: []
+        userCtnt: [],
+        keytag: []
       }
     },
     
@@ -338,7 +339,6 @@
       const close = document.querySelector('#modal-search button');
       this.keyword = keyword;
       console.log(`send key:${keyword}`);
-      
       if (keyword !== '') {
         this.$router.push({
           name: 'search',
@@ -351,9 +351,29 @@
       } else {
         alert('검색어를 입력해주세요!');
       }
-    
+    },
+
+    // 태그로 검색페이지 이동
+    async searchPageTag(keyTag) {
+      const autocomplete = document.querySelector(".autocomplete");
+      autocomplete.classList.add("disabled");
+      const close = document.querySelector('#modal-search button');
+      this.keyTag = keyTag;
+      console.log(this.keyTag);
+
+      if (keyword !== '') {
+        this.$router.push({
+          name: 'search',
+          params: {
+            keyTag: this.keyTag
+          }
+        })
+        this.keyTag = '';
+        close.click();
+      } else {
+        alert('검색어를 입력해주세요!');
       }
-      ,
+    },
 
     // 상세검색-장르 체크박스
     async getSelectTag() {
