@@ -17,8 +17,24 @@ for image in images:
     f.write('\t')
 f.close()
 
-f = open('./movie_title.txt', 'w', encoding='utf-8')
+f = open('./movie_img.txt', 'w', encoding='utf-8')
 for title in titles:
     f.write(title.text)
     f.write('\t')
 f.close()
+
+
+# 아래는 실행 되는 것.
+
+# from urllib.request import urlopen
+# from bs4 import BeautifulSoup
+
+# html = urlopen("https://news.naver.com/")
+
+# bsObject = BeautifulSoup(html, "html.parser")
+
+# #for link in bsObject.find_all('a'):
+# #    print(link.text.strip(), link.get('href'))
+
+# for link in bsObject.find_all('img'):
+#     print(link.text.strip(), link.get('src'))
