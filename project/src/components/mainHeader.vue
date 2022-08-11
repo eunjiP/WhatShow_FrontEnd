@@ -80,7 +80,7 @@
     <div class="header__right">
       <div class="header__search">
         <div class="search__input" method="post">
-        <input id="header__search" v-model="keyword"  placeholder="검색어" @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
+        <input id="header__search" v-model="keyword" placeholder="검색어" @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
             <div class="autocomplete p-ab disabled">
               <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
             </div>
@@ -99,7 +99,7 @@
             <div class="row">
               <div>
                 <label v-for="item in gsTag" :key="item" class="col-3">
-                  <input type="checkbox" name="genre"> {{ item }}
+                  <input type="checkbox" v-model="keyword" :value="item" name="genre"> {{ item }}
                 </label>
               </div>
             </div>
@@ -121,6 +121,7 @@
 <script>
   export default {
     name: 'mainHeader',
+    el: '#modal-search',
     data() {
       return {
         option1: [],
@@ -135,10 +136,11 @@
         gsTag: [],
         userImg: '',
         movienm: [],
-        keyword: null,
+        keyword: [],
         filternm: ''
       }
     },
+    
     mounted(){
       this.ins_uid();
       this.create_uid();
@@ -324,14 +326,12 @@
     },
 
     // 검색페이지 이동
-    
     async searchPage(keyword) {
       const autocomplete = document.querySelector(".autocomplete");
       autocomplete.classList.add("disabled");
       const close = document.querySelector('#modal-search button');
       this.keyword = keyword;
       console.log(`send key:${keyword}`);
-
       if (keyword !== '') {
         this.$router.push({
           name: 'search',
