@@ -63,9 +63,7 @@
             <br>
             </div>
             <div style="font-size: 20px; color:#F9F871;">내가 쓴 댓글</div>
-            <div>[미니언즈2] 너무 귀여워요~</div>
-            <div>[한산] 애국심이 불타오른다!!!!!</div>
-            <div>[헤어질결심] 헤어지는게 뭐임?</div>
+            <div v-for="(item, idx) in userCtnt" :key="idx" :item="item" >✨ {{item}}</div>
           </div>
         </b-modal>
       </div>
@@ -80,7 +78,7 @@
     <div class="header__right">
       <div class="header__search">
         <div class="search__input" method="post">
-        <input id="header__search" v-model="keyword"  placeholder="검색어" @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
+        <input id="header__search" v-model="keyword" placeholder="검색어" @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
             <div class="autocomplete p-ab disabled">
               <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
             </div>
@@ -99,7 +97,7 @@
             <div class="row">
               <div>
                 <label v-for="item in gsTag" :key="item" class="col-3">
-                  <input type="checkbox" name="genre"> {{ item }}
+                  <input type="checkbox" v-model="keyword" :value="item" name="genre"> {{ item }}
                 </label>
               </div>
             </div>
@@ -121,6 +119,7 @@
 <script>
   export default {
     name: 'mainHeader',
+    el: '#modal-search',
     data() {
       return {
         option1: [],
@@ -136,9 +135,11 @@
         userImg: '',
         movienm: [],
         keyword: null,
-        filternm: ''
+        filternm: '',
+        userCtnt: []
       }
     },
+    
     mounted(){
       this.ins_uid();
       this.create_uid();
@@ -189,15 +190,20 @@
       }
     },
 
-    //유저 uuid, nick DB 불러옴
+    //유저 정보 불러옴 불러옴
     async sel_uid() {
       let seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`, {});
+      seluid.result.forEach(item =>{
+      this.userCtnt.push(`[${item.movie_nm}] ${item.ctnt}` );
+      })
+      // console.log(this.userCtnt);
       let selResult = seluid.result[0];
       let userImg = selResult.user_img;
       // console.log(userImg);
       let iuser = selResult.iuser;
       localStorage.setItem('iuser',iuser);
       this.userImg = userImg;
+      // console.log(selResult);
       // selResult.forEach((item) => {
       //   console.log(item);
       // });
@@ -256,7 +262,7 @@
 
     //검색 자동완성
     async getMoive(){
-      const movieList = await this.$get('/movie/main', {});
+      const movieList = await this.$get('/movie/get_movie', {});
       movieList.forEach(item => {
       // console.log(item.movie_nm);
         this.movienm.push(item.movie_nm);
@@ -326,14 +332,13 @@
     },
 
     // 검색페이지 이동
-    
     async searchPage(keyword) {
       const autocomplete = document.querySelector(".autocomplete");
       autocomplete.classList.add("disabled");
       const close = document.querySelector('#modal-search button');
       this.keyword = keyword;
       console.log(`send key:${keyword}`);
-
+      
       if (keyword !== '') {
         this.$router.push({
           name: 'search',
@@ -346,7 +351,9 @@
       } else {
         alert('검색어를 입력해주세요!');
       }
-    },
+    
+      }
+      ,
 
     // 상세검색-장르 체크박스
     async getSelectTag() {
