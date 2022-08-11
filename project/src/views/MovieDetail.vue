@@ -95,7 +95,7 @@
                 </div>
                 <button class="review__btn ms-2 col-2" @click="insertReview">등록</button>
             </div>
-
+            
             <div class="review__box">
                 <ul class="review__list" >
                     <li class="review__comment" v-for="review in rev_list" :key="review.i_review">
@@ -114,11 +114,13 @@
                     </button>
                 </div>
             </div> 
+            
         </div>
     </div>
 </template>
 
 <script>
+
 export default {
     data() {
         return {
@@ -145,16 +147,9 @@ export default {
         this.getDate(); // 상영시간
         this.getReview(); // 리뷰 리스트
     },
-    
-    // computed: {
-    //     openDate() { // 영화 개봉일 가공
-    //         return this.movie_info.open_date.replaceAll('-', '.');
-    //     },
-    // },
 
     methods: {   
         async getMovieInfo() { // 영화 상세 정보
-        console.log(this.review.movie_score);
             this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
             const movie_nm = this.movie_info.movie_nm;
             this.movieTitle(movie_nm);
@@ -207,24 +202,45 @@ export default {
                             
         },
 
-        async insertReview() {
-            console.log(this.review);
-            if(this.review.ctnt !== '') {
-                const result = await this.$post('/detail/insertReview', this.review);
-                this.review.ctnt = '';
-                console.log(result);
+        async insertReview() { // 리뷰 작성
+            if(this.review.ctnt === '' || this.review.movie_score ==='') {
+                alert('입력된 내용이 없습니다.');
             } else {
-                alert('작성된 내용이 없습니다.');
+                const result = await this.$post('/detail/insertReview', this.review);
+                
+                    if(result) {
+                        const item = {
+                        'i_review' : result.result,
+                        'iuser' : this.review.iuser,
+                        'movie_code' : this.review.movie_code,
+                        'ctnt' : this.review.ctnt,
+                        'movie_score' : this.review.movie_score,
+                        'nickname' : 'user940',
+                        'created_at' : this.todayDate.split('T')
+                    };
+                    this.rev_list.unshift(item);
+                    }
+                
+
+           
+                this.review.ctnt ='';
+                this.review.movie_score='';
+                
             }
+          
+        },
+
+        async getReview() { // 리뷰 리스트
+            const list = await this.$get(`/detail/reviewList/${this.movie_code}/${this.more_rev}`, []);
+            if(list){
+                this.rev_list = list;
+            }
+            console.log(list);
         },
 
         more() { // 리뷰 더보기
             this.more_rev += 5;
             this.getReview();
-        },
-
-        async getReview() { // 리뷰 리스트 
-            this.rev_list = await this.$get(`/detail/reviewList/${this.movie_code}/${this.more_rev}`, {});
         },
 
         revLimit() { // 리뷰 글 수 제한
