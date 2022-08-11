@@ -21,7 +21,7 @@
                     <!-- 평점, 추천 -->
                     <div class="movie__recom row">
                         <div class="movie__score col-5"><i class="fa-solid fa-star fs-2 me-3"></i><span class="fs-2">{{movie_recommend.avgScore}}</span> </div>
-                        <div class="recom_good col"><i class="fa-solid fa-thumbs-up fs-2 me-3"></i> <span class="fs-2">{{ movie_recommend.recommend }}</span> </div>
+                        <div class="recom_good col" @click="changeRecommend"><i class="fa-solid fa-thumbs-up fs-2 me-3"></i> <span class="fs-2">{{ movie_recommend.recommend }}</span> </div>
                     </div>
                 </div>
 
@@ -188,6 +188,10 @@ export default {
            result[0].avgScore = Math.round(avg*10)/10;
            
            this.movie_recommend = result[0];
+           if(this.movie_recommend['meRecommend']) {
+                const recom_good = document.querySelector('.recom_good > i');
+                recom_good.classList.add('recommend');
+           }
            console.log(this.movie_recommend);
         },
 
@@ -263,6 +267,27 @@ export default {
                 review_txt.value = review_txt.value.substring(0, 100);
             }
         },
+
+        //추천과 비추천
+        async changeRecommend() {
+            const recom_good = document.querySelector('.recom_good > i');
+            const recom_goodSpan = document.querySelector('.recom_good > span');
+            if(this.movie_recommend['meRecommend']) {
+                const result = await this.$delete(`detail/changeRecommend/${this.movie_code}/${this.review.iuser}`);
+                recom_good.classList.remove('recommend');
+                this.movie_recommend['meRecommend'] = 0;
+                this.movie_recommend['recommend'] -= 1;
+                recom_goodSpan.innerHTML = this.movie_recommend['recommend'];
+            } else {
+                const result = await this.$post(`detail/changeRecommend/${this.movie_code}/${this.review.iuser}`);
+                console.log(result);
+                recom_good.classList.add('recommend');
+                this.movie_recommend['meRecommend'] = 1;
+                this.movie_recommend['recommend'] += 1;
+                recom_goodSpan.innerHTML = this.movie_recommend['recommend'];
+            }
+        },
+
     },
 }
 
@@ -375,5 +400,123 @@ export default {
     .writer__info .writer__cre { font-size:0.8rem; color:gray;  }
     .writer__info .writer { color: #F29B21; font-family: 'round'; margin-right:10px; }
 
+    /* 추천 스타일 */
+    .recommend {
+        color: var(--font--color);
+        /* 젤리 애니메이션 */
+        -webkit-animation: jello-vertical 0.9s both;
+	        animation: jello-vertical 0.9s both;
+        /* 위에서 떨어지는 애니메이션 */
+        /* -webkit-animation: bounce-top 0.9s both;
+                animation: bounce-top 0.9s both; */
+    }
+    .jello-horizontal {
+        -webkit-animation: jello-horizontal 0.9s both;
+                animation: jello-horizontal 0.9s both;
+    }
+@-webkit-keyframes bounce-top {
+  0% {
+    -webkit-transform: translateY(-45px);
+            transform: translateY(-45px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    opacity: 1;
+  }
+  24% {
+    opacity: 1;
+  }
+  40% {
+    -webkit-transform: translateY(-24px);
+            transform: translateY(-24px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  65% {
+    -webkit-transform: translateY(-12px);
+            transform: translateY(-12px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  82% {
+    -webkit-transform: translateY(-6px);
+            transform: translateY(-6px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  93% {
+    -webkit-transform: translateY(-4px);
+            transform: translateY(-4px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  25%,
+  55%,
+  75%,
+  87% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+  100% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+    opacity: 1;
+  }
+}
+@keyframes bounce-top {
+  0% {
+    -webkit-transform: translateY(-45px);
+            transform: translateY(-45px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+    opacity: 1;
+  }
+  24% {
+    opacity: 1;
+  }
+  40% {
+    -webkit-transform: translateY(-24px);
+            transform: translateY(-24px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  65% {
+    -webkit-transform: translateY(-12px);
+            transform: translateY(-12px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  82% {
+    -webkit-transform: translateY(-6px);
+            transform: translateY(-6px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  93% {
+    -webkit-transform: translateY(-4px);
+            transform: translateY(-4px);
+    -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in;
+  }
+  25%,
+  55%,
+  75%,
+  87% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+  }
+  100% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+    -webkit-animation-timing-function: ease-out;
+            animation-timing-function: ease-out;
+    opacity: 1;
+  }
+}
 
 </style>
