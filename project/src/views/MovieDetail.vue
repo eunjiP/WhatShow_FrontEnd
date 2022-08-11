@@ -134,7 +134,8 @@ export default {
             more_rev: 5,
             review: {
                 ctnt: '',
-                iuser: 1,
+                nickname: localStorage.getItem('WSnickname'),
+                iuser: localStorage.getItem('iuser'),
                 movie_code: 81888,
                 movie_score: '' 
             },
@@ -207,16 +208,18 @@ export default {
                 alert('입력된 내용이 없습니다.');
             } else {
                 const result = await this.$post('/detail/insertReview', this.review);
-                
+                    const created_at = this.todayDate.substring(0,19);
+                    created_at.split('T');
+
                     if(result) {
                         const item = {
                         'i_review' : result.result,
-                        'iuser' : this.review.iuser,
+                        'iuser' : parseInt(this.review.iuser),
                         'movie_code' : this.review.movie_code,
                         'ctnt' : this.review.ctnt,
                         'movie_score' : this.review.movie_score,
-                        'nickname' : 'user940',
-                        'created_at' : this.todayDate.split('T')
+                        'nickname' : this.review.nickname,
+                        'created_at' : created_at
                     };
                     this.rev_list.unshift(item);
                     }
