@@ -8,7 +8,9 @@
         <div class="slide__prev" @click="moveLeft"><i class="fa-solid fa-angle-left"></i></div>
         <div class="slide__next" @click="moveRight"><i class="fa-solid fa-angle-right"></i></div>
       </div>
-      <div class="paginations"></div>
+      <div class="paginations">
+        <span class="dot" v-for="idx in movieList.length" :key="idx" @click="currentSlide(idx-1)"></span>     
+      </div>
     </div>
   </main>
 </template>
@@ -29,27 +31,38 @@ export default {
       this.movieList = await this.$get('/movie/main', {});
     },
     moveRight() {
-      this.itemIdx++;
-      if(this.itemIdx === this.movieList.length) {
+      if(this.itemIdx >= this.movieList.length-1) {
         this.itemIdx = 0;
+      } else {
+        this.itemIdx++;
       }
       const slideList = document.querySelector('.slide__list');
       slideList.style.transform = `translate(-${this.itemIdx * 100}%)`;
-      
+      this.currentSlide(this.itemIdx);
     },
     moveLeft() {
-      this.itemIdx--;
-      if(this.itemIdx === -1) {
+      if(this.itemIdx <= 0) {
         this.itemIdx = this.movieList.length-1;
+      } else {
+        this.itemIdx--;
       }
       const slideList = document.querySelector('.slide__list');
       slideList.style.transform = `translate(-${this.itemIdx * 100}%)`;
-      
+      this.currentSlide(this.itemIdx);
     },
-
+    currentSlide(idx) {
+      const slideList = document.querySelector('.slide__list');
+      const dots = document.querySelectorAll('.dot');
+      for (let i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+      }
+      slideList.style.transform = `translate(-${idx * 100}%)`;
+      this.itemIdx = idx;
+      dots[idx].className += " active";
+    }, 
   },
   created() {
-    this.getMovieList()
+    this.getMovieList();
   },
   components: {
     MovieItem,
@@ -93,4 +106,21 @@ export default {
     right: 5%;
     top: 50%;
   }
+  .paginations {
+    text-align: center;
+  }
+  .dot {
+  cursor: pointer;
+  height: 10px;
+  width: 10px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: #EA9A28;
+}
 </style>
