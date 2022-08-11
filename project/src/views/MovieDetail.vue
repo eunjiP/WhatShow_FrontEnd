@@ -1,5 +1,5 @@
 <template>
-    <div class="container p-5">
+    <div class="container p-5" id="refreshing">
         <div id="movie-detail">
             <div id="detail-header" class="row justify-content-center">
                 <div class="movie__title text-start"><!-- 영화 제목 --></div>
@@ -18,29 +18,21 @@
                         <li><strong>감독</strong> :  {{ movie_info.director }} </li>
                         <li><strong>배우</strong> :  {{ movie_info.actor }} </li>
                     </ul>
-
+                    <!-- 평점, 추천 -->
                     <div class="movie__recom row">
-                        <div class="movie__score col-5">
-                            평점
-                        </div>
-                        <div class="recom_good col">
-                            <div>추천 수</div>
-                            <i class="fa-solid fa-thumbs-up"></i>
-                        </div>
-                        <div class="recom_bad col">
-                            <div>비추천 수</div>
-                            <i class="fa-solid fa-thumbs-down"></i>
-                        </div>
+                        <div class="movie__score col-5"><i class="fa-solid fa-star fs-2 me-3"></i><span class="fs-2">{{movie_recommend.avgScore}}</span> </div>
+                        <div class="recom_good col"><i class="fa-solid fa-thumbs-up fs-2 me-3"></i> <span class="fs-2">{{ movie_recommend.recommend }}</span> </div>
                     </div>
                 </div>
 
                 <div class="movie__intro my-5 col-12">
                     <h4 class="fc-oran text-start">줄거리</h4>
                     <div class="movie__intro__ctnt">
-                        {{ movie_info.movie_summary }}
+                        <!-- 영화 줄거리 -->
                     </div>
                 </div>
             </div>
+            
             <!-- 영화 상영 스케줄 -->
             <div id="movie__time"  class= "my-5 col-12">
                 <h4 class="fc-oran text-start">영화 상영시간</h4>
@@ -125,9 +117,10 @@ export default {
     data() {
         return {
             movie_code: 81888,
-            movie_info: [],
-            todayDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString(),
-            selectedDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().substring(0, 10),
+            movie_info: [], // 영화정보
+            movie_recommend: {},
+            todayDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString(), // 현재 날짜
+            selectedDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().substring(0, 10), //검색할 날짜
             theater_list: [], //상영 극장 정보
             limit: 0,
             rev_list: [],
@@ -147,12 +140,21 @@ export default {
         this.getMovieInfo(); // 영화 상세 정보
         this.getDate(); // 상영시간
         this.getReview(); // 리뷰 리스트
+        this.movieRecommend();
     },
 
-    methods: {   
+    methods: {
+      
         async getMovieInfo() { // 영화 상세 정보
             this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
             const movie_nm = this.movie_info.movie_nm;
+            const summary = this.movie_info.movie_summary.split('\\');
+            summary.forEach(e => {
+                const movie__intro__ctnt = document.querySelector('.movie__intro__ctnt')
+                const div = document.createElement('div');
+                movie__intro__ctnt.append(div);
+                div.append(e);
+            });
             this.movieTitle(movie_nm);
         },
 
@@ -174,6 +176,19 @@ export default {
                 movie__mainTitle.append(nm);
                 movieTitleBox.append(movie__mainTitle);
             }
+        },
+
+        async movieRecommend() {
+            const param = {
+                'movie_code' : this.movie_code,
+                'iuser' : this.review.iuser
+            };
+           const result = await this.$get('/detail/movieScoreAndRecommend', param);
+           const avg = result[0].avgScore
+           result[0].avgScore = Math.round(avg*10)/10;
+           
+           this.movie_recommend = result[0];
+           console.log(this.movie_recommend);
         },
 
         async getDate() { // 상영시간
@@ -223,12 +238,8 @@ export default {
                     };
                     this.rev_list.unshift(item);
                     }
-                
-
-           
                 this.review.ctnt ='';
-                this.review.movie_score='';
-                
+                this.review.movie_score=''; 
             }
           
         },
@@ -268,6 +279,16 @@ export default {
     .fc-oran { color: #F29B21; }
 
     .container { background: #00000088; border-radius: 10px;}
+    #refreshing { animation: refreshing 3s;}
+        @keyframes refreshing  {
+	        0% {
+		        opacity: 0;
+	        }
+            100% {
+                opacity: 1;
+            
+            }
+    }
 
     /* ----- 영화 정보 ----- */
     .movie__poster { width: 340px;}
@@ -292,6 +313,7 @@ export default {
     .ticketBtn:hover {background-color:#F29B21;}
     .ticketBtn:hover div { color:#fff;}
 
+   
 
     /* ----- 별점 ----- */
     .star-rating {
