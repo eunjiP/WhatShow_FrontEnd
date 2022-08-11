@@ -38,34 +38,35 @@
                     <h4 class="fc-oran text-start">줄거리</h4>
                     <div class="movie__intro__ctnt">
                         {{ movie_info.movie_summary }}
-                    <!-- <video :src="movie_info.preview" autoplay></video> -->
                     </div>
                 </div>
             </div>
             <!-- 영화 상영 스케줄 -->
             <div id="movie__time"  class= "my-5 col-12">
-
                 <h4 class="fc-oran text-start">영화 상영시간</h4>
+                <div class=" text-start text-secondary mb-2" >관람을 원하는 날짜를 선택하여 검색해보세요.</div>
                 <div class="day__selecte text-start">
                     <input type="date" id="select-day" v-model="selectedDate">
                     <button class="dateBtn ms-3" @click="getDate"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
 
-                <div class="movie__timeList">
+                <div class="movie__timeList row justify-content-md-center">
                     <ul class="theater__List">
-                        <li v-for="(schedule) in theater_schedule" :key="schedule.idx">
-                            <div v-for="(detail) in schedule" :key="detail.idx">
-                                <div v-for="time in detail.timetableList" :key="time.idx">
-                                    {{time.gname}} <!--극장이름-->
-                                    <button class="btn">
-                                        <a :href="time.ticketPcUrl" class="ticketUrl">
-                                            <span>{{ time.tname }}</span> <!-- 상영관 -->
-                                            <span>{{ time.rtime }} ~ {{ time.endTime }}</span> <!-- 상영시간 -->
-                                        </a>
-                                    </button>
-                                </div> 
+                        <li  v-for="schedule in theater_list" :key="schedule.idx">
+                            {{ schedule.gname }} <!-- 극장명 -->
+                            <div class="theater__timeList">
+                                <ul v-for="theater in schedule.theaterScheduleList" :key="theater.idx">
+                                    <li class="d-inline-block" v-for="time in theater.timetableList" :key="time.idx">
+                                        <button class="ticketBtn btn">
+                                            <a :href="time.ticketPcUrl" class="ticketUrl">
+                                                <div class="movie__runningTime">{{ time.rtime }} ~ {{ time.endTime }}</div> <!-- 상영시간 -->
+                                                <div class="movie__detailTheater">{{ time.tname }}</div> <!-- 상영관 -->
+                                            </a>
+                                        </button>
+                                    </li>
+                                </ul>
                             </div>
-                        </li>       
+                        </li>
                     </ul> 
                 </div>
             </div>
@@ -74,18 +75,18 @@
         <!-- 영화 감상평 -->
         <div id="movie-review">
             <h4 class="fc-oran">당신의 감상을 들려주세요.</h4>
-            <!-- <div class="star-rating space-x-4 mx-auto my-3">
-                <input type="radio" id="5-stars" name="rating" value="5" v-model="ratings"/>
+            <div class="star-rating space-x-4 mx-auto my-3">
+                <input type="radio" id="5-stars" value="5" v-model="review.movie_score"/>
                 <label for="5-stars" class="star pr-4">★</label>
-                <input type="radio" id="4-stars" name="rating" value="4" v-model="ratings"/>
+                <input type="radio" id="4-stars" value="4" v-model="review.movie_score"/>
                 <label for="4-stars" class="star">★</label>
-                <input type="radio" id="3-stars" name="rating" value="3" v-model="ratings"/>
+                <input type="radio" id="3-stars" value="3" v-model="review.movie_score"/>
                 <label for="3-stars" class="star">★</label>
-                <input type="radio" id="2-stars" name="rating" value="2" v-model="ratings"/>
+                <input type="radio" id="2-stars" value="2" v-model="review.movie_score"/>
                 <label for="2-stars" class="star">★</label>
-                <input type="radio" id="1-star" name="rating" value="1" v-model="ratings"/>
+                <input type="radio" id="1-star" value="1" v-model="review.movie_score"/>
                 <label for="1-star" class="star">★</label>
-            </div> -->
+            </div> 
 
             <div class="review__form row justify-content-center">
                 <div class="review__input col-10">
@@ -94,15 +95,15 @@
                 </div>
                 <button class="review__btn ms-2 col-2" @click="insertReview">등록</button>
             </div>
-
+            
             <div class="review__box">
                 <ul class="review__list" >
                     <li class="review__comment" v-for="review in rev_list" :key="review.i_review">
-                        <div class="writer__score">★★★★★</div>
+                        <span class="writer__score" v-for="star in review.movie_score" :key="star">★</span> <span>{{ review.movie_score }} </span>
                         <div class="review__cnt">{{ review.ctnt }}</div>
 
                         <div class="writer__info">
-                            <span class="writer">{{ review.iuser }}</span>
+                            <span class="writer">{{ review.nickname }}</span>
                             <span class="writer__cre">{{ review.created_at }}</span>
                         </div>
                     </li>
@@ -113,29 +114,30 @@
                     </button>
                 </div>
             </div> 
+            
         </div>
     </div>
 </template>
 
 <script>
+
 export default {
     data() {
         return {
             movie_code: 81888,
             movie_info: [],
-            //today: new Date().toISOString().slice(0, 10),
-            selectedDate: '2022-08-10',
-            theater_list: [], //상영 극장
-            theater_schedule: [], // 극장별 상영관
-            theater_time: [],
+            todayDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString(),
+            selectedDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().substring(0, 10),
+            theater_list: [], //상영 극장 정보
             limit: 0,
             rev_list: [],
             more_rev: 5,
             review: {
                 ctnt: '',
-                iuser: 1,
+                nickname: localStorage.getItem('WSnickname'),
+                iuser: localStorage.getItem('iuser'),
                 movie_code: 81888,
-                movie_score: 5 
+                movie_score: '' 
             },
             rootCode: localStorage.getItem('rootCode'),
             subCode: localStorage.getItem('subCode')
@@ -146,12 +148,7 @@ export default {
         this.getDate(); // 상영시간
         this.getReview(); // 리뷰 리스트
     },
-    
-    // computed: {
-    //     openDate() { // 영화 개봉일 가공
-    //         return this.movie_info.open_date.replaceAll('-', '.');
-    //     },
-    // },
+
     methods: {   
         async getMovieInfo() { // 영화 상세 정보
             this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
@@ -185,39 +182,68 @@ export default {
             param['date'] = this.selectedDate;
             param['rootCode'] = this.rootCode;
             param['subCode'] = this.subCode;
-            let nowTime = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString();
-            console.log(nowTime.substring(11,16));
+            const nowDay = this.selectedDate;
+            const nowTime = this.todayDate.substring(11,16);
             const list = await this.$get('/movie/movieTime', param); // 상영 극장 정보
-            for(let a=0; a<list.length; a++) {
-                this.theater_list[a] = list[a]; // 극장이름
-                this.theater_schedule[a] = list[a].theaterScheduleList; // 극장 상영관    
-                let sche_list = list[a].theaterScheduleList;
-                for(let b=0; b<sche_list.length; b++) {
+             for(let a=0; a<list.length; a++) {
+                 this.theater_list[a] = list[a]; // 극장이름
+                 let sche_list = list[a].theaterScheduleList;
+                 for(let b=0; b<sche_list.length; b++) {
                     let time_list = sche_list[b].timetableList;
-                    for(let c=0; c<time_list.length; c++) {
-                        console.log(time_list[c].rtime);
-                    }
-                }          
+                     for(let c=0; c<time_list.length; c++) {
+                        if(time_list[c].rdate == nowDay && time_list[c].rtime < nowTime) {
+                           sche_list[b].timetableList.splice(c, 1); // 지난 상영시간 삭제
+                           c--;
+                         } 
+                       
+                     }
+                    
+                 }          
             }
+                            
         },
 
-        async insertReview() {
-            if(this.review.ctnt !== '') {
-                const result = await this.$post('/detail/insertReview', this.review);
-                this.review.ctnt = '';
-                console.log(result);
+        async insertReview() { // 리뷰 작성
+            if(this.review.ctnt === '' || this.review.movie_score ==='') {
+                alert('입력된 내용이 없습니다.');
             } else {
-                alert('작성된 내용이 없습니다.');
+                const result = await this.$post('/detail/insertReview', this.review);
+                    const created_at = this.todayDate.substring(0,19);
+                    created_at.split('T');
+
+                    if(result) {
+                        const item = {
+                        'i_review' : result.result,
+                        'iuser' : parseInt(this.review.iuser),
+                        'movie_code' : this.review.movie_code,
+                        'ctnt' : this.review.ctnt,
+                        'movie_score' : this.review.movie_score,
+                        'nickname' : this.review.nickname,
+                        'created_at' : created_at
+                    };
+                    this.rev_list.unshift(item);
+                    }
+                
+
+           
+                this.review.ctnt ='';
+                this.review.movie_score='';
+                
             }
+          
+        },
+
+        async getReview() { // 리뷰 리스트
+            const list = await this.$get(`/detail/reviewList/${this.movie_code}/${this.more_rev}`, []);
+            if(list){
+                this.rev_list = list;
+            }
+            console.log(list);
         },
 
         more() { // 리뷰 더보기
             this.more_rev += 5;
             this.getReview();
-        },
-
-        async getReview() { // 리뷰 리스트 
-            this.rev_list = await this.$get(`/detail/reviewList/${this.movie_code}/${this.more_rev}`, {});
         },
 
         revLimit() { // 리뷰 글 수 제한
@@ -249,6 +275,7 @@ export default {
 
     .movie__info li { font-size:1.2rem; text-align: left; padding:10px 5px; }
     .movie__info li span {color:gray;}
+    .movie__title { font-size:2.5rem;}
 
     /* 영화 줄거리  */
     .movie__intro__ctnt { border-top:1px solid #F29B21; padding: 15px 10px; line-height: 2rem;}
@@ -257,8 +284,15 @@ export default {
     /* ----- 상영날짜 ----- */
     #select-day { background-color: #32485388; padding: 5px; border: none; border-radius: 5px;}
     .dateBtn {background-color: transparent; border:none;}
-    .movie__timeList { background-color: #32485388; border-radius: 5px; margin-top: 20px; height: auto; overflow:hidden;}
-    .theater__List li { padding: 10px 15px; border: 1px solid #fff;}
+    .movie__timeList { margin-top: 20px; height: auto; overflow:hidden;}
+    .theater__List li { margin:10px 0; text-align: left;}
+    .theater__timeList {background-color: #32485388; border-radius: 5px;}
+    .theater__title { margin-bottom: 7px; font-weight: 700;}
+    .theater__List .ticketBtn { border:1px solid #72727288; margin: 5px 8px}
+    .movie__detailTheater { color:#adadad;}
+    .ticketBtn:hover {background-color:#F29B21;}
+    .ticketBtn:hover div { color:#fff;}
+
 
     /* ----- 별점 ----- */
     .star-rating {
@@ -316,7 +350,7 @@ export default {
 
     /* ----- 리뷰 리스트 ----- */
     .review__comment { border-bottom:1px solid #535e6488; margin:10px auto; padding:15px; width:90%; overflow: hidden; text-align: left; }
-    .writer__score { display: inline-block; width:100px;}
+    .writer__score { display: inline-block; color:#F9F871;}
     .writer__info .writer__cre { font-size:0.8rem; color:gray;  }
     .writer__info .writer { color: #F29B21; font-family: 'round'; margin-right:10px; }
 
