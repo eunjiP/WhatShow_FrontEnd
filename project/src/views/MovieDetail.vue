@@ -182,8 +182,10 @@ export default {
             param['date'] = this.selectedDate;
             param['rootCode'] = this.rootCode;
             param['subCode'] = this.subCode;
-            const nowDay = this.selectedDate;
+            const nowDay = this.todayDate.substring(0, 10);
             const nowTime = this.todayDate.substring(11,16);
+
+            console.log(nowDay);
             const list = await this.$get('/movie/movieTime', param); // 상영 극장 정보
              for(let a=0; a<list.length; a++) {
                  this.theater_list[a] = list[a]; // 극장이름
@@ -195,12 +197,11 @@ export default {
                            sche_list[b].timetableList.splice(c, 1); // 지난 상영시간 삭제
                            c--;
                          } 
-                       
+                           
                      }
                     
                  }          
             }
-                            
         },
 
         async insertReview() { // 리뷰 작성
@@ -208,9 +209,8 @@ export default {
                 alert('입력된 내용이 없습니다.');
             } else {
                 const result = await this.$post('/detail/insertReview', this.review);
-                    const created_at = this.todayDate.substring(0,19);
-                    created_at.split('T');
-
+                    const t_arr = this.todayDate.substring(0,19).split('T');
+                    const created_at = t_arr[0]+' '+t_arr[1];
                     if(result) {
                         const item = {
                         'i_review' : result.result,
@@ -238,7 +238,6 @@ export default {
             if(list){
                 this.rev_list = list;
             }
-            console.log(list);
         },
 
         more() { // 리뷰 더보기
