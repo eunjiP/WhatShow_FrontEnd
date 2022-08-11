@@ -5,6 +5,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import App from './App.vue'
 import router from './router'
 import mixins from './mixin'
+import store from "./store/storage"
 
 // //event bus
 // export const eventBus = new Vue()
@@ -21,6 +22,7 @@ import mixins from './mixin'
 createApp(App)
 .use(router)
 .use(BootstrapVue3)
+.use(store)
 .mixin(mixins)
 .mount('#app');
 

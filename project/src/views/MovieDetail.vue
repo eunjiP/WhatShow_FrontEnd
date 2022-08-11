@@ -185,20 +185,22 @@ export default {
             const nowDay = this.selectedDate;
             const nowTime = this.todayDate.substring(11,16);
             const list = await this.$get('/movie/movieTime', param); // 상영 극장 정보
-             for(let a=0; a<list.length; a++) {
+            console.log(list);
+            for(let a=0; a<list.length; a++) {
                  this.theater_list[a] = list[a]; // 극장이름
-                 let sche_list = list[a].theaterScheduleList;
-                 for(let b=0; b<sche_list.length; b++) {
+                let sche_list = list[a].theaterScheduleList;
+                // console.log(sche_list);
+                for(let b=0; b<sche_list.length; b++) {
                     let time_list = sche_list[b].timetableList;
-                     for(let c=0; c<time_list.length; c++) {
+                    for(let c=0; c<time_list.length; c++) {
                         if(time_list[c].rdate == nowDay && time_list[c].rtime < nowTime) {
                            sche_list[b].timetableList.splice(c, 1); // 지난 상영시간 삭제
-                           c--;
-                         } 
-                       
-                     }
+                        c--;
+                        } 
                     
-                 }          
+                    }
+                    
+                }          
             }
                             
         },
