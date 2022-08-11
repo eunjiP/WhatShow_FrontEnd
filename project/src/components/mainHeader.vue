@@ -63,9 +63,7 @@
             <br>
             </div>
             <div style="font-size: 20px; color:#F9F871;">내가 쓴 댓글</div>
-            <div>[미니언즈2] 너무 귀여워요~</div>
-            <div>[한산] 애국심이 불타오른다!!!!!</div>
-            <div>[헤어질결심] 헤어지는게 뭐임?</div>
+            <div v-for="(item, idx) in userCtnt" :key="idx" :item="item" >✨ {{item}}</div>
           </div>
         </b-modal>
       </div>
@@ -136,8 +134,9 @@
         gsTag: [],
         userImg: '',
         movienm: [],
-        keyword: [],
-        filternm: ''
+        keyword: null,
+        filternm: '',
+        userCtnt: []
       }
     },
     
@@ -191,15 +190,20 @@
       }
     },
 
-    //유저 uuid, nick DB 불러옴
+    //유저 정보 불러옴 불러옴
     async sel_uid() {
       let seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`, {});
+      seluid.result.forEach(item =>{
+      this.userCtnt.push(`[${item.movie_nm}] ${item.ctnt}` );
+      })
+      // console.log(this.userCtnt);
       let selResult = seluid.result[0];
       let userImg = selResult.user_img;
       // console.log(userImg);
       let iuser = selResult.iuser;
       localStorage.setItem('iuser',iuser);
       this.userImg = userImg;
+      // console.log(selResult);
       // selResult.forEach((item) => {
       //   console.log(item);
       // });
@@ -258,7 +262,7 @@
 
     //검색 자동완성
     async getMoive(){
-      const movieList = await this.$get('/movie/main', {});
+      const movieList = await this.$get('/movie/get_movie', {});
       movieList.forEach(item => {
       // console.log(item.movie_nm);
         this.movienm.push(item.movie_nm);
@@ -334,6 +338,7 @@
       const close = document.querySelector('#modal-search button');
       this.keyword = keyword;
       console.log(`send key:${keyword}`);
+      
       if (keyword !== '') {
         this.$router.push({
           name: 'search',
@@ -346,7 +351,9 @@
       } else {
         alert('검색어를 입력해주세요!');
       }
-    },
+    
+      }
+      ,
 
     // 상세검색-장르 체크박스
     async getSelectTag() {
