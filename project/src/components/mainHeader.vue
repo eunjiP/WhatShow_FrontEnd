@@ -148,9 +148,6 @@
       this.sel_uid();
       this.getMoive();
     },
-    updated(){
-      this.sel_uid();
-    },
     created() {
       this.getOptionList1()
     },

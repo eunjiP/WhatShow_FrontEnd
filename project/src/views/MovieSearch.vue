@@ -72,7 +72,7 @@ export default {
         return {
             movielimit: 4,
             movie_info: [],
-            keyword: this.$route.params.keyword  //nav.vue에서 라우터를 이용해 보낸 파라미터로부터 데이터 받음 
+            keyword: this.$route.params.keyword || ''  //nav.vue에서 라우터를 이용해 보낸 파라미터로부터 데이터 받음 
         }
     },
 
@@ -81,9 +81,6 @@ export default {
     },
 
     computed:{
-        count(){
-            return this.$store.state.count;
-        }
     },
 
     methods: {
@@ -92,8 +89,7 @@ export default {
         },
 
         async getMovieInfo() { // 영화 상세 정보
-            this.keyword = this.keyword;
-            console.log(this.keyword);
+            console.log(`req : ${this.keyword}`);
             this.movie_info = await this.$get(`/movie/selSearch/${this.keyword}/${this.movielimit}`, {});
             // console.log(this.movie_info);
         },
