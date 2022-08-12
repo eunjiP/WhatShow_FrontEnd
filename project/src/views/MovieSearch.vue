@@ -72,18 +72,18 @@ export default {
         return {
             movielimit: 4,
             movie_info: [],
-            keyword: this.$route.params.keyword  //nav.vue에서 라우터를 이용해 보낸 파라미터로부터 데이터 받음 
+            movie_tag:[],
+            keyword: this.$route.params.keyword || '',  //nav.vue에서 라우터를 이용해 보낸 파라미터로부터 데이터 받음 
+            keyTag: this.$route.params.keyTag
         }
     },
 
     created() {
         this.getMovieInfo(); // 영화 상세 정보
+        this.getMovieInfoTag();
     },
 
     computed:{
-        count(){
-            return this.$store.state.count;
-        }
     },
 
     methods: {
@@ -92,9 +92,13 @@ export default {
         },
 
         async getMovieInfo() { // 영화 상세 정보
-            this.keyword = this.keyword;
-            console.log(this.keyword);
+            console.log(`req : ${this.keyword}`);
             this.movie_info = await this.$get(`/movie/selSearch/${this.keyword}/${this.movielimit}`, {});
+            // console.log(this.movie_info);
+        },
+        async getMovieInfoTag() { // 영화 상세 정보
+            console.log(`req : ${this.keyTag}`);
+            this.movie_info = await this.$get(`/movie/selSearch/${this.keyTag}/${this.movielimit}`, {});
             // console.log(this.movie_info);
         },
 
