@@ -97,6 +97,8 @@
                         <div class="writer__info">
                             <span class="writer">{{ review.nickname }}</span>
                             <span class="writer__cre">{{ review.created_at }}</span>
+                            <input type="text" class="ReCtnt d-none">
+                            <button class="addCtnt" @click="reCtnt">임시버튼</button>
                         </div>
                     </li>
                 </ul>
@@ -289,6 +291,13 @@ export default {
                 recom_goodSpan.innerHTML = this.movie_recommend['recommend'];
             }
         },
+
+        //대댓글
+        reCtnt(){
+            const newCtnt = document.querySelector('.ReCtnt');
+            newCtnt.classList.toggle('d-none');
+            console.log('작동됨');
+        }
 
     },
 }
@@ -519,6 +528,10 @@ export default {
             animation-timing-function: ease-out;
     opacity: 1;
   }
+}
+
+.d-none{
+    display: none;
 }
 
 </style>
