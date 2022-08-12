@@ -58,7 +58,7 @@
                 <label for="input-favtag" style="font-size:20px; color:#F9F871;">관심 태그</label>
                 <br>
                 <div class="d-inline" v-for="(item, idx) in userFav" :key="idx" :item="item" @click="delFav(idx)"><span class="favtag">#{{item}}</span></div>
-                <b-form-input id="input-nickname" v-model="fav" class="favtag__input" @keyup.enter="inputFav" placeholder="태그를 입력해주세요"/>
+                <b-form-input id="input-nickname" v-model="fav" class="favtag__input" @keyup.enter="inputFav()" placeholder="태그를 입력해주세요"/>
               </div>
             <br>
             </div>
@@ -97,7 +97,7 @@
             <div class="row">
               <div>
                 <label v-for="item in gsTag" :key="item" class="col-3">
-                  <input type="checkbox" v-model="keyword" :value="item" name="genre"> {{ item }}
+                  <input type="checkbox" v-model="keytag" :value="item" name="genre"> {{ item }}
                 </label>
               </div>
             </div>
@@ -108,7 +108,7 @@
             <br>
               <div>액션 범죄도시2 한산 멜로</div>
             <br>
-          <button class="search__btn col-12" type="submit" @click="searchPage(keyword)">검색하기</button>
+          <button class="search__btn col-12" type="submit" @click="searchPageTag(keytag)">검색하기</button>
         </b-modal>
       </div>
     </div>
@@ -117,8 +117,6 @@
 </template>
 
 <script>
-import { set } from 'bootstrap/js/dist/dom/data';
-
   export default {
     name: 'mainHeader',
     el: '#modal-search',
@@ -129,22 +127,22 @@ import { set } from 'bootstrap/js/dist/dom/data';
         optionList1: '',
         optionList2: 0,
         userFav:[],
-        fav:'',
         WSuuid:localStorage.getItem('WSuuid'),
         WSnickname:localStorage.getItem('WSnickname'),
+        fav:'',
         userLocation: '',
         gsTag: [],
         userImg: '',
         movienm: [],
-        keyword: [],
+        keyword: null,
         filternm: '',
         userCtnt: [],
-        keytag: [],
-        seluid:{}
+        keytag: []
       }
     },
     mounted(){
       this.selFav();
+      this.sel_uid();
       this.getMoive();
     },
     created() {
@@ -175,42 +173,51 @@ import { set } from 'bootstrap/js/dist/dom/data';
         
         localStorage.setItem('WSuuid', Math.floor(Math.random() * 1000));
         localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random() * 1000));
+        
+        
+        // this.ins_uid(WSuuid, WSnickname);
       }
-      this.ins_uid();
+      console.log(this.WSuuid);
 
     },
 
     //유저 uuid, nick DB 저장
-    async ins_uid() {
-      const param = {
-        'uuid':this.WSuuid,
-        'nickname':this.WSnickname
-      };
-      
-      const senduid = await this.$post(`/user/signup`, param);
-      
-      if (senduid) {
-        this.sel_uid();
-      } else {
-        console.error('error');
-      }
+    ins_uid(WSuuid, WSnickname) {
+      // const param = {
+      //   'uuid':WSuuid,
+      //   'Nick':WSnickname
+      // };
+      console.log(WSuuid);
+      console.log(WSnickname);
+
+      // const senduid = await this.$post(`/user/signup`, param);
+      // if (senduid) {
+      //   console.log();
+      // } else {
+      //   console.error('error');
+      // }
     },
 
-    // 유저 정보 불러옴 불러옴
+    //유저 정보 불러옴 불러옴
     async sel_uid() {
-      this.seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`, {});
-      // console.log(this.seluid);
-      if(this.seluid[0].ctnt !== null){
-        this.seluid.forEach(item =>{
-        this.userCtnt.push(`[${item.movie_nm}] ${item.ctnt}` );
-      });}
-
+      let seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`, {});
+      seluid.result.forEach(item =>{
+      this.userCtnt.push(`[${item.movie_nm}] ${item.ctnt}` );
+      })
+      // console.log(this.userCtnt);
+      let selResult = seluid.result[0];
+      // console.log(seluid);
+      this.userImg = selResult.user_img;
+      console.log(seluid);
+      let iuser = selResult.iuser;
       
-      this.userImg = this.seluid[0].user_img;
-      console.log(this.userImg);
-      // console.log(this.userImg);
-      let iuser = this.seluid[0].iuser;
       localStorage.setItem('iuser',iuser);
+      // console.log(selResult);
+      // selResult.forEach((item) => {
+      //   console.log(item);
+      // });
+      // let selImg = selResult.user_img;
+      // consoel.log(selImg);
     },
 
     //닉네임 변경
@@ -258,6 +265,8 @@ import { set } from 'bootstrap/js/dist/dom/data';
       const formData = { image };
       const { error } = await this.$post(`/user/upd_img/${this.WSuuid}`, formData);
       // console.log(error);
+
+
     },
 
     //검색 자동완성
@@ -337,9 +346,6 @@ import { set } from 'bootstrap/js/dist/dom/data';
       autocomplete.classList.add("disabled");
       const close = document.querySelector('#modal-search button');
       this.keyword = keyword;
-      // const str = this.keyword.splice(',');
-      // console.log(str);
-
       console.log(`send key:${keyword}`);
       if (keyword !== '') {
         this.$router.push({
