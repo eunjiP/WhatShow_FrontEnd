@@ -224,8 +224,10 @@ export default {
         },
 
         async insertReview() { // 리뷰 작성
-            if(this.review.ctnt === '' || this.review.movie_score ==='') {
+            if(this.review.ctnt === '' ) {
                 alert('입력된 내용이 없습니다.');
+            } else if(this.review.movie_score ==='') {
+                alert('별점을 입력해 주세요.');
             } else {
                 const result = await this.$post('/detail/insertReview', this.review);
                     const t_arr = this.todayDate.substring(0,19).split('T');
@@ -236,7 +238,7 @@ export default {
                         'iuser' : parseInt(this.review.iuser),
                         'movie_code' : this.review.movie_code,
                         'ctnt' : this.review.ctnt,
-                        'movie_score' : this.review.movie_score,
+                        'movie_score' : parseInt(this.review.movie_score),
                         'nickname' : this.review.nickname,
                         'created_at' : created_at
                     };
