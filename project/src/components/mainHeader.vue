@@ -95,7 +95,7 @@
             <div class="row">
               <div>
                 <label v-for="item in gsTag" :key="item" class="col-3">
-                  <input type="checkbox" v-model="keyword" :value="item" name="genre"> {{ item }}
+                  <input type="checkbox" v-model="keytag" :value="item" name="genre"> {{ item }}
                 </label>
               </div>
             </div>
@@ -106,7 +106,7 @@
             <div v-for="(key, idx) in recommendKeyword" :key=idx class="col-3">{{ key }}</div>
           </div>
 
-          <button class="search__btn col-12 mt-3" type="submit" @click="searchPage(keyword)">검색하기</button>
+          <button class="search__btn col-12 mt-3" type="submit" @click="searchPage(keyword), searchPageTag(keytag)">검색하기</button>
         </b-modal>
       </div>
     </div>
@@ -377,8 +377,6 @@
         })
         this.keyTag = '';
         close.click();
-      } else {
-        alert('검색어를 입력해주세요!');
       }
     },
 
