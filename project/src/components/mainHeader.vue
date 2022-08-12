@@ -46,7 +46,7 @@
           <div>
             <div class="mypage__user">
               <label for="input-file">
-                  <img v-if="!this.userImg == ''" :src="`/static/img/${this.WSuuid}/0/${this.userImg}`" class="user_img" require>
+                  <img v-if="!this.userImg == ''" :src="`/static/img/${this.WSuuid}/${this.userImg}`" class="user_img" require>
                   <img v-if="this.userImg == ''" :src="`/static/img/profile/avatar.svg`" class="user_img">
               </label>
               <input id="input-file" type="file" @change="uploadImages($event.target.files)" accept="image/*" style="display: none"/>
@@ -164,10 +164,6 @@
     async getOptionList2(optionList1) {
       this.option2 = await this.$get(`/location/optionList2/${optionList1}`, {})
     },
-    uploadImages() {
-
-    },
-
     //추천검색어 부분
     async getKeyword() {
       this.recommendKeyword = await this.$get('movie/selTopSearch', {});
@@ -208,11 +204,11 @@
       if(this.seluid[0].ctnt !== null){
         this.seluid.forEach(item =>{
         this.userCtnt.push(`[${item.movie_nm}] ${item.ctnt}` );
-      });}
+      })}
 
       
       this.userImg = this.seluid[0].user_img;
-      console.log(this.userImg);
+      // console.log('seluid' + this.seluid[0].user_img);
       // console.log(this.userImg);
       let iuser = this.seluid[0].iuser;
       localStorage.setItem('iuser',iuser);
@@ -257,12 +253,14 @@
 
     //유저 프로필 이미지 추가
     async uploadImages(files) {
+      const imgChang = document.querySelector('.user_img');
       // console.log(files);
       const image = await this.$base64(files[0]);
       // console.log(image);
       const formData = { image };
-      const { error } = await this.$post(`/user/upd_img/${this.WSuuid}`, formData);
-      // console.log(error);
+      const result = await this.$post(`/user/upd_img/${this.WSuuid}`, formData);
+      // console.log('/' + result['result']);
+      imgChang['src'] = '/' + result['result'];
     },
 
     //검색 자동완성
