@@ -11,8 +11,6 @@
                     <div></div>
                     <div id="sub2" @click="more" style="cursor:pointer;">더보기</div>
                 </div>
-            <br>
-            <div id="search-body">
                 <br>
                 <div id="search-body">
                     <br>
@@ -25,27 +23,28 @@
                         </div>
                     </div>
                 </div>
-            <br>
             </div>
-            <div v-if="this.keyword == ''"></div>
-            <div v-else>
+            <div></div>
+            <div>
                 <div id="search__subTitle">
-                    <br>
-                    <div id="sub1"> 검색 장르 영화 추천</div>
+                    <div id="sub1"> 검색 장르 영화</div>
                     <div></div>
-                    <div id="sub2">더보기</div>
+                    <div id="sub2" @click="more" style="cursor:pointer;">더보기</div>
                 </div>
+                <br>
                 <div id="search-body">
                     <br>
-                    <div class="movie__poster col-3">
-                        <img :src="movie_info.movie_poster" alt="poster">
-                        <div>{{ movie_info.movie_nm }}</div>
+                    <div class="container">
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+                            <div class="movie__poster col" v-for="(item, idx) in movie_info2" :key="idx" :item="item">
+                                <img :src="`${item.movie_poster}`"/>
+                                <div>{{ item.movie_nm }}</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            <br>
             </div>
-            <div v-if="this.keyword == ''"></div>
-            <div v-else>
+            <div>
                 <div id="search__subTitle">
                     <div id="sub1"> # 태그 추천</div>
                     <div></div>
@@ -53,14 +52,15 @@
                 </div>
                 <div id="search-body">
                     <br>
-                    <div class="movie__poster col-3">
-                        <img :src="movie_info.movie_poster" alt="poster">
-                        <div>{{ movie_info.movie_nm }}</div>
+                    <div class="movie__poster row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+                        <div class="movie__poster col" v-for="(item, idx) in movie_recommend_info" :key="idx" :item="item">
+                            <img :src="`${item.movie_poster}`"/>
+                            <div>{{ item.movie_nm }}</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </template>
 
@@ -72,15 +72,17 @@ export default {
         return {
             movielimit: 4,
             movie_info: [],
-            movie_tag:[],
-            keyword: this.$route.params.keyword || '',  //nav.vue에서 라우터를 이용해 보낸 파라미터로부터 데이터 받음 
-            keyTag: this.$route.params.keyTag
+            movie_recommend_info: [],
+            movie_tag: [],
+            keyword: this.$route.params.keyword || '',  //mainHeader.vue에서 라우터를 이용해 보낸 파라미터로부터 데이터 받음 
+            keyTag: this.$route.params.keyTag,
         }
     },
 
     created() {
         this.getMovieInfo(); // 영화 상세 정보
         this.getMovieInfoTag();
+        this.getRecommendMovie();
     },
 
     computed:{
@@ -91,20 +93,34 @@ export default {
             this.$store.commit('increment');
         },
 
-        async getMovieInfo() { // 영화 상세 정보
-            console.log(`req : ${this.keyword}`);
-            this.movie_info = await this.$get(`/movie/selSearch/${this.keyword}/${this.movielimit}`, {});
-            // console.log(this.movie_info);
+        async getRecommendMovie() {
+            const data = {
+                'iuser' : parseInt(localStorage.getItem('iuser'))
+            };
+            console.log(data);
+            this.movie_recommend_info = await this.$post('recommend/tagRecommend', data);
+            console.log(this.movie_recommend_info);
         },
+
         async getMovieInfoTag() { // 영화 상세 정보
-            console.log(`req : ${this.keyTag}`);
-            this.movie_info = await this.$get(`/movie/selSearch/${this.keyTag}/${this.movielimit}`, {});
+            const data = {
+                'tag':this.$route.params.keyTag
+            };
+            this.movie_info2 = await this.$post(`/recommend/tagRecommend`, data);
+            console.log(this.movie_info);
+        },
+
+        async getMovieInfo() { // 영화 상세 정보
+        console.log(this.$route.params.keyTag);
+            // console.log(`req : ${this.$route.params.keyTag}`);
+            // this.movie_info = await this.$get(`/movie/selSearch/${this.keyword}/${this.movielimit}`, {});
             // console.log(this.movie_info);
         },
 
         more() { // 검색 결과 더보기
             this.movielimit += 4;
             this.getMovieInfo();
+            this.getMovieInfoTag();
         }
     },
 }
