@@ -1,31 +1,31 @@
 <template>
-  <div class="slide__item">
-    <div>
-      <b-badge variant="warning" class="badge-circle badge-lg badge-floating border-white">{{ item.rank }}위</b-badge>  
-      {{ item.movie_nm }}
-    </div>
-    <!-- <video class="videoPreview" muted width="800" height="500" :src="`${item.preview }`" :poster="`${item.movie_poster }`" ref="preview" @click="this.previewPlay"></video> -->
-    <div class="show__movieBox d-flex justify-content-center ">
+  <div class="slide__item position-relative">
+    <div class="movieBox position-absolute">
+      <div>
+        <b-badge variant="warning" class="badge-circle badge-lg badge-floating border-white">{{ item.rank }}위</b-badge>  
+        {{ item.movie_nm }}
+      </div>     
       <img class="movie__poster" :src="item.movie_poster" @click="showTime" alt="영화포스터">
-
-      <div class="movie__timeList">
-        <ul class="theater__List text-start">
-          <li v-for="schedule in theater_list" :key="schedule.idx">
-            {{ schedule.gname }} <!-- 극장명 -->
-            <div class="theater__timeList">
-              <ul v-for="theater in schedule.theaterScheduleList" :key="theater.idx">
-                <li v-for="time in theater.timetableList" :key="time.idx">
-                    <a :href="time.ticketPcUrl" class="ticketUrl">
-                      <div class="movie__runningTime">{{ time.rtime }} ~ {{ time.endTime }}</div> <!-- 상영시간 -->
-                      <!-- <div class="movie__detailTheater">{{ time.tname }}</div> 상영관 -->
-                    </a>
-                </li>
-              </ul>
-            </div>
-          </li>
-        </ul> 
-      </div>
     </div>
+
+    <div class="movie__timeList d-none position-absolute">
+      <ul class="theater__List text-start">
+        <li v-for="(schedule) in theater_list" :key="schedule.idx">
+          {{ schedule.gname }} <!-- 극장명 -->
+          <div class="theater__timeList">
+            <ul class="d-inline ps-0" v-for="theater in schedule.theaterScheduleList" :key="theater.idx">
+              <!-- {{theater.timetableList}} -->
+              <li v-for="time in theater.timetableList" :key="time.idx">
+                <a :href="time.ticketPcUrl" class="ticketUrl">
+                  <div class="movie__runningTime">{{ time.rtime }} ~ {{ time.endTime }}</div>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>  
+    </div>
+
   </div>
 </template>
 
@@ -43,6 +43,9 @@ export default {
     props: {
         item: Object
     },
+    created() {
+      this.gettheaterList();
+    },
     methods:{
       previewPlay() {
         if(!this.previewValue) {
@@ -53,19 +56,20 @@ export default {
         return this.$refs.preview.load();
       },
 
-      async showTime() {
-        
+      async gettheaterList() {
         const param = {
           'code': this.item.movie_code,
           'date': this.todayDate.substring(0, 10),
           'rootCode': this.rootCode,
           'subCode': this.subCode,
         };
-        console.log(param);
 
         const nowTime = this.todayDate.substring(11,16);
+        const tt = nowTime.split(':'); 
+        const tt2 = parseInt(tt[0])+3;
+        
         const list = await this.$get('/movie/movieTime', param); // 상영 극장 정보
-       
+  
         for(let a=0; a<list.length; a++) {
           this.theater_list[a] = list[a]; // 극장이름
           let sche_list = list[a].theaterScheduleList;
@@ -73,16 +77,28 @@ export default {
             let time_list = sche_list[b].timetableList;
 
             for(let c=0; c<time_list.length; c++) {
-              if(time_list[c].rtime < nowTime) {
+              let mt = time_list[c].rtime.split(':');
+              if(time_list[c].rtime < nowTime || mt[0] > tt2 ) {
                 sche_list[b].timetableList.splice(c, 1); // 지난 상영시간 삭제
                 c--;
               }               
             }        
           }          
         }
+        console.log(this.theater_list);
+      },
 
+      showTime() {
+        const timeList = document.querySelectorAll('.movie__timeList');
+        const moviePoster = document.querySelectorAll('.movie__poster');
         
-
+        for(let i=0; i<timeList.length; i++) {
+          moviePoster[i].addEventListener('click', function(e) {
+            e.preventDefault();
+            timeList[i].classList.remove('d-none');
+            timeList[i].classList.add('d-block');
+          })
+        }
       },
 
     }
@@ -92,7 +108,23 @@ export default {
 <style>
  li{list-style: none;}
  a{ text-decoration: none; color:#fff;}
- .theater__timeList ul { background-color: #32485388;}
+.slide__item {
+  width: 100%;
+  height: 500px;
+}
+  .movieBox {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+ .movie__timeList {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #000000a9; width:50%; height:100%;
+    float:left;
+  }
+
  .theater__timeList ul>li { display: inline-block; }
- .movie__runningTime { font-size:0.8rem; }
+ .movie__runningTime { font-size:0.8rem; background-color: #F29B21; padding:5px; margin: 5px; border-radius: 5px; }
 </style>
