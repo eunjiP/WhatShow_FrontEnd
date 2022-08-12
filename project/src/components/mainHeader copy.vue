@@ -58,7 +58,7 @@
                 <label for="input-favtag" style="font-size:20px; color:#F9F871;">관심 태그</label>
                 <br>
                 <div class="d-inline" v-for="(item, idx) in userFav" :key="idx" :item="item" @click="delFav(idx)"><span class="favtag">#{{item}}</span></div>
-                <b-form-input id="input-nickname" v-model="fav" class="favtag__input" @keyup.enter="inputFav" placeholder="태그를 입력해주세요"/>
+                <b-form-input id="input-nickname" v-model="fav" class="favtag__input" @keyup.enter="inputFav()" placeholder="태그를 입력해주세요"/>
               </div>
             <br>
             </div>
@@ -90,23 +90,25 @@
 
         <b-modal id="modal-search" title="검색하기" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <b-form-input id="modal__search" type="text" v-model="keyword" placeholder="검색어" v-on:keyup.enter="searchPage(keyword)"/>
-          <div class="search__seltag mt-3" style="font-size:20px; color:#F9F871;">#태그설정</div>
-          <div class="container2 mt-3">
+          <br>
+          <div class="search__seltag" style="font-size:20px; color:#F9F871;">#태그설정</div>
+          <br>
+          <div class="container2">
             <div class="row">
               <div>
                 <label v-for="item in gsTag" :key="item" class="col-3">
-                  <input type="checkbox" v-model="keyword" :value="item" name="genre"> {{ item }}
+                  <input type="checkbox" v-model="keytag" :value="item" name="genre"> {{ item }}
                 </label>
               </div>
             </div>
           </div>
-          <div class="search__recommend mb-3 mt-3" style="font-size:20px; color:#F9F871;">추천 검색어</div>
-          
-          <div class="row">
-            <div v-for="(key, idx) in recommendKeyword" :key=idx class="col-3">{{ key }}</div>
-          </div>
-
-          <button class="search__btn col-12 mt-3" type="submit" @click="searchPage(keyword)">검색하기</button>
+            <br>
+            <br>
+          <div class="search__recommend" style="font-size:20px; color:#F9F871;">추천 검색어</div>
+            <br>
+              <div>액션 범죄도시2 한산 멜로</div>
+            <br>
+          <button class="search__btn col-12" type="submit" @click="searchPageTag(keytag)">검색하기</button>
         </b-modal>
       </div>
     </div>
@@ -115,7 +117,6 @@
 </template>
 
 <script>
-
   export default {
     name: 'mainHeader',
     el: '#modal-search',
@@ -126,28 +127,26 @@
         optionList1: '',
         optionList2: 0,
         userFav:[],
-        fav:'',
         WSuuid:localStorage.getItem('WSuuid'),
         WSnickname:localStorage.getItem('WSnickname'),
+        fav:'',
         userLocation: '',
         gsTag: [],
         userImg: '',
         movienm: [],
-        keyword: [],
+        keyword: null,
         filternm: '',
         userCtnt: [],
-        keytag: [],
-        recommendKeyword: [],
-        seluid:{}
+        keytag: []
       }
     },
     mounted(){
       this.selFav();
+      this.sel_uid();
       this.getMoive();
     },
     created() {
       this.getOptionList1();
-      this.getKeyword();
       this.create_uid();
     },
 
@@ -167,12 +166,6 @@
     uploadImages() {
 
     },
-
-    //추천검색어 부분
-    async getKeyword() {
-      this.recommendKeyword = await this.$get('movie/selTopSearch', {});
-    },
-
     //유저 메소드 시작//
     //로컬 스토로지에 유저 생성
     create_uid() {
@@ -180,42 +173,51 @@
         
         localStorage.setItem('WSuuid', Math.floor(Math.random() * 1000));
         localStorage.setItem('WSnickname', 'user' + Math.floor(Math.random() * 1000));
+        
+        
+        // this.ins_uid(WSuuid, WSnickname);
       }
-      this.ins_uid();
+      console.log(this.WSuuid);
 
     },
 
     //유저 uuid, nick DB 저장
-    async ins_uid() {
-      const param = {
-        'uuid':this.WSuuid,
-        'nickname':this.WSnickname
-      };
-      
-      const senduid = await this.$post(`/user/signup`, param);
-      
-      if (senduid) {
-        this.sel_uid();
-      } else {
-        console.error('error');
-      }
+    ins_uid(WSuuid, WSnickname) {
+      // const param = {
+      //   'uuid':WSuuid,
+      //   'Nick':WSnickname
+      // };
+      console.log(WSuuid);
+      console.log(WSnickname);
+
+      // const senduid = await this.$post(`/user/signup`, param);
+      // if (senduid) {
+      //   console.log();
+      // } else {
+      //   console.error('error');
+      // }
     },
 
-    // 유저 정보 불러옴 불러옴
+    //유저 정보 불러옴 불러옴
     async sel_uid() {
-      this.seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`, {});
-      // console.log(this.seluid);
-      if(this.seluid[0].ctnt !== null){
-        this.seluid.forEach(item =>{
-        this.userCtnt.push(`[${item.movie_nm}] ${item.ctnt}` );
-      });}
-
+      let seluid = await this.$get(`/user/sel_user/${this.WSuuid}/${this.WSnickname}`, {});
+      seluid.result.forEach(item =>{
+      this.userCtnt.push(`[${item.movie_nm}] ${item.ctnt}` );
+      })
+      // console.log(this.userCtnt);
+      let selResult = seluid.result[0];
+      // console.log(seluid);
+      this.userImg = selResult.user_img;
+      console.log(seluid);
+      let iuser = selResult.iuser;
       
-      this.userImg = this.seluid[0].user_img;
-      console.log(this.userImg);
-      // console.log(this.userImg);
-      let iuser = this.seluid[0].iuser;
       localStorage.setItem('iuser',iuser);
+      // console.log(selResult);
+      // selResult.forEach((item) => {
+      //   console.log(item);
+      // });
+      // let selImg = selResult.user_img;
+      // consoel.log(selImg);
     },
 
     //닉네임 변경
@@ -263,6 +265,8 @@
       const formData = { image };
       const { error } = await this.$post(`/user/upd_img/${this.WSuuid}`, formData);
       // console.log(error);
+
+
     },
 
     //검색 자동완성
@@ -342,9 +346,6 @@
       autocomplete.classList.add("disabled");
       const close = document.querySelector('#modal-search button');
       this.keyword = keyword;
-      // const str = this.keyword.splice(',');
-      // console.log(str);
-
       console.log(`send key:${keyword}`);
       if (keyword !== '') {
         this.$router.push({
