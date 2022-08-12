@@ -90,10 +90,8 @@
 
         <b-modal id="modal-search" title="검색하기" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <b-form-input id="modal__search" type="text" v-model="keyword" placeholder="검색어" v-on:keyup.enter="searchPage(keyword)"/>
-          <br>
-          <div class="search__seltag" style="font-size:20px; color:#F9F871;">#태그설정</div>
-          <br>
-          <div class="container2">
+          <div class="search__seltag mt-3" style="font-size:20px; color:#F9F871;">#태그설정</div>
+          <div class="container2 mt-3">
             <div class="row">
               <div>
                 <label v-for="item in gsTag" :key="item" class="col-3">
@@ -102,13 +100,13 @@
               </div>
             </div>
           </div>
-            <br>
-            <br>
-          <div class="search__recommend" style="font-size:20px; color:#F9F871;">추천 검색어</div>
-            <br>
-              <div>액션 범죄도시2 한산 멜로</div>
-            <br>
-          <button class="search__btn col-12" type="submit" @click="searchPage(keyword)">검색하기</button>
+          <div class="search__recommend mb-3 mt-3" style="font-size:20px; color:#F9F871;">추천 검색어</div>
+          
+          <div class="row">
+            <div v-for="(key, idx) in recommendKeyword" :key=idx class="col-3">{{ key }}</div>
+          </div>
+
+          <button class="search__btn col-12 mt-3" type="submit" @click="searchPage(keyword)">검색하기</button>
         </b-modal>
       </div>
     </div>
@@ -117,7 +115,6 @@
 </template>
 
 <script>
-import { set } from 'bootstrap/js/dist/dom/data';
 
   export default {
     name: 'mainHeader',
@@ -139,7 +136,8 @@ import { set } from 'bootstrap/js/dist/dom/data';
         keyword: [],
         filternm: '',
         userCtnt: [],
-        keytag: []
+        keytag: [],
+        recommendKeyword: []
       }
     },
     
@@ -154,7 +152,8 @@ import { set } from 'bootstrap/js/dist/dom/data';
       this.sel_uid();
     },
     created() {
-      this.getOptionList1()
+      this.getOptionList1();
+      this.getKeyword();
     },
 
 
@@ -173,6 +172,12 @@ import { set } from 'bootstrap/js/dist/dom/data';
     uploadImages() {
 
     },
+
+    //추천검색어 부분
+    async getKeyword() {
+      this.recommendKeyword = await this.$get('movie/selTopSearch', {});
+    },
+
     //유저 메소드 시작//
     //로컬 스토로지에 유저 생성
     create_uid() {
