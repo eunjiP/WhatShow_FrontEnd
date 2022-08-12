@@ -54,10 +54,7 @@ export default {
       },
 
       async showTime() {
-        const slide_item = document.querySelectorAll('.slide__item');
-        slide_item.forEach(e=>{
-          console.log(e);
-        });
+        
         const param = {
           'code': this.item.movie_code,
           'date': this.todayDate.substring(0, 10),
