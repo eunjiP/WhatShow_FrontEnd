@@ -97,7 +97,7 @@
             <div class="row">
               <div>
                 <label v-for="item in gsTag" :key="item" class="col-3">
-                  <input type="checkbox" v-model="keytag" :value="item" name="genre"> {{ item }}
+                  <input type="checkbox" v-model="keyword" :value="item" name="genre"> {{ item }}
                 </label>
               </div>
             </div>
@@ -108,7 +108,7 @@
             <br>
               <div>액션 범죄도시2 한산 멜로</div>
             <br>
-          <button class="search__btn col-12" type="submit" @click="searchPageTag(keytag)">검색하기</button>
+          <button class="search__btn col-12" type="submit" @click="searchPage(keyword)">검색하기</button>
         </b-modal>
       </div>
     </div>
@@ -117,6 +117,8 @@
 </template>
 
 <script>
+import { set } from 'bootstrap/js/dist/dom/data';
+
   export default {
     name: 'mainHeader',
     el: '#modal-search',
@@ -134,7 +136,7 @@
         gsTag: [],
         userImg: '',
         movienm: [],
-        keyword: null,
+        keyword: [],
         filternm: '',
         userCtnt: [],
         keytag: []
@@ -338,6 +340,9 @@
       autocomplete.classList.add("disabled");
       const close = document.querySelector('#modal-search button');
       this.keyword = keyword;
+      // const str = this.keyword.splice(',');
+      // console.log(str);
+
       console.log(`send key:${keyword}`);
       if (keyword !== '') {
         this.$router.push({
