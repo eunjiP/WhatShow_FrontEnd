@@ -24,6 +24,12 @@ export default {
 <style>
 :root {
   --font--color : #EA9A28;
+  --subFont--color: #F9F871;
+  --subFont2--color: gold;
+  --white : #fff;
+  --black :#000;
+  --bg--main:#152A35;
+  --bg--black:#00000088;
 }
 @-webkit-keyframes jello-vertical {
   0% {
@@ -102,7 +108,7 @@ export default {
     font-family: roundAir;
   }
 
-  body {background: #152A35;}
+  body {background: var(--bg--main);}
 
   .router {
     text-align: center;

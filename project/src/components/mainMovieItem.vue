@@ -91,7 +91,7 @@ export default {
 
 <style>
  li{list-style: none;}
- a{ text-decoration: none; color:#fff;}
+ a{ text-decoration: none; color:var(--white);}
  .theater__timeList ul { background-color: #32485388;}
  .theater__timeList ul>li { display: inline-block; }
  .movie__runningTime { font-size:0.8rem; }

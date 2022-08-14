@@ -307,15 +307,15 @@ export default {
 
 <style scoped>
     @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&display=swap');
-    * { color:#fff; }
+    * { color:var(--white); }
     img { display: inline-block; width:100%; height:auto; border-radius: 15px;}
     li { list-style: none;}
     a { text-decoration: none;}
 
-    .fc-yell { color: #F9F871; }
-    .fc-oran { color: #F29B21; }
+    .fc-yell { color: var(--subFont--color); }
+    .fc-oran { color: var(--font--color); }
 
-    .container { background: #00000088; border-radius: 10px;}
+    .container { background: var(--bg--black); border-radius: 10px;}
     #refreshing { animation: refreshing 3s;}
         @keyframes refreshing  {
 	        0% {
@@ -335,7 +335,7 @@ export default {
     .movie__title { font-size:2.5rem;}
 
     /* 영화 줄거리  */
-    .movie__intro__ctnt { border-top:1px solid #F29B21; padding: 15px 10px; line-height: 2rem;}
+    .movie__intro__ctnt { border-top:1px solid var(--font--color); padding: 15px 10px; line-height: 2rem;}
     .movie__intro__ctnt video { width:80%; height:auto;}
 
     /* ----- 상영날짜 ----- */
@@ -347,8 +347,8 @@ export default {
     .theater__title { margin-bottom: 7px; font-weight: 700;}
     .theater__List .ticketBtn { border:1px solid #72727288; margin: 5px 8px}
     .movie__detailTheater { color:#adadad;}
-    .ticketBtn:hover {background-color:#F29B21;}
-    .ticketBtn:hover div { color:#fff;}
+    .ticketBtn:hover {background-color:var(--font--color);}
+    .ticketBtn:hover div { color:var(--white);}
 
    
 
@@ -372,10 +372,10 @@ export default {
     cursor: pointer;
     }
     
-    .star-rating :checked ~ label { -webkit-text-fill-color: gold; }
+    .star-rating :checked ~ label { -webkit-text-fill-color: var(--subFont2--color); }
     
     .star-rating label:hover,
-    .star-rating label:hover ~ label { -webkit-text-fill-color: gold; }
+    .star-rating label:hover ~ label { -webkit-text-fill-color: var(--subFont2--color); }
 
     /* ----- 리뷰 ----- */
     #movie-review .review__input { position: relative; height:90px; }
@@ -386,18 +386,18 @@ export default {
         width:100%;
         height:100%;
         box-sizing: border-box;
-        border: 1px solid#F29B21; border-radius: 10px;
+        border: 1px solid var(--font--color); border-radius: 10px;
         background: transparent;
     }
     #movie-review .review__input .review__limit {
         position: absolute;
         bottom: 12px;
         right: 20px;
-        color: #F29B21;
+        color: var(--font--color);
         letter-spacing: -0.09px;
     }
     #movie-review .review__form .review__btn {
-        background-color: #F29B21;
+        background-color: var(--font--color);
         border: none;
         border-radius: 10px;
         width: 95px; height:90px;
@@ -408,9 +408,9 @@ export default {
 
     /* ----- 리뷰 리스트 ----- */
     .review__comment { border-bottom:1px solid #535e6488; margin:10px auto; padding:15px; width:90%; overflow: hidden; text-align: left; }
-    .writer__score { display: inline-block; color:#F9F871;}
+    .writer__score { display: inline-block; color:var(--subFont--color);}
     .writer__info .writer__cre { font-size:0.8rem; color:gray;  }
-    .writer__info .writer { color: #F29B21; font-family: 'round'; margin-right:10px; }
+    .writer__info .writer { color: var(--font--color); font-family: 'round'; margin-right:10px; }
 
     /* 추천 스타일 */
     .recommend {
