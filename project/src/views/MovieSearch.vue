@@ -130,13 +130,13 @@ export default {
 <style scoped>
     /* 검색페이지 전체 */
     .container {
-        background: #00000088; border-radius: 10px;
-        color: white;
+        background: var(--bg--black); border-radius: 10px;
+        color: var(--white);
     }
 
     /* 검색어결과 타이틀 */
     .search__title {
-        color: #F9F871; font-size: 2rem; font-weight: bold;
+        color: var(--subFont--color); font-size: 2rem; font-weight: bold;
     }
 
     /* 소제목 타이틀 */
@@ -144,7 +144,7 @@ export default {
         width: 100%;
         display: inline-block;
         vertical-align: middle;
-        border-bottom: 1px solid #F29B21;
+        border-bottom: 1px solid var(--font--color);
         padding: 15px 10px;
         line-height: 2rem;
     }
@@ -153,7 +153,7 @@ export default {
     #sub1 {
         float: left;
         font-size: 1.5rem;
-        color: #F29B21;
+        color: var(--font--color);
         font-weight: bold;
     }
 

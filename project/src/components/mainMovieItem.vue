@@ -85,20 +85,9 @@ export default {
             }        
           }          
         }
-        console.log(this.theater_list);
-      },
 
-      showTime() {
-        const timeList = document.querySelectorAll('.movie__timeList');
-        const moviePoster = document.querySelectorAll('.movie__poster');
         
-        for(let i=0; i<timeList.length; i++) {
-          moviePoster[i].addEventListener('click', function(e) {
-            e.preventDefault();
-            timeList[i].classList.remove('d-none');
-            timeList[i].classList.add('d-block');
-          })
-        }
+
       },
 
     }
@@ -108,23 +97,7 @@ export default {
 <style>
  li{list-style: none;}
  a{ text-decoration: none; color:#fff;}
-.slide__item {
-  width: 100%;
-  height: 500px;
-}
-  .movieBox {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
- .movie__timeList {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #000000a9; width:50%; height:100%;
-    float:left;
-  }
-
+ .theater__timeList ul { background-color: #32485388;}
  .theater__timeList ul>li { display: inline-block; }
  .movie__runningTime { font-size:0.8rem; background-color: #F29B21; padding:5px; margin: 5px; border-radius: 5px; }
 </style>
