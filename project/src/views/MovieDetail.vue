@@ -225,9 +225,15 @@ export default {
 
         async insertReview() { // 리뷰 작성
             if(this.review.ctnt === '' ) {
-                alert('입력된 내용이 없습니다.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: '입력된 내용이 없습니다.'
+                });
             } else if(this.review.movie_score ==='') {
-                alert('별점을 입력해 주세요.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: '별점을 입력해 주세요.'
+                });
             } else {
                 const result = await this.$post('/detail/insertReview', this.review);
                     const t_arr = this.todayDate.substring(0,19).split('T');
@@ -246,6 +252,10 @@ export default {
                     }
                 this.review.ctnt ='';
                 this.review.movie_score=''; 
+                Swal.fire({
+                    icon: 'success',
+                    title: '댓글 등록이 완료되었습니다.'
+                });
             }
           
         },

@@ -290,7 +290,10 @@
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(this.showPosition);
       } else {
-        alert("Geolocation is not supported by this browser.");
+        Swal.fire({
+          icon: 'warning',
+          title: 'Geolocation is not supported by this browser.'
+        });
       }
     },
 
@@ -354,7 +357,10 @@
         this.keyword = '';
         close.click();
       } else {
-        alert('검색어를 입력해주세요!');
+        Swal.fire({
+          icon: "warning",
+          title: "검색어를 입력해주세요!"
+        });
       }
     },
 
