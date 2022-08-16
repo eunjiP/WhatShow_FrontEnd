@@ -304,9 +304,15 @@ export default {
 
         //대댓글
         reCtnt(){
-            const newCtnt = document.querySelector('.ReCtnt');
-            newCtnt.classList.toggle('d-none');
-            console.log('작동됨');
+            const newCtnt = document.querySelectorAll('.ReCtnt');
+            const btnCtnt = document.querySelectorAll('.addCtnt');
+
+            for(let i=0; i<newCtnt.length; i++) {
+                btnCtnt[i].addEventListener('click', function(e) {
+                    e.preventDefault();
+                    newCtnt[i].classList.toggle('d-none');
+                })
+            }
         }
 
     },
