@@ -8,13 +8,14 @@
       <img class="movie__poster" :src="item.movie_poster" @click="showTime" alt="영화포스터">
     </div>
 
-    <div class="movie__timeList d-none">
-      <ul class="theater__List text-start">
+    <div class="movie__timeList d-none d-flex">
+      <div v-if="item.preview == null" >예고편 없음</div>
+      <video v-else :src="item.preview" autoplay loop class="flex-fill w-50"></video>
+      <ul class="theater__List text-start flex-fill">
         <li v-for="(schedule) in theater_list" :key="schedule.idx">
           {{ schedule.gname }} <!-- 극장명 -->
           <div class="theater__timeList">
             <ul class="d-inline ps-0" v-for="theater in schedule.theaterScheduleList" :key="theater.idx">
-              <!-- {{theater.timetableList}} -->
               <li v-for="time in theater.timetableList" :key="time.idx">
                 <a :href="time.ticketPcUrl" class="ticketUrl">
                   <div class="movie__runningTime">{{ time.rtime }} ~ {{ time.endTime }}</div>
@@ -22,10 +23,9 @@
               </li>
             </ul>
           </div>
-        </li>
+        </li>  
       </ul>  
     </div>
-
   </div>
 </template>
 
@@ -44,9 +44,11 @@ export default {
     props: {
         item: Object
     },
+   
     created() {
       this.gettheaterList();
     },
+
     methods:{
       previewPlay() {
         if(!this.previewValue) {
@@ -70,6 +72,7 @@ export default {
       },
 
       async gettheaterList() {
+          
         const param = {
           'code': this.item.movie_code,
           'date': this.todayDate.substring(0, 10)
@@ -105,6 +108,7 @@ export default {
 
       },
 
+    
 
     }
 }
@@ -113,7 +117,20 @@ export default {
 <style>
  li{list-style: none;}
  a{ text-decoration: none; color:#fff;}
- .theater__timeList ul { background-color: #32485388;}
- .theater__timeList ul>li { display: inline-block; }
- .movie__runningTime { font-size:0.8rem; background-color: #F29B21; padding:5px; margin: 5px; border-radius: 5px; }
+ .slide__item { position: relative; height: 600px;}
+ .slide__item .movieBox{
+    position: absolute; 
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+ .slide__item .movie__timeList {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #32485388;
+  }
+ .movie__poster { width: 250px; }
+ .slide__item .theater__timeList ul { background-color: #32485388;}
+ .slide__item .theater__timeList ul>li { display: inline-block; }
+ .slide__item .movie__runningTime { font-size:0.8rem; background-color: #F29B21; padding:5px; margin: 5px; border-radius: 5px; }
 </style>

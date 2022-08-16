@@ -12,6 +12,7 @@
         <span class="dot" v-for="idx in movieList.length" :key="idx" @click="currentSlide(idx-1)"></span>     
       </div>
     </div>
+    
   </main>
 </template>
 
