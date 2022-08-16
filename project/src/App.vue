@@ -7,16 +7,19 @@
       <!-- <router-link to="/search">검색페이지</router-link> -->
       <router-view/>
     </div>
+    <footer><mainFooter/></footer>
   </div>
 </template>
 
 <script>
 import mainHeader from './components/mainHeader.vue'
+import mainFooter from './components/mainFooter.vue'
 
 export default {
   name: 'main',
   components: {
-    mainHeader
+    mainHeader,
+    mainFooter
   }
 }
 </script>
