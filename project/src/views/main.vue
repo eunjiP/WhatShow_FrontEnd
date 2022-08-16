@@ -72,7 +72,7 @@ export default {
 
 <style scoped>
   main {
-    color: #fff;
+    color: var(--white);
   }
   .slide {
       width: 100%;
@@ -121,6 +121,6 @@ export default {
 }
 
 .active, .dot:hover {
-  background-color: #EA9A28;
+  background-color: var(--font--color);
 }
 </style>

@@ -7,16 +7,15 @@
         <div v-b-modal.modal-regin>현재 위치</div>
 
         <b-modal id="modal-regin"  ref="modal-regin" size="lg" title="위치 설정" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
-          <p class="my-2">현재 위치로 설정하시겠습니까?</p>
-          <br>
-          <b-button @click="getLocation">현재 위치로 설정</b-button>
-          <b-button v-b-modal.modal-regin2>수동 위치로 설정</b-button>
+          <p class="my-2 mb-3 mt-3">현재 위치로 설정하시겠습니까?</p>
+          <b-button @click="getLocation" class="mb-3">현재 위치로 설정</b-button>
+          <b-button v-b-modal.modal-regin2 class="mb-3">수동 위치로 설정</b-button>
         </b-modal>
 
         <b-modal id="modal-regin2" ref="modal-regin2" title="수동 설정" header-bg-variant="secondary" 
         header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
-          <div class="mr-2">수동으로 위치 설정</div>
-          <select @change="changeOption1" v-model="optionList1">
+          <div class="mr-2 mb-3">수동으로 위치 설정</div>
+          <select @change="changeOption1" v-model="optionList1" class="mb-3">
               <option value="" selected>시/도</option>
               <option v-for="item in option1" :key="item.root_code" :value="item.root_code">
                 {{ item.region_nm }}
@@ -50,17 +49,15 @@
                   <img v-if="this.userImg == ''" :src="`/static/img/profile/avatar.svg`" class="user_img">
               </label>
               <input id="input-file" type="file" @change="uploadImages($event.target.files)" accept="image/*" style="display: none"/>
-              <div>
+              <div class="mt-3 mb-3">
                 <label for="input-nickname" style="font-size:20px; color:#F9F871;">닉네임</label>
                 <button @click="change_nick" class="btn-mod">변경</button>
-                <b-form-input id="input-nickname" class="nickname__input" placeholder="닉네임을 입력해주세요" v-model="WSnickname" @keyup.enter="change_nick"></b-form-input>
-                <br>
+                <b-form-input id="input-nickname" class="nickname__input mb-5" placeholder="닉네임을 입력해주세요" v-model="WSnickname" @keyup.enter="change_nick"></b-form-input>
                 <label for="input-favtag" style="font-size:20px; color:#F9F871;">관심 태그</label>
                 <br>
                 <div class="d-inline" v-for="(item, idx) in userFav" :key="idx" :item="item" @click="delFav(idx)"><span class="favtag">#{{item}}</span></div>
                 <b-form-input id="input-nickname" v-model="fav" class="favtag__input" @keyup.enter="inputFav" placeholder="태그를 입력해주세요"/>
               </div>
-            <br>
             </div>
             <div style="font-size: 20px; color:#F9F871;">내가 쓴 댓글</div>
             <div v-for="(item, idx) in userCtnt" :key="idx" :item="item" >✨ {{item}}</div>
@@ -129,6 +126,7 @@
         fav:'',
         WSuuid:localStorage.getItem('WSuuid'),
         WSnickname:localStorage.getItem('WSnickname'),
+        my_addr: localStorage.getItem('my_addr'),
         userLocation: '',
         gsTag: [],
         userImg: '',
@@ -168,6 +166,10 @@
     async getKeyword() {
       this.recommendKeyword = await this.$get('movie/selTopSearch', {});
     },
+     async postRecentLocation() {
+        await this.$post(`/location/recentLocation/${this.my_addr}`, {});
+    },
+   
 
     //유저 메소드 시작//
     //로컬 스토로지에 유저 생성
@@ -290,21 +292,26 @@
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(this.showPosition);
       } else {
-        alert("Geolocation is not supported by this browser.");
+        Swal.fire({
+          icon: 'warning',
+          title: 'Geolocation is not supported by this browser.'
+        });
       }
+
+      this.postRecentLocation();
     },
 
     showPosition(pos) {
       let lat = pos.coords.latitude;
       let lng = pos.coords.longitude;
-      // console.log(lat);
-      // console.log(lng);
+      //console.log(lat);
+      //console.log(lng);
       this.getAddr(lat, lng);
     },
     getAddr(lat, lng) {
       let geocoder = new kakao.maps.services.Geocoder();
       let coord = new kakao.maps.LatLng(lat, lng);
-      console.log(coord);
+      //console.log(coord);
       let callback = function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
           let detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
@@ -354,7 +361,10 @@
         this.keyword = '';
         close.click();
       } else {
-        alert('검색어를 입력해주세요!');
+        Swal.fire({
+          icon: "warning",
+          title: "검색어를 입력해주세요!"
+        });
       }
     },
 
@@ -393,7 +403,7 @@
     margin: 1% 5% 0 5%;
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
-    color: #fff;
+    color: var(--white);
   }
   .header__left {
     margin-top: 15px;
@@ -429,9 +439,9 @@
   }
   /* 위치지정_수동 */
   .form-select select { margin: 0 20px; width: 100px; height: 30px;
-    text-align: center; font-size: 1rem; color: black;
+    text-align: center; font-size: 1rem; color: var(--black);
   }
-  #modal-regin2 select option { color: black; }
+  #modal-regin2 select option { color: var(--black); }
 
   /* 마이페이지 css */
 
@@ -444,8 +454,8 @@
 
   .search__input > #header__search {
     height: 30px;
-    background: #00000088;
-    color: #fff;
+    background: var(--bg--black);
+    color: var(--white);
     border: none;
     font-size: 0.8rem;
     padding-left: 5px;
@@ -453,16 +463,16 @@
   }
 
   .search__btn {
-    background-color: #F29B21;
+    background-color: var(--font--color);
     border: none;
     border-radius: 10px;
     padding: 5px;
-    color: #fff;
+    color: var(--white);
   }
 
   .favtag{
     display: inline-block;
-    background-color: #F29B21;
+    background-color: var(--font--color);
     border-radius: 5px;
     margin: 2px;
     padding: 0 2px;
@@ -486,7 +496,7 @@
   .p-ab{
     position: absolute;
     z-index: 20;
-    background: rgba(0,0,0,0.5);
+    background: var(--bg--black);
     border-radius: 10px;
     padding: 10px;
     top: 60px;
@@ -497,6 +507,6 @@
   }
 
   .filternm:hover{
-    color: #F29B21;
+    color: var(--font--color);
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div class="slide__item position-relative">
-    <div class="movieBox position-absolute">
+  <div class="slide__item">
+    <div class="movieBox">
       <div>
         <b-badge variant="warning" class="badge-circle badge-lg badge-floating border-white">{{ item.rank }}위</b-badge>  
         {{ item.movie_nm }}
@@ -8,7 +8,7 @@
       <img class="movie__poster" :src="item.movie_poster" @click="showTime" alt="영화포스터">
     </div>
 
-    <div class="movie__timeList d-none position-absolute">
+    <div class="movie__timeList d-none">
       <ul class="theater__List text-start">
         <li v-for="(schedule) in theater_list" :key="schedule.idx">
           {{ schedule.gname }} <!-- 극장명 -->
@@ -55,6 +55,18 @@ export default {
         this.previewValue = 0;
         return this.$refs.preview.load();
       },
+      showTime() {
+        const timeList = document.querySelectorAll('.movie__timeList');
+        const moviePoster = document.querySelectorAll('.movie__poster');
+        
+        for(let i=0; i<timeList.length; i++) {
+          moviePoster[i].addEventListener('click', function(e) {
+            e.preventDefault();
+            timeList[i].classList.remove('d-none');
+            timeList[i].classList.add('d-block');
+          })
+        }
+      },
 
       async gettheaterList() {
         const param = {
@@ -84,22 +96,10 @@ export default {
               }               
             }        
           }          
-        }
-        console.log(this.theater_list);
+        } 
+
       },
 
-      showTime() {
-        const timeList = document.querySelectorAll('.movie__timeList');
-        const moviePoster = document.querySelectorAll('.movie__poster');
-        
-        for(let i=0; i<timeList.length; i++) {
-          moviePoster[i].addEventListener('click', function(e) {
-            e.preventDefault();
-            timeList[i].classList.remove('d-none');
-            timeList[i].classList.add('d-block');
-          })
-        }
-      },
 
     }
 }
@@ -108,23 +108,7 @@ export default {
 <style>
  li{list-style: none;}
  a{ text-decoration: none; color:#fff;}
-.slide__item {
-  width: 100%;
-  height: 500px;
-}
-  .movieBox {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
- .movie__timeList {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #000000a9; width:50%; height:100%;
-    float:left;
-  }
-
+ .theater__timeList ul { background-color: #32485388;}
  .theater__timeList ul>li { display: inline-block; }
  .movie__runningTime { font-size:0.8rem; background-color: #F29B21; padding:5px; margin: 5px; border-radius: 5px; }
 </style>
