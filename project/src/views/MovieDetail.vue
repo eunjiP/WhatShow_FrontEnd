@@ -100,10 +100,10 @@
                             <div class="showMoreCmt" style="cousor:pointer;" @click="showCmt(review.i_review)" :v-bind="review.i_review">댓글
                                 <div class="reCmt d-none">
                                     
-                                    <div v-for="item in cmtList" :key="item">
-                                        <span>{{item.nickname}}</span>
-                                        <span>{{item.comment_cnt}}</span> 
-                                        <span>{{item.create_at}}</span>
+                                    <div class="cmtLi" v-for="item in cmtList" :key="item">
+                                        <span class="cmWriter">{{item.nickname}}</span>
+                                        <span class="cmReview__cnt">{{item.comment_cnt}}</span> 
+                                        <span class="cmWriter__cre">{{item.create_at}}</span>
                                     </div>
                                     
                                     <input type="text" class="cmtFiled" v-model="rcmt">
@@ -148,6 +148,8 @@ export default {
             rootCode: localStorage.getItem('rootCode'),
             subCode: localStorage.getItem('subCode'),
             myAddr: localStorage.getItem('my_addr'),
+            cmtList: [],
+            rcmt: ''
         }
     },
     created() {
@@ -318,18 +320,29 @@ export default {
             }
         },
 
-        //대댓글
-        showCmt(){
+         //대댓글 열기
+        showCmt(reNum){
             const showMoreCmt = document.querySelectorAll('.showMoreCmt');
             const reCmt = document.querySelectorAll('.reCmt');
-
+            this.getCmt(reNum);
             for(let i=0; i<reCmt.length; i++) {
                 showMoreCmt[i].addEventListener('click', function(e) {
                     e.preventDefault();
                     reCmt[i].classList.toggle('d-none');
-                    console.log('1');
                 })
+                // this.parentNode.classList.add('d-none');
             }
+        },
+        //대댓글 불러오기
+        async getCmt(reNum){
+            this.cmtList = '';
+            this.cmtList = await this.$get(`/detail/reviewListCmt/${reNum}`, []);
+            console.log(this.cmtList);
+            const reCmt = document.querySelectorAll('.reCmt');
+        },
+        async insCmt(reCmt){
+            await this.$post(`/detail/insCmt/${reCmt}/${this.rcmt}/${this.review.iuser}`, {});
+            console.log()
         }
 
     },
@@ -351,7 +364,7 @@ export default {
     #refreshing { animation: refreshing 3s;}
         @keyframes refreshing  {
 	        0% {
-		        opacity: 0;
+		    opacity: 0;
 	        }
             100% {
                 opacity: 1;
@@ -444,6 +457,11 @@ export default {
     .writer__info .writer__cre { font-size:0.8rem; color:gray;  }
     .writer__info .writer { color: var(--font--color); font-family: 'round'; margin-right:10px; }
 
+    /* ----- 대댓글 리스트 ----- */
+    .cmReview__cnt { margin:10px auto; padding:15px; width:90%; overflow: hidden; text-align: left; font-size:0.8em; }
+    .cmWriter__cre { font-size:0.6rem; color:gray;  }
+    .cmWriter { color: var(--font--color); font-family: 'round'; margin-right:10px; font-size: 0.9em;}
+
     /* 추천 스타일 */
     .recommend {
         color: var(--font--color);
@@ -472,4 +490,7 @@ export default {
     font-size: 0.9em;
 }
 
+.cmtLi{
+    padding: 5px;
+}
 </style>
