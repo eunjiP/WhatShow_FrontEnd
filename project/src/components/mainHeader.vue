@@ -126,6 +126,7 @@
         fav:'',
         WSuuid:localStorage.getItem('WSuuid'),
         WSnickname:localStorage.getItem('WSnickname'),
+        my_addr: localStorage.getItem('my_addr'),
         userLocation: '',
         gsTag: [],
         userImg: '',
@@ -165,6 +166,10 @@
     async getKeyword() {
       this.recommendKeyword = await this.$get('movie/selTopSearch', {});
     },
+     async postRecentLocation() {
+        await this.$post(`/location/recentLocation/${this.my_addr}`, {});
+    },
+   
 
     //유저 메소드 시작//
     //로컬 스토로지에 유저 생성
@@ -292,20 +297,21 @@
           title: 'Geolocation is not supported by this browser.'
         });
       }
-      console.log(navigator);
+
+      this.postRecentLocation();
     },
 
     showPosition(pos) {
       let lat = pos.coords.latitude;
       let lng = pos.coords.longitude;
-      // console.log(lat);
-      // console.log(lng);
+      //console.log(lat);
+      //console.log(lng);
       this.getAddr(lat, lng);
     },
     getAddr(lat, lng) {
       let geocoder = new kakao.maps.services.Geocoder();
       let coord = new kakao.maps.LatLng(lat, lng);
-      console.log(coord);
+      //console.log(coord);
       let callback = function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
           let detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
