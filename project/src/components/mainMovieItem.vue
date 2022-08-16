@@ -55,6 +55,18 @@ export default {
         this.previewValue = 0;
         return this.$refs.preview.load();
       },
+      showTime() {
+        const timeList = document.querySelectorAll('.movie__timeList');
+        const moviePoster = document.querySelectorAll('.movie__poster');
+        
+        for(let i=0; i<timeList.length; i++) {
+          moviePoster[i].addEventListener('click', function(e) {
+            e.preventDefault();
+            timeList[i].classList.remove('d-none');
+            timeList[i].classList.add('d-block');
+          })
+        }
+      },
 
       async gettheaterList() {
         const param = {
@@ -84,11 +96,10 @@ export default {
               }               
             }        
           }          
-        }
-
-        
+        } 
 
       },
+
 
     }
 }
