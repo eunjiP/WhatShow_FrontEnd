@@ -97,11 +97,19 @@
                         <div class="writer__info">
                             <span class="writer">{{ review.nickname }}</span>
                             <span class="writer__cre">{{ review.created_at }}</span>
-                            <span class="showMoreCmt" style="cousor:pointer;" @click="showCmt">댓글</span>
+                            <div class="showMoreCmt" style="cousor:pointer;" @click="showCmt(review.i_review)" :v-bind="review.i_review">댓글
                                 <div class="reCmt d-none">
-                                    <input type="text" class="cmtFiled">
-                                    <button class="addCmt">등록</button>
+                                    
+                                    <div v-for="item in cmtList" :key="item">
+                                        <span>{{item.nickname}}</span>
+                                        <span>{{item.comment_cnt}}</span> 
+                                        <span>{{item.create_at}}</span>
+                                    </div>
+                                    
+                                    <input type="text" class="cmtFiled" v-model="rcmt">
+                                    <button class="addCmt" @click="insCmt(review.i_review)">등록</button>
                                 </div>
+                            </div>
                         </div>
                     </li>
                 </ul>
@@ -441,11 +449,11 @@ export default {
         color: var(--font--color);
         /* 젤리 애니메이션 */
         -webkit-animation: jello-vertical 0.9s both;
-	        animation: jello-vertical 0.9s both;
+	    animation: jello-vertical 0.9s both;
     }
     .jello-horizontal {
         -webkit-animation: jello-horizontal 0.9s both;
-                animation: jello-horizontal 0.9s both;
+        animation: jello-horizontal 0.9s both;
     }
 
 .d-none{
@@ -461,7 +469,6 @@ export default {
     background-color: darkorange;
     border-radius: 5px;
     font-size: 0.9em;
-
 }
 
 </style>
