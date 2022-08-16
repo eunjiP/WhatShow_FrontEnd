@@ -126,7 +126,6 @@
         fav:'',
         WSuuid:localStorage.getItem('WSuuid'),
         WSnickname:localStorage.getItem('WSnickname'),
-        my_addr: localStorage.getItem('my_addr'),
         userLocation: '',
         gsTag: [],
         userImg: '',
@@ -166,9 +165,7 @@
     async getKeyword() {
       this.recommendKeyword = await this.$get('movie/selTopSearch', {});
     },
-     async postRecentLocation() {
-        await this.$post(`/location/recentLocation/${this.my_addr}`, {});
-    },
+
    
 
     //유저 메소드 시작//
@@ -297,8 +294,6 @@
           title: 'Geolocation is not supported by this browser.'
         });
       }
-
-      this.postRecentLocation();
     },
 
     showPosition(pos) {
