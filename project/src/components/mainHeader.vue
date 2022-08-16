@@ -60,7 +60,7 @@
               </div>
             </div>
             <div style="font-size: 20px; color:#F9F871;">내가 쓴 댓글</div>
-            <div v-for="(item, idx) in userCtnt" :key="idx" :item="item" >✨ {{item}}</div>
+            <div v-for="(item, idx) in userCtnt" :key="idx" :item="item" >{{item}}</div>
           </div>
         </b-modal>
       </div>
