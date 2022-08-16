@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="loading d-none"><img src="../assets/img/loading1.gif"></div>
+    <div class="loading d-none"><img src="../assets/img/loading3.gif"></div>
     <div class="slide__box">
       <div class="slide__list">
         <MovieItem v-for="(item, idx) in movieList" :key="idx" :item="item"></MovieItem>
@@ -29,14 +29,14 @@ export default {
     }
   },
   methods:{
-    showLoading() {
-      const loadingElem = document.querySelector('loading');
-      loadingElem.classList.remove('d-none');
-    },
-    hideLoading() {
-      const loadingElem = document.querySelector('loading');
-      loadingElem.classList.add('d-none');
-    },
+    // showLoading() {
+    //   const loadingElem = document.querySelector('.loading');
+    //   loadingElem.classList.remove('d-none');
+    // },
+    // hideLoading() {
+    //   const loadingElem = document.querySelector('.loading');
+    //   loadingElem.classList.add('d-none');
+    // },
     async getMovieList() {
       this.showLoading();
       this.movieList = await this.$get('/movie/main', {});
@@ -83,6 +83,9 @@ export default {
 </script>
 
 <style scoped>
+  .d-none {
+    display: none;
+  }
   main {
     color: var(--white);
   }
