@@ -94,7 +94,7 @@ export default {
             this.movie_info = await this.$get('recommend/movieSearch', param);
             if (this.movie_info.length === 0) {
                 const keywordResult = document.querySelector('#keywordResult');
-                keywordResult.innerHTML = "<div class='resultNull'>검색 결과가 없습니다!</div>";
+                keywordResult.innerHTML = "<div class='resultNull text-white-50'>검색 결과가 없습니다!</div>";
             } else {
                 console.log(this.movie_info);
             }
@@ -116,7 +116,7 @@ export default {
             this.movie_info2 = await this.$get(`/recommend/movieTagSearch`, param);
             if (this.movie_info2.length === 0) {
                 const genreResult = document.querySelector('#genreResult');
-                genreResult.innerHTML = "<div class='resultNull'>검색 결과가 없습니다!</div>";
+                genreResult.innerHTML = "<div class='resultNull text-white-50'>검색 결과가 없습니다!</div>";
             } else {
                 console.log(this.movie_info);
             }
