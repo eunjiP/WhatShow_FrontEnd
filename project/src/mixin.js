@@ -3,11 +3,15 @@ import axios from "axios";
 export default {
     methods: {
         async $get(url, param) {
+            const loadingElem = document.querySelector('.loading');
+            loadingElem.classList.remove('d-none');
             return (await axios.get(url, {
                 params : param
             }).catch(e => {
                 console.log(e);
-            })).data;
+                loadingElem.classList.add('d-none');
+            })
+            ).data;
         },
         
         async $post(url, data) {

@@ -106,7 +106,7 @@
                                         <span class="cmWriter__cre">{{item.create_at}}</span>
                                     </div>
                                     
-                                    <input type="text" class="cmtFiled" v-model="rcmt">
+                                    <input type="text" class="cmtFiled" v-model="rcmt" @keyup.enter="insCmt(review.i_review)">
                                     <button class="addCmt" @click="insCmt(review.i_review)">등록</button>
                                 </div>
                             </div>
@@ -342,7 +342,7 @@ export default {
         },
         async insCmt(reCmt){
             await this.$post(`/detail/insCmt/${reCmt}/${this.rcmt}/${this.review.iuser}`, {});
-            console.log()
+            this.rcmt = '';
         }
 
     },
