@@ -81,7 +81,7 @@ export default {
 
     created() {
         this.getMovieInfo(); // 영화 상세 정보
-        this.getMovieInfoTag();
+        // this.getMovieInfoTag();
         this.getRecommendMovie();
     },
 
@@ -94,11 +94,11 @@ export default {
         },
 
         async getRecommendMovie() {
-            const data = {
-                'iuser' : parseInt(localStorage.getItem('iuser'))
+            const param = {
+                'iuser': parseInt(localStorage.getItem('iuser'))
             };
-            console.log(data);
-            this.movie_recommend_info = await this.$post('recommend/tagRecommend', data);
+            console.log(param);
+            this.movie_recommend_info = await this.$get('recommend/tagRecommend', param);
             console.log(this.movie_recommend_info);
         },
 
