@@ -100,10 +100,10 @@
                             <div class="showMoreCmt" style="cousor:pointer;" @click="showCmt(review.i_review)" :v-bind="review.i_review">댓글
                                 <div class="reCmt d-none">
                                     
-                                    <div v-for="item in cmtList" :key="item">
-                                        <span>{{item.nickname}}</span>
-                                        <span>{{item.comment_cnt}}</span> 
-                                        <span>{{item.create_at}}</span>
+                                    <div class="cmtLi" v-for="item in cmtList" :key="item">
+                                        <span class="cmWriter">{{item.nickname}}</span>
+                                        <span class="cmReview__cnt">{{item.comment_cnt}}</span> 
+                                        <span class="cmWriter__cre">{{item.create_at}}</span>
                                     </div>
                                     
                                     <input type="text" class="cmtFiled" v-model="rcmt">
@@ -457,6 +457,11 @@ export default {
     .writer__info .writer__cre { font-size:0.8rem; color:gray;  }
     .writer__info .writer { color: var(--font--color); font-family: 'round'; margin-right:10px; }
 
+    /* ----- 대댓글 리스트 ----- */
+    .cmReview__cnt { margin:10px auto; padding:15px; width:90%; overflow: hidden; text-align: left; font-size:0.8em; }
+    .cmWriter__cre { font-size:0.6rem; color:gray;  }
+    .cmWriter { color: var(--font--color); font-family: 'round'; margin-right:10px; font-size: 0.9em;}
+
     /* 추천 스타일 */
     .recommend {
         color: var(--font--color);
@@ -485,4 +490,7 @@ export default {
     font-size: 0.9em;
 }
 
+.cmtLi{
+    padding: 5px;
+}
 </style>

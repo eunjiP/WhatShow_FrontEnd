@@ -19,7 +19,7 @@ export default {
 
 <style>
     .main__footer {
-        margin: 0 100px 0 100px;
+        margin: 150px 100px 0 100px;
         color: white;
     }
 
