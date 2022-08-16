@@ -37,7 +37,7 @@
       </div>
 
       <!-- 채팅창 -->
-      <div>채팅창</div>
+      <!-- <div>채팅창</div> -->
       <!-- 마이페이지 -->
       <div>
         <div v-b-modal.modal-mypage>마이페이지</div>
