@@ -16,7 +16,6 @@
           {{ schedule.gname }} <!-- 극장명 -->
           <div class="theater__timeList">
             <ul class="d-inline ps-0" v-for="theater in schedule.theaterScheduleList" :key="theater.idx">
-              <!-- {{theater.timetableList}} -->
               <li v-for="time in theater.timetableList" :key="time.idx">
                 <a :href="time.ticketPcUrl" class="ticketUrl">
                   <div class="movie__runningTime">{{ time.rtime }} ~ {{ time.endTime }}</div>
