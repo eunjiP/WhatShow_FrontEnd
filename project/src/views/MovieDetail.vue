@@ -148,6 +148,8 @@ export default {
             rootCode: localStorage.getItem('rootCode'),
             subCode: localStorage.getItem('subCode'),
             myAddr: localStorage.getItem('my_addr'),
+            cmtList: [],
+            rcmt: ''
         }
     },
     created() {
@@ -318,18 +320,29 @@ export default {
             }
         },
 
-        //대댓글
-        showCmt(){
+         //대댓글 열기
+        showCmt(reNum){
             const showMoreCmt = document.querySelectorAll('.showMoreCmt');
             const reCmt = document.querySelectorAll('.reCmt');
-
+            this.getCmt(reNum);
             for(let i=0; i<reCmt.length; i++) {
                 showMoreCmt[i].addEventListener('click', function(e) {
                     e.preventDefault();
                     reCmt[i].classList.toggle('d-none');
-                    console.log('1');
                 })
+                // this.parentNode.classList.add('d-none');
             }
+        },
+        //대댓글 불러오기
+        async getCmt(reNum){
+            this.cmtList = '';
+            this.cmtList = await this.$get(`/detail/reviewListCmt/${reNum}`, []);
+            console.log(this.cmtList);
+            const reCmt = document.querySelectorAll('.reCmt');
+        },
+        async insCmt(reCmt){
+            await this.$post(`/detail/insCmt/${reCmt}/${this.rcmt}/${this.review.iuser}`, {});
+            console.log()
         }
 
     },
@@ -351,7 +364,7 @@ export default {
     #refreshing { animation: refreshing 3s;}
         @keyframes refreshing  {
 	        0% {
-		        opacity: 0;
+		    opacity: 0;
 	        }
             100% {
                 opacity: 1;
