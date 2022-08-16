@@ -8,7 +8,7 @@
       <img class="movie__poster" :src="item.movie_poster" @click="showTime" alt="영화포스터">
     </div>
 
-    <div class="movie__timeList d-none container">
+    <div class="movie__timeList d-none container scale-up-center">
       <div class="row row-cols-2">
         <div class="preview__box col row align-items-center">
           <span v-if="item.preview == null" class="text-center" >예고편 없음 </span>
@@ -75,7 +75,7 @@ export default {
             moviePoster[i].addEventListener('click', function(e) {
               e.preventDefault();
               timeList[i].classList.remove('d-none');
-              timeList[i].classList.add('d-block slide-fwd-center');
+              timeList[i].classList.add('d-block');
             })
           }
         } else {
@@ -153,9 +153,9 @@ export default {
     
   }
  .slide__item .movie__timeList {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
+    /* position: absolute; */
+    /* top: 50%; left: 50%; */
+    /* transform: translate(-50%, -50%); */
     background-color: #000000a4;
     min-height: 400px;
   }
@@ -168,30 +168,35 @@ export default {
  .slide__item .theater__timeList ul>li { display: inline-block; }
  .slide__item .movie__runningTime { font-size:0.8rem; background-color: #F29B21; padding:5px; margin: 5px; border-radius: 5px; }
 
- .slide-fwd-center {
-	-webkit-animation: slide-fwd-center 0.45s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-	        animation: slide-fwd-center 0.45s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+/* 예고편 애니메이션 */
+ .scale-up-center {
+	-webkit-animation: scale-up-center 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+	        animation: scale-up-center 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
 }
 
-@-webkit-keyframes slide-fwd-center {
+@-webkit-keyframes scale-up-center {
   0% {
-    -webkit-transform: translateZ(0);
-            transform: translateZ(0);
+    -webkit-transform: scale(0.5);
+            transform: scale(0.5);
   }
   100% {
-    -webkit-transform: translateZ(160px);
-            transform: translateZ(160px);
+    -webkit-transform: scale(1);
+            transform: scale(1);
   }
 }
-@keyframes slide-fwd-center {
+@keyframes scale-up-center {
   0% {
-    -webkit-transform: translateZ(0);
-            transform: translateZ(0);
+    -webkit-transform: scale(0.5);
+            transform: scale(0.5);
   }
   100% {
-    -webkit-transform: translateZ(160px);
-            transform: translateZ(160px);
+    -webkit-transform: scale(1);
+            transform: scale(1);
   }
 }
+
+
+
+
 
 </style>
