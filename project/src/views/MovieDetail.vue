@@ -142,7 +142,7 @@ export default {
                 ctnt: '',
                 nickname: localStorage.getItem('WSnickname'),
                 iuser: localStorage.getItem('iuser'),
-                movie_code: 81888,
+                movie_code: 195758,
                 movie_score: '' 
             },
             rootCode: localStorage.getItem('rootCode'),
@@ -453,7 +453,8 @@ export default {
     }
     .jello-horizontal {
         -webkit-animation: jello-horizontal 0.9s both;
-        animation: jello-horizontal 0.9s both;
+                animation: jello-horizontal 0.9s both;
+
     }
 
 .d-none{
