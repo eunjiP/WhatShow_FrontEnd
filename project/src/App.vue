@@ -2,9 +2,9 @@
   <div>
     <header><mainHeader/></header>
     <div class="router">
-      <router-link to="/">메인</router-link> |
-      <router-link to="/detail">상세페이지</router-link> |
-      <router-link to="/search">검색페이지</router-link>
+      <!-- <router-link to="/">메인</router-link> | -->
+      <!-- <router-link to="/detail">상세페이지</router-link> | -->
+      <!-- <router-link to="/search">검색페이지</router-link> -->
       <router-view/>
     </div>
     <footer><mainFooter/></footer>
