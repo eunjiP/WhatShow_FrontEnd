@@ -124,10 +124,6 @@
     </div>
 </template>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 4e2ed1d87795227cf6b5b008a7ec3d9775429d7b
 <script>
 
 export default {
@@ -146,11 +142,7 @@ export default {
                 ctnt: '',
                 nickname: localStorage.getItem('WSnickname'),
                 iuser: localStorage.getItem('iuser'),
-<<<<<<< HEAD
                 movie_code: 195758,
-=======
-                movie_code: 81888,
->>>>>>> 4e2ed1d87795227cf6b5b008a7ec3d9775429d7b
                 movie_score: '' 
             },
             rootCode: localStorage.getItem('rootCode'),
@@ -461,11 +453,8 @@ export default {
     }
     .jello-horizontal {
         -webkit-animation: jello-horizontal 0.9s both;
-<<<<<<< HEAD
                 animation: jello-horizontal 0.9s both;
-=======
-        animation: jello-horizontal 0.9s both;
->>>>>>> 4e2ed1d87795227cf6b5b008a7ec3d9775429d7b
+
     }
 
 .d-none{
