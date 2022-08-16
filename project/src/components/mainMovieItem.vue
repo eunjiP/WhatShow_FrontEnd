@@ -37,6 +37,7 @@ export default {
         todayDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString(),
         rootCode: localStorage.getItem('rootCode'),
         subCode: localStorage.getItem('subCode'),
+        myAddr: localStorage.getItem('my_addr'),
         theater_list: [],
       }
     },
@@ -71,10 +72,14 @@ export default {
       async gettheaterList() {
         const param = {
           'code': this.item.movie_code,
-          'date': this.todayDate.substring(0, 10),
-          'rootCode': this.rootCode,
-          'subCode': this.subCode,
+          'date': this.todayDate.substring(0, 10)
         };
+        if(this.rootCode == null) {
+          param['my_addr'] = this.myAddr;
+        } else {
+          param['rootCode'] = this.rootCode;
+          param['subCode'] = this.subCode;
+        }
 
         const nowTime = this.todayDate.substring(11,16);
         const tt = nowTime.split(':'); 
