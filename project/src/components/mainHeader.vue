@@ -41,7 +41,7 @@
         <div v-b-modal.modal-mypage>마이페이지</div>
         <b-modal id="modal-mypage" title="마이페이지" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" footer-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <div>
-            <div class="mypage__user">
+            <div class="mypage__user mb-3">
               <label for="input-file">
                   <img v-if="!this.userImg == ''" :src="`/static/img/${this.WSuuid}/${this.userImg}`" class="user_img" require>
                   <img v-if="this.userImg == ''" :src="`/static/img/profile/avatar.svg`" class="user_img">
@@ -50,15 +50,18 @@
               <div class="mt-3 mb-3">
                 <label for="input-nickname" style="font-size:20px; color:#F9F871;">닉네임</label>
                 <button @click="change_nick" class="btn-mod">변경</button>
-                <b-form-input id="input-nickname" class="nickname__input mb-5 fw-bold" placeholder="닉네임을 입력해주세요" v-model="WSnickname" @keyup.enter="change_nick"></b-form-input>
+                <b-form-input id="input-nickname" class="nickname__input mb-5 fw-bold text-white" v-model="WSnickname" @keyup.enter="change_nick"></b-form-input>
                 <label for="input-favtag" style="font-size:20px; color:#F9F871;">관심 태그</label>
                 <br>
                 <div class="d-inline" v-for="(item, idx) in userFav" :key="idx" :item="item" @click="delFav(idx)"><span class="favtag">#{{item}}</span></div>
-                <b-form-input id="input-nickname" v-model="fav" class="favtag__input" @keyup.enter="inputFav" placeholder="태그를 입력해주세요"/>
+                <b-form-input id="input-nickname" v-model="fav" class="favtag__input text-white" @keyup.enter="inputFav" placeholder="관심태그를 등록해주세요."/>
               </div>
             </div>
-            <div style="font-size: 20px; color:#F9F871;">내가 쓴 댓글</div>
-            <div v-for="(item, idx) in userCtnt" :key="idx" :item="item" >{{item}}</div>
+              
+              <span style="font-size: 20px; color:#F9F871;">내가 쓴 댓글</span>
+              <div class="userCtnt">
+                <div v-for="(item, idx) in userCtnt" :key="idx" :item="item" >{{item}}</div>
+              </div>
           </div>
         </b-modal>
       </div>
@@ -451,8 +454,9 @@
     color:rgb(64, 64, 64);
     font-size:0.8rem;
   }
-
   .btn-mod:hover { color:#fff;}
+  .nickname__input, .favtag__input { background-color: transparent; border:none; border-bottom: 1px solid #F9F871; border-radius: 0px;}
+  .userCtnt { background-color: #5e6770; border-radius: 5px; padding:10px;}
 
   /* 검색 css */
 

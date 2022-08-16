@@ -88,7 +88,7 @@ export default {
   }
 
   .slide__item {
-      flex: 0 0 100%;
+    flex: 0 0 100%;
   }
 
   .buttons {
