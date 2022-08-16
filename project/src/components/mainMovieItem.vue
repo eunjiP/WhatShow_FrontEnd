@@ -67,15 +67,22 @@ export default {
         return this.$refs.preview.load();
       },
       showTime() {
-        const timeList = document.querySelectorAll('.movie__timeList');
-        const moviePoster = document.querySelectorAll('.movie__poster');
-        
-        for(let i=0; i<timeList.length; i++) {
-          moviePoster[i].addEventListener('click', function(e) {
-            e.preventDefault();
-            timeList[i].classList.remove('d-none');
-            timeList[i].classList.add('d-block slide-fwd-center');
-          })
+        if(this.rootCode || this.myAddr) {
+          const timeList = document.querySelectorAll('.movie__timeList');
+          const moviePoster = document.querySelectorAll('.movie__poster');
+          
+          for(let i=0; i<timeList.length; i++) {
+            moviePoster[i].addEventListener('click', function(e) {
+              e.preventDefault();
+              timeList[i].classList.remove('d-none');
+              timeList[i].classList.add('d-block slide-fwd-center');
+            })
+          }
+        } else {
+          Swal.fire({
+              icon: 'warning',
+              title: '상영 시간은 위치설정이 필요합니다'
+            });
         }
       },
 
