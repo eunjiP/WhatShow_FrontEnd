@@ -1,6 +1,6 @@
 <template>
     <footer>
-        <div class="main__footer">
+        <div class="main__footer text-white-50">
             <hr>
             <div>팀명 : BOAAA(혈액형)</div>
             <div>팀장 : 황현</div>
@@ -19,7 +19,7 @@ export default {
 
 <style>
     .main__footer {
-        margin: 0 100px 0 100px;
+        margin: 150px 100px 0 100px;
         color: white;
     }
 
