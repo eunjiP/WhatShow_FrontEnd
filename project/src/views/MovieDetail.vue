@@ -121,7 +121,7 @@
 export default {
     data() {
         return {
-            movie_code: 81888,
+            movie_code: 195758,
             movie_info: [], // 영화정보
             movie_recommend: {},
             todayDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString(), // 현재 날짜
@@ -138,7 +138,8 @@ export default {
                 movie_score: '' 
             },
             rootCode: localStorage.getItem('rootCode'),
-            subCode: localStorage.getItem('subCode')
+            subCode: localStorage.getItem('subCode'),
+            myAddr: localStorage.getItem('my_addr'),
         }
     },
     created() {
@@ -204,13 +205,17 @@ export default {
             const param = {};
             param['code'] = this.movie_code;
             param['date'] = this.selectedDate;
-            param['rootCode'] = this.rootCode;
-            param['subCode'] = this.subCode;
+            if(this.rootCode == null) {
+                param['my_addr'] = this.myAddr;
+            } else {
+                param['rootCode'] = this.rootCode;
+                param['subCode'] = this.subCode;
+            }
             const nowDay = this.todayDate.substring(0, 10);
             const nowTime = this.todayDate.substring(11,16);
 
-            console.log(nowDay);
             const list = await this.$get('/movie/movieTime', param); // 상영 극장 정보
+            console.log(list);
              for(let a=0; a<list.length; a++) {
                  this.theater_list[a] = list[a]; // 극장이름
                  let sche_list = list[a].theaterScheduleList;
