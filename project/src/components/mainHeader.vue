@@ -35,6 +35,7 @@
           </div>
         </b-modal>
       </div>
+
       <!-- 마이페이지 -->
       <div>
         <div v-b-modal.modal-mypage>마이페이지</div>
