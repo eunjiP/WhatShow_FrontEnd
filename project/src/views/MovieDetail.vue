@@ -97,11 +97,19 @@
                         <div class="writer__info">
                             <span class="writer">{{ review.nickname }}</span>
                             <span class="writer__cre">{{ review.created_at }}</span>
-                            <span class="showMoreCmt" style="cousor:pointer;" @click="showCmt">댓글</span>
+                            <div class="showMoreCmt" style="cousor:pointer;" @click="showCmt(review.i_review)" :v-bind="review.i_review">댓글
                                 <div class="reCmt d-none">
-                                    <input type="text" class="cmtFiled">
-                                    <button class="addCmt">등록</button>
+                                    
+                                    <div v-for="item in cmtList" :key="item">
+                                        <span>{{item.nickname}}</span>
+                                        <span>{{item.comment_cnt}}</span> 
+                                        <span>{{item.create_at}}</span>
+                                    </div>
+                                    
+                                    <input type="text" class="cmtFiled" v-model="rcmt">
+                                    <button class="addCmt" @click="insCmt(review.i_review)">등록</button>
                                 </div>
+                            </div>
                         </div>
                     </li>
                 </ul>
@@ -138,7 +146,9 @@ export default {
                 movie_score: '' 
             },
             rootCode: localStorage.getItem('rootCode'),
-            subCode: localStorage.getItem('subCode')
+            subCode: localStorage.getItem('subCode'),
+            cmtList: [],
+            rcmt: ''
         }
     },
     created() {
@@ -149,7 +159,6 @@ export default {
     },
 
     methods: {
-      
         async getMovieInfo() { // 영화 상세 정보
             this.movie_info = await this.$get(`/detail/movieInfo/${this.movie_code}`, {});
             const movie_nm = this.movie_info.movie_nm;
@@ -270,6 +279,7 @@ export default {
             if(list){
                 this.rev_list = list;
             }
+            console.log(this.rev_list);
         },
 
         more() { // 리뷰 더보기
@@ -305,18 +315,34 @@ export default {
             }
         },
 
-        //대댓글
-        showCmt(){
+        //대댓글 열기
+        showCmt(reNum){
             const showMoreCmt = document.querySelectorAll('.showMoreCmt');
             const reCmt = document.querySelectorAll('.reCmt');
-
+            this.getCmt(reNum);
             for(let i=0; i<reCmt.length; i++) {
                 showMoreCmt[i].addEventListener('click', function(e) {
                     e.preventDefault();
                     reCmt[i].classList.toggle('d-none');
-                    console.log('1');
+
                 })
+                // this.parentNode.classList.add('d-none');
             }
+            
+            
+        },
+        //대댓글 불러오기
+        async getCmt(reNum){
+            this.cmtList = '';
+            this.cmtList = await this.$get(`/detail/reviewListCmt/${reNum}`, []);
+            console.log(this.cmtList);
+            const reCmt = document.querySelectorAll('.reCmt');
+        },
+        //대댓글 쓰기
+        async insCmt(reCmt){
+            await this.$post(`/detail/insCmt/${reCmt}/${this.rcmt}/${this.review.iuser}`, []);
+            console.log()
+
         }
 
     },
@@ -563,7 +589,6 @@ export default {
     background-color: darkorange;
     border-radius: 5px;
     font-size: 0.9em;
-
 }
 
 </style>
