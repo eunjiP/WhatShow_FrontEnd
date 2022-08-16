@@ -7,7 +7,7 @@
         <div v-b-modal.modal-regin>현재 위치</div>
 
         <b-modal id="modal-regin"  ref="modal-regin" size="lg" title="위치 설정" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
-          <p class="my-2 mb-3 mt-3">현재 위치로 설정하시겠습니까?</p>
+          <p class="my-3 fs-4">현재 위치로 설정하시겠습니까?</p>
           <b-button @click="getLocation" class="mb-3">현재 위치로 설정</b-button>
           <b-button v-b-modal.modal-regin2 class="mb-3">수동 위치로 설정</b-button>
         </b-modal>
@@ -35,9 +35,6 @@
           </div>
         </b-modal>
       </div>
-
-      <!-- 채팅창 -->
-      <div>채팅창</div>
       <!-- 마이페이지 -->
       <div>
         <div v-b-modal.modal-mypage>마이페이지</div>
@@ -52,7 +49,7 @@
               <div class="mt-3 mb-3">
                 <label for="input-nickname" style="font-size:20px; color:#F9F871;">닉네임</label>
                 <button @click="change_nick" class="btn-mod">변경</button>
-                <b-form-input id="input-nickname" class="nickname__input mb-5" placeholder="닉네임을 입력해주세요" v-model="WSnickname" @keyup.enter="change_nick"></b-form-input>
+                <b-form-input id="input-nickname" class="nickname__input mb-5 fw-bold" placeholder="닉네임을 입력해주세요" v-model="WSnickname" @keyup.enter="change_nick"></b-form-input>
                 <label for="input-favtag" style="font-size:20px; color:#F9F871;">관심 태그</label>
                 <br>
                 <div class="d-inline" v-for="(item, idx) in userFav" :key="idx" :item="item" @click="delFav(idx)"><span class="favtag">#{{item}}</span></div>
@@ -79,13 +76,13 @@
             <div class="autocomplete p-ab disabled">
               <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
             </div>
-          <div class="search__button" @click="searchPage(keyword)"><i class="fa-solid fa-play" style="color:#fff; background-color: #F29B21;"></i></div>
+          <div class="search__button ms-2" @click="searchPage(keyword)"><i class="fa-solid fa-play px-2" style="color:#fff; background-color: #F29B21;"></i></div>
         </div>
         
         <!-- 상세검색 -->
         <div v-b-modal.modal-search class="search__bottom" @click="getSelectTag">상세검색</div>
 
-        <b-modal id="modal-search" title="검색하기" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
+        <b-modal id="modal-search" title="상세검색" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <b-form-input id="modal__search" type="text" v-model="keyword" placeholder="검색어" v-on:keyup.enter="searchPage(keyword)"/>
           <div class="search__seltag mt-3" style="font-size:20px; color:#F9F871;">#태그설정</div>
           <div class="container2 mt-3">
@@ -444,6 +441,17 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
+
+  .btn-mod {
+    background-color: transparent;
+    border: none;
+    float: right;
+    margin-top:5px;
+    color:rgb(64, 64, 64);
+    font-size:0.8rem;
+  }
+
+  .btn-mod:hover { color:#fff;}
 
   /* 검색 css */
 
