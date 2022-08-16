@@ -292,6 +292,7 @@
           title: 'Geolocation is not supported by this browser.'
         });
       }
+      console.log(navigator);
     },
 
     showPosition(pos) {
