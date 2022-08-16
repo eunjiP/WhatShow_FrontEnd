@@ -1,6 +1,6 @@
 <template>
-  <div class="slide__item position-relative">
-    <div class="movieBox position-absolute">
+  <div class="slide__item">
+    <div class="movieBox">
       <div>
         <b-badge variant="warning" class="badge-circle badge-lg badge-floating border-white">{{ item.rank }}위</b-badge>  
         {{ item.movie_nm }}
@@ -8,7 +8,7 @@
       <img class="movie__poster" :src="item.movie_poster" @click="showTime" alt="영화포스터">
     </div>
 
-    <div class="movie__timeList d-none position-absolute">
+    <div class="movie__timeList d-none">
       <ul class="theater__List text-start">
         <li v-for="(schedule) in theater_list" :key="schedule.idx">
           {{ schedule.gname }} <!-- 극장명 -->
