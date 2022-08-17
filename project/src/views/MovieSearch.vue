@@ -8,12 +8,11 @@
             <div v-else>
                 <div class="search__subTitle">
                     <div class="sub1"> 영화</div>
-                    <div class="sub2" @click="more" style="cursor:pointer;">더보기</div>
                 </div>
                 <div class="search-body m-3">
                     <div class="container">
                         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4" id="keywordResult">
-                            <div class="movie__poster col" v-for="(item, idx) in movie_info" :key="idx" :item="item">
+                            <div class="movie__poster" v-for="(item, idx) in movie_info" :key="idx" :item="item">
                                 <img :src="`${item.movie_poster}`" class="mt-3"/>
                                 <div class="mb-3">{{ item.movie_nm }}</div>
                             </div>
@@ -24,7 +23,6 @@
             <div>
                 <div class="search__subTitle">
                     <div class="sub1"> 검색 장르 영화</div>
-                    <div class="sub2" @click="more" style="cursor:pointer;">더보기</div>
                 </div>
                 <div class="search-body m-3">
                     <div class="container">
@@ -40,7 +38,6 @@
             <div>
                 <div class="search__subTitle">
                     <div class="sub1"> # 태그 추천</div>
-                    <div class="sub2">더보기</div>
                 </div>
                 <div class="search-body m-3">
                     <div class="container">
@@ -63,7 +60,6 @@ export default {
 
     data() {
         return {
-            movielimit: 4,
             movie_info: [],
             movie_info2: [],
             movie_recommend_info: [],
@@ -122,12 +118,6 @@ export default {
             }
             console.log(this.movie_info2);
         },
-
-        more() { // 검색 결과 더보기
-            this.movielimit += 4;
-            this.getMovieInfo();
-            this.getMovieInfoTag();
-        }
     },
 }
 
@@ -163,15 +153,9 @@ export default {
         font-weight: bold;
     }
 
-    /* 더보기 */
-    .sub2 {
-        float: right;
-
-    }
-
+    /* 영화 포스터 */
     .movie__poster {
-        text-align: center;
-
+        display: block; margin: 0px auto;
     }
 
 </style>
