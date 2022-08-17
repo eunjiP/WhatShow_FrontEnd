@@ -165,5 +165,8 @@ export default {
     .movie__poster {
         display: block; margin: 0px auto;
     }
+    .movie__poster img {
+        height: 290px;
+    }
 
 </style>
