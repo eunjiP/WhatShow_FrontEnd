@@ -71,7 +71,7 @@ export default {
       showTime() {
         if(this.rootCode || this.myAddr) {
           const timeList = document.querySelectorAll('.movie__timeList');
-          const moviePoster = document.querySelectorAll('.movie__poster');
+          const moviePoster = document.querySelectorAll('.item__movie__poster');
           
           for(let i=0; i<timeList.length; i++) {
             moviePoster[i].addEventListener('click', function(e) {
