@@ -8,7 +8,6 @@
             <div v-else>
                 <div class="search__subTitle">
                     <div class="sub1"> 영화</div>
-                    <div class="sub2" @click="more" style="cursor:pointer;">더보기</div>
                 </div>
                 <div class="search-body m-3">
                     <div class="container">
@@ -24,7 +23,6 @@
             <div>
                 <div class="search__subTitle">
                     <div class="sub1"> 검색 장르 영화</div>
-                    <div class="sub2" @click="more" style="cursor:pointer;">더보기</div>
                 </div>
                 <div class="search-body m-3">
                     <div class="container">
@@ -40,7 +38,6 @@
             <div>
                 <div class="search__subTitle">
                     <div class="sub1"> # 태그 추천</div>
-                    <div class="sub2">더보기</div>
                 </div>
                 <div class="search-body m-3">
                     <div class="container">
@@ -63,7 +60,6 @@ export default {
 
     data() {
         return {
-            movielimit: 4,
             movie_info: [],
             movie_info2: [],
             movie_recommend_info: [],
@@ -122,6 +118,7 @@ export default {
             }
             console.log(this.movie_info2);
         },
+<<<<<<< HEAD
 
         more() { // 검색 결과 더보기
             this.movielimit += 4;
@@ -136,6 +133,8 @@ export default {
           }
         });
       },
+=======
+>>>>>>> af33352887143a8f3fe83c0f8358d2efe7e0d728
     },
 }
 
@@ -171,15 +170,9 @@ export default {
         font-weight: bold;
     }
 
-    /* 더보기 */
-    .sub2 {
-        float: right;
-
-    }
-
+    /* 영화 포스터 */
     .movie__poster {
-        text-align: center;
-
+        display: block; margin: 0px auto;
     }
 
 </style>
