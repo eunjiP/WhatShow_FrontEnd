@@ -5,7 +5,7 @@
         <b-badge variant="warning" class="badge-circle badge-lg badge-floating border-white mb-3">{{ item.rank }}위</b-badge>  
         <span class="fs-3 ms-3">{{ item.movie_nm }}</span>
       </div>     
-      <img class="movie__poster" :src="item.movie_poster" @click="showTime" alt="영화포스터">
+      <img class="item__movie__poster" :src="item.movie_poster" @click="showTime" alt="영화포스터">
     </div>
 
     <div class="movie__timeList d-none container scale-up-center">
@@ -171,7 +171,7 @@ export default {
 
 
  .close { width: 45px; font-size:2rem;}
- .movie__poster { width: 250px; }
+ .item__movie__poster { width: 400px; }
 
  .preview__video { width: 100%;}
  .slide__item .theater__timeList ul>li { display: inline-block; }
