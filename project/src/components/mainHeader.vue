@@ -1,7 +1,7 @@
 <template>
-  <header>
+  <header class="position-relative">
     <!-- 헤더 왼쪽(모달) -->
-    <div class="header__left">
+    <div class="header__left position-absolute" style="top:10px; left:10%;">
       <!-- 현재 위치 -->
       <div>
         <div v-b-modal.modal-regin class="locationModal d-none">현재 위치</div>
@@ -17,14 +17,14 @@
         <b-modal id="modal-regin2" centered ref="modal-regin2" title="수동 설정" header-bg-variant="dark" 
         header-text-variant="light" body-bg-variant="dark" body-text-variant="light" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <div class="mr-2 mb-3">수동으로 위치 설정</div>
-          <select @change="changeOption1" v-model="optionList1" class="mb-3">
+          <select @change="changeOption1" v-model="optionList1" class="mx-2">
               <option value="" selected>시/도</option>
               <option v-for="item in option1" :key="item.root_code" :value="item.root_code">
                 {{ item.region_nm }}
               </option>
           </select>
 
-          <select v-model="optionList2" v-if="optionList1 !== ''">
+          <select v-model="optionList2" v-if="optionList1 !== ''" class="mx-2">
             <option value="0" selected>군/구</option>
             <option v-for="item in option2" :key="item.sub_code" :value="item.sub_code">
               {{ item.sub_nm }}
@@ -70,12 +70,12 @@
     </div>
 
     <!-- 헤더 중앙(로고) -->
-    <div class="header__logo">
+    <div class="header__logo position-absolute start-50" style="top:10px; transform: translateX(-50%)">
       <a href="/"><img src="../assets/img/logo.png"></a>
     </div>
 
     <!-- 헤더 오른쪽(검색) -->
-    <div class="header__right">
+    <div class="header__right d-inline-block position-absolute" style="top:10px; right:10%;">
       <div class="header__search">
         <!-- 상세검색 -->
 
@@ -86,7 +86,7 @@
           <div class="autocomplete p-ab disabled text-start">
             <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
           </div>
-          <div class="search__button d-inline me-5" @click="searchPage(keyword)"><i class="fa-solid fa-play px-2 button" style="color:#fff; background-color: #F29B21;"></i></div>
+          <div class="search__button d-inline-block me-5" @click="searchPage(keyword)"><i class="fa-solid fa-play px-2 button" style="color:#fff; background-color: #F29B21;"></i></div>
         </div>
       
         <b-modal id="modal-search" centered title="상세검색" header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
@@ -402,10 +402,9 @@
 
 <style scoped>
   header {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    color: var(--white);
+    height: 90px;
     background-color: #000;
+    color: var(--white);
     padding: 15px 10px 0 10px;
   }
   .header__left {
@@ -426,13 +425,12 @@
     margin-top: 15px;
     display: grid;
     grid-template-rows: 1fr 1fr;
-    text-align:end ;
     
   }
-  /* .header__search .search__input {
+   .header__search .search__input {
     display: grid;
-    grid-template-columns: 2fr 1fr;
-  } */
+    grid-template-columns: 1fr 2fr 1fr;
+  } 
   .header__search .search__button i {
     font-size: 20px;
     padding: 5px;
@@ -488,6 +486,7 @@
     border: none;
     font-size: 0.8rem;
     padding-left: 5px;
+    width: 80%;
   }
 
   .search__btn {
