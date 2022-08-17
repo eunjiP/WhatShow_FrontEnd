@@ -9,9 +9,10 @@
     </div>
 
     <div class="movie__timeList d-none container scale-up-center">
+
       <div class="row row-cols-2">
-        <div class="preview__box col row align-items-center">
-          <span v-if="item.preview == null" class="text-center" >예고편 없음 </span>
+        <div class="preview__box col">
+          <span v-if="item.preview == null" class="text-center">예고편 없음 </span>
           <video v-else :src="item.preview" autoplay loop class="flex-fill w-50"></video>
         </div>
         <div class="row">
@@ -30,7 +31,7 @@
               </div>
             </li>  
           </ul>
-          <span class="mb-5">자세한 상영 일정은 상세페이지를 확인해주세요.</span> 
+          <button type="button" class="btn mb-5 text-white" @click="moveTodetail(item.movie_code)"> 자세한 상영 일정은 상세페이지를 확인해주세요.</button>
         </div>        
       </div> 
     </div>
@@ -133,6 +134,15 @@ export default {
             }        
           }          
         } 
+      },
+      //상세페이지로 이동
+      moveTodetail(code) {
+        this.$router.push({
+          name: 'detail',
+          params: {
+            movie_code: code
+          }
+        });
       },
 
     

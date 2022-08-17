@@ -129,7 +129,7 @@
 export default {
     data() {
         return {
-            movie_code: 195758,
+            movie_code: this.$route.params.movie_code,
             movie_info: [], // 영화정보
             movie_recommend: {},
             todayDate: new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString(), // 현재 날짜
@@ -142,7 +142,7 @@ export default {
                 ctnt: '',
                 nickname: localStorage.getItem('WSnickname'),
                 iuser: localStorage.getItem('iuser'),
-                movie_code: 195758,
+                movie_code: this.$route.params.movie_code,
                 movie_score: '' 
             },
             rootCode: localStorage.getItem('rootCode'),
@@ -152,6 +152,7 @@ export default {
             rcmt: ''
         }
     },
+   
     created() {
         this.getMovieInfo(); // 영화 상세 정보
         this.getDate(); // 상영시간
