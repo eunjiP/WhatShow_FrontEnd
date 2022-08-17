@@ -8,7 +8,6 @@ import mixins from './mixin'
 import store from "./store/storage"
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
-import Carousel3d from 'vue-carousel-3d';
 
 // //event bus
 // export const eventBus = new Vue()
@@ -26,7 +25,6 @@ createApp(App)
 .use(router)
 .use(BootstrapVue3)
 .use(VueSweetalert2)
-.use(Carousel3d)
 .use(store)
 .mixin(mixins)
 .mount('#app');

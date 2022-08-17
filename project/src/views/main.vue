@@ -2,12 +2,8 @@
   <main>
     <div class="loading" v-if="this.showLoading === true"><img src="../assets/img/loading2.gif"></div>
     <div class="slide__box">
-      <div class="slide__list" id="example">
-        <carousel-3d :controls-visible="true" :controls-prev-html="'&#10092; '" :controls-next-html="'&#10093;'" :controls-width="30" :controls-height="60" :clickable="false">
-        <slide v-for="(slide, i) in slides" :index="i" :key="i">
-          <MovieItem v-for="(item, idx) in movieList" :key="idx" :item="item"></MovieItem>
-        </slide>
-        </carousel-3d>
+      <div class="slide__list">
+        <MovieItem v-for="(item, idx) in movieList" :key="idx" :item="item"></MovieItem>
       </div>
       <div class="buttons">
         <div class="slide__prev" @click="moveLeft"><i class="fa-solid fa-angle-left"></i></div>
@@ -23,16 +19,8 @@
 
 <script>
 import MovieItem from '../components/mainMovieItem.vue';
-import { Carousel3d, Slide } from 'vue-carousel-3d';
 
 export default {
-  el: '#example',
-  components: {
-    // 'carousel-3d': window['carousel-3d'].Carousel3d,
-    // 'slide': window['carousel-3d'].Slide
-    Carousel3d,
-    Slide
-  },
   name: 'main',
   data() {
     return {
