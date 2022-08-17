@@ -4,13 +4,13 @@
     <div class="header__left">
       <!-- 현재 위치 -->
       <div>
-        <div v-b-modal.modal-regin>현재 위치</div>
+        <div v-b-modal.modal-regin class="locationModal d-none">현재 위치</div>
 
         <b-modal id="modal-regin" centered ref="modal-regin" size="lg" title="위치 설정" header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
-          <p class="my-3 fs-4" >현재 위치로 설정하시겠습니까?</p>
+          <p class="my-5 fs-5" >현재 위치로 설정하시겠습니까?</p>
           <div class="locaBtn">
-            <b-button @click="getLocation" class="mb-3">현재 위치로 설정</b-button>
-            <b-button v-b-modal.modal-regin2 class="mb-3">수동 위치로 설정</b-button>
+            <button @click="getLocation" class="btn">현재 위치로 설정</button>
+            <button v-b-modal.modal-regin2 class="btn">수동 위치로 설정</button>
           </div>
         </b-modal>
 
@@ -41,7 +41,7 @@
       <!-- 마이페이지 -->
       <div>
         <div v-b-modal.modal-mypage>마이페이지</div>
-        <b-modal id="modal-mypage" centered title="마이페이지" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" footer-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
+        <b-modal id="modal-mypage" centered title="마이페이지" header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" footer-bg-variant="secondary" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <div>
             <div class="mypage__user mb-3">
               <label for="input-file">
@@ -78,17 +78,18 @@
     <div class="header__right">
       <div class="header__search">
         <div class="search__input" method="post">
-        <input id="header__search" v-model="keyword" placeholder="제목, 장르, 배우 등으로 검색해보세요." @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
-            <div class="autocomplete p-ab disabled text-start">
-              <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
-            </div>
-          <div class="search__button ms-2" @click="searchPage(keyword)"><i class="fa-solid fa-play px-2" style="color:#fff; background-color: #F29B21;"></i></div>
+          <input id="header__search" v-model="keyword" placeholder="제목, 장르, 배우 등으로 검색해보세요." @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
+          <div class="autocomplete p-ab disabled text-start">
+            <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
+          </div>
+          <div class="search__button" @click="searchPage(keyword)"><i class="fa-solid fa-play px-2 button" style="color:#fff; background-color: #F29B21;"></i></div>
         </div>
+      
         
         <!-- 상세검색 -->
         <div v-b-modal.modal-search class="search__bottom" @click="getSelectTag">상세검색</div>
 
-        <b-modal id="modal-search" centered title="상세검색" header-bg-variant="secondary" header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
+        <b-modal id="modal-search" centered title="상세검색" header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <b-form-input id="modal__search" type="text" v-model="keyword" placeholder="검색키워드를 입력하세요." v-on:keyup.enter="searchPage(keyword)"/>
           <div class="search__seltag mt-3 fw-bold" style="font-size:20px; color:#F9F871;">#태그설정</div>
           <div class="container2 mt-3">
@@ -297,6 +298,7 @@
           title: 'Geolocation is not supported by this browser.'
         });
       }
+      window.location.reload();
     },
 
     showPosition(pos) {
@@ -332,6 +334,8 @@
       close.click();
 
       await this.$post(`/user/ins_rootcode/${this.WSuuid}/${this.optionList1}`, {});
+      window.location.reload();
+
     },
 
     close() {
@@ -398,10 +402,11 @@
 
 <style scoped>
   header {
-    margin: 1% 5% 0 5%;
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     color: var(--white);
+    background-color: #000;
+    padding: 15px 10px 0 10px;
   }
   .header__left {
     margin-top: 15px;
@@ -426,12 +431,11 @@
   }
   .header__search .search__input {
     display: grid;
-    grid-template-columns: 1fr 25px;
+    grid-template-columns: 2fr 1fr;
   }
   .header__search .search__button i {
     font-size: 20px;
     padding: 5px;
-    margin-left: 5px;
     border-radius: 5px;
     cursor: pointer;
   }
@@ -441,7 +445,7 @@
   }
   #modal-regin2 select option { color: var(--black); }
 
-  #modal-regin {padding:0 !important; }
+  .locaBtn button {width:50%; border:none; color:#fff;}
   
 
   /* 마이페이지 css */
@@ -466,6 +470,14 @@
   .userCtnt { background-color: #5e6770; border-radius: 5px; padding:10px;}
 
   /* 검색 css */
+  .fa-play {
+    box-shadow: 0 5px #f27019;
+  }
+
+  .button:active {
+    box-shadow: 0 5px #f27019;
+    transform: translateY(4px);
+  }
 
   .search__input > #header__search {
     height: 30px;
@@ -474,7 +486,7 @@
     border: none;
     font-size: 0.8rem;
     padding-left: 5px;
-    width: 100%;
+    width: 80%;
   }
 
   .search__btn {
@@ -483,6 +495,11 @@
     border-radius: 10px;
     padding: 5px;
     color: var(--white);
+    box-shadow: 0 5px #f27019;
+  }
+  .search__btn:active {
+    box-shadow: 0 5px #f27019;
+    transform: translateY(4px);
   }
 
   .favtag{
@@ -525,3 +542,4 @@
     color: var(--font--color);
   }
 </style>
+
