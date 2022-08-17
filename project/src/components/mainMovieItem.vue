@@ -152,6 +152,9 @@ export default {
 </script>
 
 <style scoped>
+.fa-xmark {
+  cursor: pointer;
+}
 .button span {
   cursor: pointer;
   display: inline-block;
