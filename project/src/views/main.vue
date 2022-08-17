@@ -34,6 +34,7 @@ export default {
       showLoading: true,
       movieList: [],
       itemIdx: 0,
+      slides: 10
     }
   },
   methods:{

@@ -471,10 +471,12 @@
 
   /* 검색 css */
   .fa-play {
-    box-shadow: 0 5px #f27019;
+    box-shadow: 0 5px #999;
   }
+  .button:hover {background-color: #3e8e41}
 
   .button:active {
+    background-color: #3e8e41;
     box-shadow: 0 5px #f27019;
     transform: translateY(4px);
   }

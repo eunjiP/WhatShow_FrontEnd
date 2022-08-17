@@ -1,5 +1,5 @@
 <template>
-  <div class="slide__item">
+  <div class="slide__item carousel-3d-slider">
     <div class="movieBox">
       <div>
         <b-badge variant="warning" class="badge-circle badge-lg badge-floating border-white mb-3">{{ item.rank }}위</b-badge>  
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+
 export default {
     data() {
       return {
@@ -151,6 +152,36 @@ export default {
 </script>
 
 <style scoped>
+.fa-xmark {
+  cursor: pointer;
+}
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -35px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 35px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+  top: -10px;
+  font-size: 30px;
+}
+
  li{list-style: none;}
  a{ text-decoration: none; color:#fff;}
  .slide__item { position: relative; height: 600px;}
