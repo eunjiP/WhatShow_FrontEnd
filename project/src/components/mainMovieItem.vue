@@ -2,18 +2,18 @@
   <div class="slide__item carousel-3d-slider">
     <div class="movieBox">
       <div>
-        <b-badge variant="warning" class="badge-circle badge-lg badge-floating border-white">{{ item.rank }}위</b-badge>  
-        {{ item.movie_nm }}
+        <b-badge variant="warning" class="badge-circle badge-lg badge-floating border-white mb-3">{{ item.rank }}위</b-badge>  
+        <span class="fs-3 ms-3">{{ item.movie_nm }}</span>
       </div>     
       <img class="movie__poster" :src="item.movie_poster" @click="showTime" alt="영화포스터">
     </div>
 
     <div class="movie__timeList d-none container scale-up-center">
 
-      <div class="row row-cols-2">
+      <div class="row row-cols-2 align-items-center">
         <div class="preview__box col">
           <span v-if="item.preview == null" class="text-center">예고편 없음 </span>
-          <video v-else :src="item.preview" autoplay loop class="flex-fill w-50"></video>
+          <video v-else :src="item.preview" autoplay loop class="preview__video"></video>
         </div>
         <div class="row">
           <span class="close position-absolute top-0 end-0" @click="close"><i class="fa-solid fa-xmark"></i></span>
@@ -31,7 +31,7 @@
               </div>
             </li>  
           </ul>
-          <button type="button" class="btn mb-5 text-white button" @click="moveTodetail(item.movie_code)"> <span>자세한 상영 일정은 상세페이지를 확인해주세요.</span></button>
+          <button type="button" class="btn mb-5 text-white" @click="moveTodetail(item.movie_code)"><span>자세한 상영 일정은 상세페이지를 확인해주세요.</span></button>
         </div>        
       </div> 
     </div>
@@ -181,6 +181,7 @@ export default {
   top: -10px;
   font-size: 30px;
 }
+
  li{list-style: none;}
  a{ text-decoration: none; color:#fff;}
  .slide__item { position: relative; height: 600px;}
@@ -202,9 +203,39 @@ export default {
  .close { width: 45px; font-size:2rem;}
  .movie__poster { width: 250px; }
 
- .preview__box { background-color: black;}
+ .preview__video { width: 100%;}
  .slide__item .theater__timeList ul>li { display: inline-block; }
  .slide__item .movie__runningTime { font-size:0.8rem; background-color: #F29B21; padding:5px; margin: 5px; border-radius: 5px; }
+
+ .fa-xmark {
+  cursor: pointer;
+  }
+  .button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+
+  .button span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -35px;
+    transition: 0.5s;
+  }
+
+  .button:hover span {
+    padding-right: 35px;
+  }
+
+  .button:hover span:after {
+    opacity: 1;
+    right: 0;
+    top: -10px;
+    font-size: 30px;
+  }
 
 /* 예고편 애니메이션 */
  .scale-up-center {
