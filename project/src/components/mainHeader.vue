@@ -1,39 +1,41 @@
 <template>
-  <header>
+  <header class="position-relative">
     <!-- 헤더 왼쪽(모달) -->
-    <div class="header__left">
+    <div class="header__left position-absolute" style="top:10px; left:10%;">
       <!-- 현재 위치 -->
       <div>
         <div v-b-modal.modal-regin class="locationModal d-none">현재 위치</div>
 
         <b-modal id="modal-regin" centered ref="modal-regin" size="lg" title="위치 설정" header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
-          <p class="my-5 fs-5" >현재 위치로 설정하시겠습니까?</p>
+          <p class="my-5 fs-5">위치<span class="text-warning"> 설정 방법</span>을 선택해주세요.</p>
           <div class="locaBtn">
             <button @click="getLocation" class="btn">현재 위치로 설정</button>
             <button v-b-modal.modal-regin2 class="btn">수동 위치로 설정</button>
           </div>
         </b-modal>
 
-        <b-modal id="modal-regin2" centered ref="modal-regin2" title="수동 설정" header-bg-variant="secondary" 
-        header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
-          <div class="mr-2 mb-3">수동으로 위치 설정</div>
-          <select @change="changeOption1" v-model="optionList1" class="mb-3">
-              <option value="" selected>시/도</option>
-              <option v-for="item in option1" :key="item.root_code" :value="item.root_code">
-                {{ item.region_nm }}
+        <b-modal id="modal-regin2" centered ref="modal-regin2" size="lg" title="수동 설정" 
+        header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
+          <div class="mt-5 fs-5">수동으로 위치 설정</div>
+          <div class="my-3">
+            <select @change="changeOption1" v-model="optionList1" class="fs-5 mx-2">
+                <option value="" selected>시/도</option>
+                <option v-for="item in option1" :key="item.root_code" :value="item.root_code">
+                  {{ item.region_nm }}
+                </option>
+            </select>
+  
+            <select v-model="optionList2" v-if="optionList1 !== ''" class="fs-5 mx-2">
+              <option value="0" selected>군/구</option>
+              <option v-for="item in option2" :key="item.sub_code" :value="item.sub_code">
+                {{ item.sub_nm }}
+
               </option>
-          </select>
-
-          <select v-model="optionList2" v-if="optionList1 !== ''">
-            <option value="0" selected>군/구</option>
-            <option v-for="item in option2" :key="item.sub_code" :value="item.sub_code">
-              {{ item.sub_nm }}
-            </option>
-          </select>
-
-          <div>
-            <b-button size="sm" variant="success" @click="ok()">설정</b-button>
-            <b-button size="sm" variant="danger" @click="close()">취소</b-button> 
+            </select>
+          </div>
+          <div class="locaBtn2">
+            <button class="btn" @click="ok()">설정</button>
+            <button class="btn" @click="close()">취소</button> 
           </div>
         </b-modal>
       </div>
@@ -70,25 +72,25 @@
     </div>
 
     <!-- 헤더 중앙(로고) -->
-    <div class="header__logo">
+    <div class="header__logo position-absolute start-50" style="top:10px; transform: translateX(-50%)">
       <a href="/"><img src="../assets/img/logo.png"></a>
     </div>
 
     <!-- 헤더 오른쪽(검색) -->
-    <div class="header__right">
+    <div class="header__right d-inline-block position-absolute" style="top:10px; right:25px;">
       <div class="header__search">
+        <!-- 상세검색 -->
+
         <div class="search__input" method="post">
-          <input id="header__search" v-model="keyword" placeholder="제목, 장르, 배우 등으로 검색해보세요." @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
+          <div v-b-modal.modal-search class="search__bottom d-inline-block me-3" @click="getSelectTag">상세검색</div>
+
+          <input id="header__search" class="me-2 w-100" v-model="keyword" placeholder="제목, 장르, 배우 등으로 검색해보세요." @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
           <div class="autocomplete p-ab disabled text-start">
             <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
           </div>
-          <div class="search__button" @click="searchPage(keyword)"><i class="fa-solid fa-play px-2 button" style="color:#fff; background-color: #F29B21;"></i></div>
+          <div class="search__button d-inline-block" @click="searchPage(keyword)"><i class="fa-solid fa-play px-2 button" style="color:#fff; background-color: #F29B21;"></i></div>
         </div>
       
-        
-        <!-- 상세검색 -->
-        <div v-b-modal.modal-search class="search__bottom" @click="getSelectTag">상세검색</div>
-
         <b-modal id="modal-search" centered title="상세검색" header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <b-form-input id="modal__search" type="text" v-model="keyword" placeholder="검색키워드를 입력하세요." v-on:keyup.enter="searchPage(keyword)"/>
           <div class="search__seltag mt-3 fw-bold" style="font-size:20px; color:#F9F871;">#태그설정</div>
@@ -402,10 +404,9 @@
 
 <style scoped>
   header {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    color: var(--white);
+    height: 90px;
     background-color: #000;
+    color: var(--white);
     padding: 15px 10px 0 10px;
   }
   .header__left {
@@ -420,19 +421,19 @@
     text-align: center;
   }
   .header__logo a img {
-    width: 5rem;
+    width: 4rem;
   }
   .header__search {
     margin-top: 15px;
     display: grid;
     grid-template-rows: 1fr 1fr;
-    text-align:end ;
-    line-height: 2rem;
+    
   }
-  .header__search .search__input {
+   .header__search .search__input {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 3fr 1fr;
   }
+  .search__button { text-align: right;}
   .header__search .search__button i {
     font-size: 20px;
     padding: 5px;
@@ -445,7 +446,7 @@
   }
   #modal-regin2 select option { color: var(--black); }
 
-  .locaBtn button {width:50%; border:none; color:#fff;}
+  .locaBtn button, .locaBtn2 button {width:50%; border:none; color:#fff;}
   
 
   /* 마이페이지 css */
@@ -466,12 +467,12 @@
   .btn-mod:hover { color:#fff;}
   .nickname__input, .favtag__input, #modal__search { background-color: transparent; border:none; border-bottom: 1px solid #F9F871; border-radius: 0px;}
   .nickname__input::placeholder  {color:#fff;}
-  .favtag__input::placeholder,  #modal__search::placeholder {color: #abb2ba; }
+  .favtag__input::placeholder,  #modal__search::placeholder,  #header__search::placeholder {color: #e4e9f0; }
   .userCtnt { background-color: #5e6770; border-radius: 5px; padding:10px;}
 
   /* 검색 css */
   .fa-play {
-    box-shadow: 0 5px #999;
+    box-shadow: 0 5px #f27019;
   }
   .button:hover {background-color: #3e8e41}
 
@@ -489,6 +490,7 @@
     font-size: 0.8rem;
     padding-left: 5px;
     width: 80%;
+    border-bottom: 1px solid #f27019;
   }
 
   .search__btn {

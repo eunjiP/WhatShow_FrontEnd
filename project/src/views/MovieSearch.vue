@@ -1,5 +1,5 @@
 <template>
-    <div class="container p-5">
+    <div class="container p-5 mt-5">
         <div id="movie-search">
             <div id="search-header">
                 <div class="search__title text-start">"{{ keyword }}" 검색 결과</div>
@@ -164,6 +164,9 @@ export default {
     /* 영화 포스터 */
     .movie__poster {
         display: block; margin: 0px auto;
+    }
+    .movie__poster img {
+        height: 290px;
     }
 
 </style>

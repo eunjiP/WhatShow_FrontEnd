@@ -4,10 +4,10 @@
     <div class="main__area">
       <MainBanner :movieList="movieList"></MainBanner>
     </div>
-    <div class="slide__box">
-      <h1 id="about" >Boxoffice Movie</h1>
+    <div class="slide__box p-5">
+      <h1 id="about" class="m-3">Boxoffice Movie</h1>
       <span>영화 이미지를 선택하면 상영 일정을 확인할 수 있습니다. </span>
-      <div class="slide__list" >
+      <div class="slide__list m-5">
         <MovieItem v-for="(item, idx) in movieList" :key="idx" :item="item"></MovieItem>
       </div>
       <div class="buttons">

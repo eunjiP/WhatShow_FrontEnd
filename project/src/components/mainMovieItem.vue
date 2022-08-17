@@ -5,7 +5,7 @@
         <b-badge variant="warning" class="badge-circle badge-lg badge-floating border-white mb-3">{{ item.rank }}위</b-badge>  
         <span class="fs-3 ms-3">{{ item.movie_nm }}</span>
       </div>     
-      <img class="movie__poster" :src="item.movie_poster" @click="showTime" alt="영화포스터">
+      <img class="item__movie__poster" :src="item.movie_poster" @click="showTime" alt="영화포스터">
     </div>
 
     <div class="movie__timeList d-none container scale-up-center">
@@ -31,7 +31,7 @@
               </div>
             </li>  
           </ul>
-          <button type="button" class="btn mb-5 text-white" @click="moveTodetail(item.movie_code)"><span>자세한 상영 일정은 상세페이지를 확인해주세요.</span></button>
+          <button type="button" class="btn mb-5 text-white button" @click="moveTodetail(item.movie_code)"><span>자세한 상영 일정은 상세페이지를 확인해주세요.</span></button>
         </div>        
       </div> 
     </div>
@@ -71,7 +71,7 @@ export default {
       showTime() {
         if(this.rootCode || this.myAddr) {
           const timeList = document.querySelectorAll('.movie__timeList');
-          const moviePoster = document.querySelectorAll('.movie__poster');
+          const moviePoster = document.querySelectorAll('.item__movie__poster');
           
           for(let i=0; i<timeList.length; i++) {
             moviePoster[i].addEventListener('click', function(e) {
@@ -152,36 +152,6 @@ export default {
 </script>
 
 <style scoped>
-.fa-xmark {
-  cursor: pointer;
-}
-.button span {
-  cursor: pointer;
-  display: inline-block;
-  position: relative;
-  transition: 0.5s;
-}
-
-.button span:after {
-  content: '\00bb';
-  position: absolute;
-  opacity: 0;
-  top: 0;
-  right: -35px;
-  transition: 0.5s;
-}
-
-.button:hover span {
-  padding-right: 35px;
-}
-
-.button:hover span:after {
-  opacity: 1;
-  right: 0;
-  top: -10px;
-  font-size: 30px;
-}
-
  li{list-style: none;}
  a{ text-decoration: none; color:#fff;}
  .slide__item { position: relative; height: 600px;}
@@ -201,7 +171,7 @@ export default {
 
 
  .close { width: 45px; font-size:2rem;}
- .movie__poster { width: 250px; }
+ .item__movie__poster { width: 400px; }
 
  .preview__video { width: 100%;}
  .slide__item .theater__timeList ul>li { display: inline-block; }
@@ -222,7 +192,7 @@ export default {
     position: absolute;
     opacity: 0;
     top: 0;
-    right: -35px;
+    right: 10px;
     transition: 0.5s;
   }
 
