@@ -1,5 +1,5 @@
 <template>
-  <div class="slide__item">
+  <div class="slide__item carousel-3d-slider">
     <div class="movieBox">
       <div>
         <b-badge variant="warning" class="badge-circle badge-lg badge-floating border-white">{{ item.rank }}위</b-badge>  
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+
 export default {
     data() {
       return {
