@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="banner__title">
+        <div class="banner__title d-flex flex-column align-items-center justify-content-center">
             <div class="welcome">
                 <h1>What do you want to some movie?</h1>
                 <span><i class="fa-solid fa-quote-left"></i></span>
