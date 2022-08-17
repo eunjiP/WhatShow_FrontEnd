@@ -7,33 +7,35 @@
         <div v-b-modal.modal-regin class="locationModal d-none">현재 위치</div>
 
         <b-modal id="modal-regin" centered ref="modal-regin" size="lg" title="위치 설정" header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" hide-footer style="text-align: center; background-color: rgba(0, 0, 0, 0.5);">
-          <p class="my-5 fs-5" >현재 위치로 설정하시겠습니까?</p>
+          <p class="my-5 fs-5">위치<span class="text-warning"> 설정 방법</span>을 선택해주세요.</p>
           <div class="locaBtn">
             <button @click="getLocation" class="btn">현재 위치로 설정</button>
             <button v-b-modal.modal-regin2 class="btn">수동 위치로 설정</button>
           </div>
         </b-modal>
 
-        <b-modal id="modal-regin2" centered ref="modal-regin2" title="수동 설정" header-bg-variant="secondary" 
-        header-text-variant="light" body-bg-variant="secondary" body-text-variant="light" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
-          <div class="mr-2 mb-3">수동으로 위치 설정</div>
-          <select @change="changeOption1" v-model="optionList1" class="mb-3">
-              <option value="" selected>시/도</option>
-              <option v-for="item in option1" :key="item.root_code" :value="item.root_code">
-                {{ item.region_nm }}
+        <b-modal id="modal-regin2" centered ref="modal-regin2" size="lg" title="수동 설정" 
+        header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
+          <div class="mt-5 fs-5">수동으로 위치 설정</div>
+          <div class="my-3">
+            <select @change="changeOption1" v-model="optionList1" class="fs-5">
+                <option value="" selected>시/도</option>
+                <option v-for="item in option1" :key="item.root_code" :value="item.root_code">
+                  {{ item.region_nm }}
+                </option>
+            </select>
+  
+            <select v-model="optionList2" v-if="optionList1 !== ''" class="fs-5">
+              <option value="0" selected>군/구</option>
+              <option v-for="item in option2" :key="item.sub_code" :value="item.sub_code">
+                {{ item.sub_nm }}
               </option>
-          </select>
+            </select>
+          </div>
 
-          <select v-model="optionList2" v-if="optionList1 !== ''">
-            <option value="0" selected>군/구</option>
-            <option v-for="item in option2" :key="item.sub_code" :value="item.sub_code">
-              {{ item.sub_nm }}
-            </option>
-          </select>
-
-          <div>
-            <b-button size="sm" variant="success" @click="ok()">설정</b-button>
-            <b-button size="sm" variant="danger" @click="close()">취소</b-button> 
+          <div class="locaBtn2">
+            <button class="btn" @click="ok()">설정</button>
+            <button class="btn" @click="close()">취소</button> 
           </div>
         </b-modal>
       </div>
@@ -445,7 +447,7 @@
   }
   #modal-regin2 select option { color: var(--black); }
 
-  .locaBtn button {width:50%; border:none; color:#fff;}
+  .locaBtn button, .locaBtn2 button {width:50%; border:none; color:#fff;}
   
 
   /* 마이페이지 css */
