@@ -77,18 +77,18 @@
     </div>
 
     <!-- 헤더 오른쪽(검색) -->
-    <div class="header__right d-inline-block position-absolute" style="top:10px; right:10%;">
+    <div class="header__right d-inline-block position-absolute" style="top:10px; right:25px;">
       <div class="header__search">
         <!-- 상세검색 -->
 
         <div class="search__input" method="post">
           <div v-b-modal.modal-search class="search__bottom d-inline-block me-3" @click="getSelectTag">상세검색</div>
 
-          <input id="header__search" class="me-2 w-75" v-model="keyword" placeholder="제목, 장르, 배우 등으로 검색해보세요." @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
+          <input id="header__search" class="me-2 w-100" v-model="keyword" placeholder="제목, 장르, 배우 등으로 검색해보세요." @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
           <div class="autocomplete p-ab disabled text-start">
             <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
           </div>
-          <div class="search__button d-inline-block me-5" @click="searchPage(keyword)"><i class="fa-solid fa-play px-2 button" style="color:#fff; background-color: #F29B21;"></i></div>
+          <div class="search__button d-inline-block" @click="searchPage(keyword)"><i class="fa-solid fa-play px-2 button" style="color:#fff; background-color: #F29B21;"></i></div>
         </div>
       
         <b-modal id="modal-search" centered title="상세검색" header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
@@ -431,8 +431,9 @@
   }
    .header__search .search__input {
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-  } 
+    grid-template-columns: 1fr 3fr 1fr;
+  }
+  .search__button { text-align: right;}
   .header__search .search__button i {
     font-size: 20px;
     padding: 5px;
@@ -466,7 +467,7 @@
   .btn-mod:hover { color:#fff;}
   .nickname__input, .favtag__input, #modal__search { background-color: transparent; border:none; border-bottom: 1px solid #F9F871; border-radius: 0px;}
   .nickname__input::placeholder  {color:#fff;}
-  .favtag__input::placeholder,  #modal__search::placeholder {color: #abb2ba; }
+  .favtag__input::placeholder,  #modal__search::placeholder,  #header__search::placeholder {color: #e4e9f0; }
   .userCtnt { background-color: #5e6770; border-radius: 5px; padding:10px;}
 
   /* 검색 css */
@@ -489,6 +490,7 @@
     font-size: 0.8rem;
     padding-left: 5px;
     width: 80%;
+    border-bottom: 1px solid #f27019;
   }
 
   .search__btn {
