@@ -78,9 +78,6 @@ export default {
 </script>
 
 <style scoped>
-  .d-none {
-    display: none;
-  }
   main {
     color: var(--white);
   }
