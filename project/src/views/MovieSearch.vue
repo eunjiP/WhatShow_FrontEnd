@@ -12,8 +12,8 @@
                 <div class="search-body m-3">
                     <div class="container">
                         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4" id="keywordResult">
-                            <div class="movie__poster" v-for="(item, idx) in movie_info" :key="idx" :item="item">
-                                <img :src="`${item.movie_poster}`" class="mt-3"/>
+                            <div class="movie__poster col" v-for="(item, idx) in movie_info" :key="idx" :item="item">
+                                <img :src="`${item.movie_poster}`" class="mt-3" @click="moveTodetail(item.movie_code)"/>
                                 <div class="mb-3">{{ item.movie_nm }}</div>
                             </div>
                         </div>
@@ -28,7 +28,7 @@
                     <div class="container">
                         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4" id="genreResult">
                             <div class="movie__poster col" v-for="(item, idx) in movie_info2" :key="idx" :item="item">
-                                <img :src="`${item.movie_poster}`" class="mt-3"/>
+                                <img :src="`${item.movie_poster}`" class="mt-3" @click="moveTodetail(item.movie_code)"/>
                                 <div class="mb-3">{{ item.movie_nm }}</div>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                     <div class="container">
                         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
                             <div class="movie__poster col" v-for="(item, idx) in movie_recommend_info" :key="idx" :item="item">
-                                <img :src="`${item.movie_poster}`" class="mt-3"/>
+                                <img :src="`${item.movie_poster}`" class="mt-3" @click="moveTodetail(item.movie_code)"/>
                                 <div class="mb-3">{{ item.movie_nm }}</div>
                             </div>
                         </div>
@@ -118,6 +118,14 @@ export default {
             }
             console.log(this.movie_info2);
         },
+        moveTodetail(code) {
+        this.$router.push({
+          name: 'detail',
+          params: {
+            movie_code: code
+          }
+        });
+      },
     },
 }
 
