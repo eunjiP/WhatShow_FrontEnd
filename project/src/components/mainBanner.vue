@@ -1,10 +1,10 @@
 <template>
     <div class="container">
         <div class="banner__title d-flex flex-column align-items-center justify-content-center">
-            <div class="welcome">
-                <h1>What do you want to some movie?</h1>
+            <div class="welcome mb-5">
+                <h1 class="mb-5">What movie do you want to see?</h1>
                 <span><i class="fa-solid fa-quote-left"></i></span>
-                <div class="describeMyself">
+                <div class="describeMyself mb-5">
                     <ul class="descriptionList align-middle">
                         <li v-for="item in movieList" :key="item.idx" >{{ item.movie_nm }}</li>
                         <li>{{movieList[0].movie_nm}}</li>
@@ -15,16 +15,16 @@
             </div>
 
             <div>
-                <h4>위치를 설정하여 가까운 영화관의 상영일자를 확인하세요.</h4>
-                <button type="button" class="btn text-white" @click="clickLocation">위치 설정</button>
+                <h4 class="mb-3">위치를 설정하여 가까운 영화관의 상영일정을 확인하세요.</h4>
+                <button type="button" class="btn btn-outline-light" @click="clickLocation">위치 설정</button>
+            </div>
 
-                <div class="arrow-down">
-                    <a href="#about">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </a>
-                </div>
+            <div class="arrow-down d-flex justify-content-center mt-5">
+                <a href="#about">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </a>
             </div>
         </div>
         
@@ -52,15 +52,17 @@ export default {
     .container { width:100%; height:100%;}
     .banner__title { height:100%;}
 
-    .welcome h1 { font-family: 'Noto Sans KR', sans-serif; font-weight: 900;}
-    .welcome span { display: inline-block; margin-top:12px;}
+    .welcome h1 { font-family: 'Noto Sans KR', sans-serif; font-weight: 900; font-size:4.5rem;}
+    .welcome span { display: inline-block; font-size:1.5rem; }
 
     /* 배너 영화 제목 애니메이션 */
     .describeMyself {
         margin: 14px 3px;
         display: inline-block;
         vertical-align: top;
+        font-size: 1.5rem;
         height: 1.5em;
+        font-weight: 600;
         overflow: hidden;
         color:white;
         z-index: 2;
@@ -151,4 +153,28 @@ export default {
     .arrow-down span:nth-child(3){
         animation-delay: -0.6s;
     }
+
+    .welcome h1 {
+
+        letter-spacing: 0;
+        padding: .25em 0 .325em;
+        display: block;
+        margin: 0 auto;
+        text-shadow: 0 0 80px rgba(255,255,255,.5);
+
+        background: url(https://i.ibb.co/RDTnNrT/animated-text-fill.png) repeat-y;
+        -webkit-background-clip: text;
+        background-clip: text;
+
+	    -webkit-text-fill-color: transparent;
+	    -webkit-animation: aitf 80s linear infinite;
+	    -webkit-transform: translate3d(0,0,0);
+	    -webkit-backface-visibility: hidden;
+    }
+
+    @-webkit-keyframes aitf {
+	    0% { background-position: 0% 50%; }
+	    100% { background-position: 100% 50%; }
+    }
+
 </style>
