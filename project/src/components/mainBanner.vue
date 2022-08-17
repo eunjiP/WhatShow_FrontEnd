@@ -1,0 +1,154 @@
+<template>
+    <div class="container">
+        <div class="banner__title">
+            <div class="welcome">
+                <h1>What do you want to some movie?</h1>
+                <span><i class="fa-solid fa-quote-left"></i></span>
+                <div class="describeMyself">
+                    <ul class="descriptionList align-middle">
+                        <li v-for="item in movieList" :key="item.idx" >{{ item.movie_nm }}</li>
+                        <li>{{movieList[0].movie_nm}}</li>
+                    </ul>
+                </div>
+                <span><i class="fa-solid fa-quote-right"></i></span>
+                <span class="ms-3">보러 갈까?</span>
+            </div>
+
+            <div>
+                <h4>위치를 설정하여 가까운 영화관의 상영일자를 확인하세요.</h4>
+                <button type="button" class="btn text-white" @click="clickLocation">위치 설정</button>
+
+                <div class="arrow-down">
+                    <a href="#about">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</template>
+
+<script>
+export default {
+    props: {
+        movieList:Array
+    },
+    methods: {
+        // header > 위치설정 클릭
+        clickLocation() {
+            const btn = document.querySelector('.locationModal');
+            btn.click();
+        }
+    },
+}
+</script>
+
+<style scoped>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+    
+    .container { width:100%; height:100%;}
+    .banner__title { height:100%;}
+
+    .welcome h1 { font-family: 'Noto Sans KR', sans-serif; font-weight: 900;}
+    .welcome span { display: inline-block; margin-top:12px;}
+
+    /* 배너 영화 제목 애니메이션 */
+    .describeMyself {
+        margin: 14px 3px;
+        display: inline-block;
+        vertical-align: top;
+        height: 1.5em;
+        overflow: hidden;
+        color:white;
+        z-index: 2;
+    }
+
+    @keyframes rolling {
+        0% {
+            margin-top: 0;
+        }
+        10% {
+            margin-top: -1.5em;
+        }
+        20% {
+            margin-top: -3em;
+        }
+        30%{
+            margin-top: -4.5em;
+        }
+        40%{
+            margin-top:-6em;
+        }
+        50%{
+            margin-top:-7.5em;
+        }
+        60%{
+            margin-top:-9em;
+        }
+        70%{
+            margin-top:-10.5em;
+        }
+        80%{
+            margin-top:-12em;
+        }
+        90%{
+            margin-top:-13.5em;
+        }
+        100%{
+            margin-top:-15em;
+        }
+    }
+
+    .descriptionList {
+        padding-left: 0;
+        margin:0;
+        animation-name: rolling;
+        animation-duration: 20s;
+        animation-iteration-count: infinite;
+    }
+    .descriptionList li {
+        list-style: none;
+        line-height: 1.5em;
+        display: flex;
+        justify-content: center;
+        flex-wrap: nowrap;
+    }
+
+    /* 하단 화살표 */
+    .arrow-down span{
+        display: block;
+        width: 1.5em;
+        height: 1.5em;
+        border-bottom: 1px solid #fff;
+        border-right: 1px solid #fff;
+        transform: rotate(45deg);
+        margin: -10px;
+        animation: animate-arrows 2s infinite;
+    }
+    @keyframes animate-arrows{
+        0%{
+            opacity: 0;
+            transform: rotate(45deg) translate(-1.5em, -1.5em);
+        }
+        50%{
+            opacity: 1;
+        }
+        100%{
+            opacity: 0;
+            transform: rotate(45deg) translate(1.5em, 1.5em);
+        }
+    }
+
+    .arrow-down span:nth-child(1){
+        animation-delay: -0.2s;
+    }
+    .arrow-down span:nth-child(2){
+        animation-delay: -0.4s;
+    }
+    .arrow-down span:nth-child(3){
+        animation-delay: -0.6s;
+    }
+</style>

@@ -1,8 +1,13 @@
 <template>
   <main>
     <div class="loading" v-if="this.showLoading === true"><img src="../assets/img/loading2.gif"></div>
+    <div class="main__area">
+      <MainBanner :movieList="movieList"></MainBanner>
+    </div>
     <div class="slide__box">
-      <div class="slide__list">
+      <h1 id="about" >Boxoffice Movie</h1>
+      <span>영화 이미지를 선택하면 상영 일정을 확인할 수 있습니다. </span>
+      <div class="slide__list" >
         <MovieItem v-for="(item, idx) in movieList" :key="idx" :item="item"></MovieItem>
       </div>
       <div class="buttons">
@@ -12,16 +17,18 @@
       <div class="paginations">
         <span class="dot" v-for="idx in movieList.length" :key="idx" @click="currentSlide(idx-1)"></span>     
       </div>
-    </div>
-    
+    </div> 
   </main>
 </template>
 
 <script>
 import MovieItem from '../components/mainMovieItem.vue';
+import MainBanner from '../components/mainBanner.vue';
+
 
 export default {
   name: 'main',
+  el: '#example',
   data() {
     return {
       showLoading: true,
@@ -66,28 +73,34 @@ export default {
       this.itemIdx = idx;
       dots[idx].className += " active";
     }, 
+
   },
   created() {
     this.getMovieList();
   },
   components: {
     MovieItem,
+    MainBanner,
   }
 }
+
 </script>
 
 <style scoped>
-  .d-none {
-    display: none;
-  }
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
   main {
     color: var(--white);
   }
-  .slide {
-      width: 100%;
-      height: 100%;
-      position: relative;
-    }
+
+  .main__area {
+        background-image: url('../../public/theater3.jpg');
+        height: 100vh;
+        background-size: cover;
+        background-attachment: fixed;
+  }
+  
+  .slide__box {position: relative;}
+  .slide__box h1 { font-family: 'Noto Sans KR', sans-serif; font-weight: 900; color: var(--subFont--color); margin-top:50px;}
 
   .slide__list {
       display: flex;
