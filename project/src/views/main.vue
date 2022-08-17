@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div class="loading d-none"><img src="../assets/img/loading2.gif"></div>
+    <div class="loading" v-if="this.showLoading === true"><img src="../assets/img/loading2.gif"></div>
     <div class="slide__box">
       <div class="slide__list">
         <MovieItem v-for="(item, idx) in movieList" :key="idx" :item="item"></MovieItem>
@@ -24,6 +24,7 @@ export default {
   name: 'main',
   data() {
     return {
+      showLoading: true,
       movieList: [],
       itemIdx: 0,
     }
@@ -38,9 +39,8 @@ export default {
     //   loadingElem.classList.add('d-none');
     // },
     async getMovieList() {
-      this.showLoading();
       this.movieList = await this.$get('/movie/main', {});
-      this.hideLoading();
+      this.showLoading = false;
     },
     moveRight() {
       if(this.itemIdx >= this.movieList.length-1) {
