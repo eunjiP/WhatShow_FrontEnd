@@ -78,19 +78,11 @@
     <div class="header__right">
       <div class="header__search">
         <div class="search__input" method="post">
-<<<<<<< HEAD
-        <input id="header__search" v-model="keyword" placeholder="제목, 장르, 배우 등으로 검색해보세요." @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
-            <div class="autocomplete p-ab disabled text-start">
-              <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
-            </div>
-          <div class="search__button ms-2" @click="searchPage(keyword)"><i class="fa-solid fa-play px-2 button" style="color:#fff; background-color: #F29B21;"></i></div>
-=======
           <input id="header__search" v-model="keyword" placeholder="제목, 장르, 배우 등으로 검색해보세요." @input="submitAutoComplete" type="text" style="margin-bottom : 15px;" @keyup.enter="searchPage(keyword)"/>
           <div class="autocomplete p-ab disabled text-start">
             <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
           </div>
           <div class="search__button" @click="searchPage(keyword)"><i class="fa-solid fa-play px-2 button" style="color:#fff; background-color: #F29B21;"></i></div>
->>>>>>> 4e184e2460794ad222a13ebb33a19eece4729929
         </div>
       
         
