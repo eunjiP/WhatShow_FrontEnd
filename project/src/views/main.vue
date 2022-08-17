@@ -30,17 +30,11 @@ export default {
     }
   },
   methods:{
-    // showLoading() {
-    //   const loadingElem = document.querySelector('.loading');
-    //   loadingElem.classList.remove('d-none');
-    // },
-    // hideLoading() {
-    //   const loadingElem = document.querySelector('.loading');
-    //   loadingElem.classList.add('d-none');
-    // },
     async getMovieList() {
       this.movieList = await this.$get('/movie/main', {});
       this.showLoading = false;
+      const dots = document.querySelectorAll('.dot');
+      dots[0].className += " active";
     },
     moveRight() {
       if(this.itemIdx >= this.movieList.length-1) {
