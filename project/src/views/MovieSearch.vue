@@ -118,13 +118,6 @@ export default {
             }
             console.log(this.movie_info2);
         },
-<<<<<<< HEAD
-
-        more() { // 검색 결과 더보기
-            this.movielimit += 4;
-            this.getMovieInfo();
-            this.getMovieInfoTag();
-        },
         moveTodetail(code) {
         this.$router.push({
           name: 'detail',
@@ -133,8 +126,6 @@ export default {
           }
         });
       },
-=======
->>>>>>> af33352887143a8f3fe83c0f8358d2efe7e0d728
     },
 }
 
