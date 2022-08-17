@@ -82,7 +82,7 @@
             <div class="autocomplete p-ab disabled text-start">
               <div @click="searchPage(res)" style="cursor: pointer" v-for="(res, i) in filternm" :key="i" class="filternm" >{{ res }}</div>
             </div>
-          <div class="search__button ms-2" @click="searchPage(keyword)"><i class="fa-solid fa-play px-2" style="color:#fff; background-color: #F29B21;"></i></div>
+          <div class="search__button ms-2" @click="searchPage(keyword)"><i class="fa-solid fa-play px-2 button" style="color:#fff; background-color: #F29B21;"></i></div>
         </div>
         
         <!-- 상세검색 -->
@@ -466,6 +466,16 @@
   .userCtnt { background-color: #5e6770; border-radius: 5px; padding:10px;}
 
   /* 검색 css */
+  .fa-play {
+    box-shadow: 0 5px #999;
+  }
+  .button:hover {background-color: #3e8e41}
+
+  .button:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
 
   .search__input > #header__search {
     height: 30px;

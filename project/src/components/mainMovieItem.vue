@@ -31,7 +31,7 @@
               </div>
             </li>  
           </ul>
-          <button type="button" class="btn mb-5 text-white" @click="moveTodetail(item.movie_code)"> 자세한 상영 일정은 상세페이지를 확인해주세요.</button>
+          <button type="button" class="btn mb-5 text-white button" @click="moveTodetail(item.movie_code)"> <span>자세한 상영 일정은 상세페이지를 확인해주세요.</span></button>
         </div>        
       </div> 
     </div>
@@ -151,7 +151,33 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -35px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 35px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+  top: -10px;
+  font-size: 30px;
+}
  li{list-style: none;}
  a{ text-decoration: none; color:#fff;}
  .slide__item { position: relative; height: 600px;}
