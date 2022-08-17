@@ -99,8 +99,7 @@ export default {
         }
       },
 
-      async gettheaterList() {
-          
+      async gettheaterList() { 
         const param = {
           'code': this.item.movie_code,
           'date': this.todayDate.substring(0, 10)
@@ -117,6 +116,7 @@ export default {
         const tt2 = parseInt(tt[0])+3;
         
         const list = await this.$get('/movie/movieTime', param); // 상영 극장 정보
+        console.log(list);
   
         for(let a=0; a<6; a++) {
           this.theater_list[a] = list[a]; // 극장이름
@@ -132,8 +132,6 @@ export default {
             }        
           }          
         } 
-
-
       },
 
     
