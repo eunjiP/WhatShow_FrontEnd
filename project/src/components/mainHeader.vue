@@ -14,51 +14,28 @@
           </div>
         </b-modal>
 
-<<<<<<< HEAD
-        <b-modal id="modal-regin2" centered ref="modal-regin2" title="수동 설정" header-bg-variant="dark" 
-        header-text-variant="light" body-bg-variant="dark" body-text-variant="light" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
-          <div class="mr-2 mb-3">수동으로 위치 설정</div>
-          <select @change="changeOption1" v-model="optionList1" class="mx-2">
-              <option value="" selected>시/도</option>
-              <option v-for="item in option1" :key="item.root_code" :value="item.root_code">
-                {{ item.region_nm }}
-=======
         <b-modal id="modal-regin2" centered ref="modal-regin2" size="lg" title="수동 설정" 
         header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" style="text-align: center; background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <div class="mt-5 fs-5">수동으로 위치 설정</div>
           <div class="my-3">
-            <select @change="changeOption1" v-model="optionList1" class="fs-5">
+            <select @change="changeOption1" v-model="optionList1" class="fs-5 mx-2">
                 <option value="" selected>시/도</option>
                 <option v-for="item in option1" :key="item.root_code" :value="item.root_code">
                   {{ item.region_nm }}
                 </option>
             </select>
   
-            <select v-model="optionList2" v-if="optionList1 !== ''" class="fs-5">
+            <select v-model="optionList2" v-if="optionList1 !== ''" class="fs-5 mx-2">
               <option value="0" selected>군/구</option>
               <option v-for="item in option2" :key="item.sub_code" :value="item.sub_code">
                 {{ item.sub_nm }}
->>>>>>> 0da690b0cc6cb95586abf8a6ebc2ab557c8b6f0a
+
               </option>
             </select>
           </div>
-
-<<<<<<< HEAD
-          <select v-model="optionList2" v-if="optionList1 !== ''" class="mx-2">
-            <option value="0" selected>군/구</option>
-            <option v-for="item in option2" :key="item.sub_code" :value="item.sub_code">
-              {{ item.sub_nm }}
-            </option>
-          </select>
-
-          <div>
-            <b-button size="sm" variant="success" @click="ok()">설정</b-button>
-            <b-button size="sm" variant="danger" @click="close()">취소</b-button> 
-=======
           <div class="locaBtn2">
             <button class="btn" @click="ok()">설정</button>
             <button class="btn" @click="close()">취소</button> 
->>>>>>> 0da690b0cc6cb95586abf8a6ebc2ab557c8b6f0a
           </div>
         </b-modal>
       </div>
