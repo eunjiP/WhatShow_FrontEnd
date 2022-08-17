@@ -15,7 +15,7 @@
             </div>
 
             <div>
-                <h4 class="mb-3">위치를 설정하여 가까운 영화관의 상영일정을 확인하세요.</h4>
+                <h5 class="mb-3">위치를 설정하여 가까운 영화관의 상영일정을 확인하세요.</h5>
                 <button type="button" class="btn btn-outline-light" @click="clickLocation">위치 설정</button>
             </div>
 
