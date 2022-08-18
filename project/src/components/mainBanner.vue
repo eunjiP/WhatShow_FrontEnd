@@ -2,7 +2,7 @@
     <div class="container">
         <div class="banner__title d-flex flex-column align-items-center justify-content-center">
             <div class="welcome mb-5">
-                <h1 class="mb-5">What movie do you want to see?</h1>
+                <h1 class="mb-5">What movie are you going to show?</h1>
                 <span><i class="fa-solid fa-quote-left"></i></span>
                 <div class="describeMyself mb-5">
                     <ul class="descriptionList align-middle">
@@ -52,7 +52,7 @@ export default {
     .container { width:100%; height:100%;}
     .banner__title { height:100%;}
 
-    .welcome h1 { font-family: 'Noto Sans KR', sans-serif; font-weight: 900; font-size:4.5rem;}
+    .welcome h1 { font-family: 'Noto Sans KR', sans-serif; font-weight: 900; font-size:4rem;}
     .welcome span { display: inline-block; font-size:1.5rem; }
 
     /* 배너 영화 제목 애니메이션 */
