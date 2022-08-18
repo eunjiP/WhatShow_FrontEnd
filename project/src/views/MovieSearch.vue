@@ -22,7 +22,7 @@
             </div>
             <div>
                 <div class="search__subTitle">
-                    <div class="sub1"> 검색 장르 영화</div>
+                    <div class="sub1"> 유사 장르</div>
                 </div>
                 <div class="search-body m-3">
                     <div class="container">
