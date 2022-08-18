@@ -106,7 +106,7 @@
           <div class="search__recommend mb-3 mt-3  fw-bold" style="font-size:20px; color:#F9F871;">추천 검색어</div>
           
           <div class="row">
-            <div v-for="(key, idx) in recommendKeyword" :key=idx class="col-3">{{ key }}</div>
+            <div v-for="(key, idx) in recommendKeyword" :key=idx class="col-3 recommendKeyword" @click="searchKeyword(key)">{{ key }}</div>
           </div>
 
           <button class="search__btn col-12 mt-3" type="submit" @click="searchPage(keyword), searchPageTag(keytag)">검색하기</button>
@@ -167,6 +167,7 @@
     async getOptionList2(optionList1) {
       this.option2 = await this.$get(`/location/optionList2/${optionList1}`, {})
     },
+    
     //추천검색어 부분
     async getKeyword() {
       this.recommendKeyword = await this.$get('movie/selTopSearch', {});
@@ -397,6 +398,16 @@
       this.gsTag = await this.$get(`/movie/getTag/`, {});
       // console.log(this.gsTag);
     },
+
+    //추천 검색어 이동
+    searchKeyword(keyword) {
+      this.$router.push({
+        name: 'search',
+        params: {
+          keyword: keyword
+        }
+      })
+    }
   }
 }
 
@@ -544,6 +555,10 @@
 
   .filternm:hover{
     color: var(--font--color);
+  }
+
+  .recommendKeyword {
+    cursor: pointer;
   }
 </style>
 
