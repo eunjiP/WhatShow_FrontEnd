@@ -17,6 +17,11 @@ import mainFooter from './components/mainFooter.vue'
 
 export default {
   name: 'main',
+  watch: {
+      $route() {
+          window.scrollTo(0, 0);
+      },
+  },
   components: {
     mainHeader,
     mainFooter
