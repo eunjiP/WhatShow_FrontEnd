@@ -23,7 +23,7 @@
               <div class="theater__timeList">
                 <ul class=" d-inline ps-0" v-for="theater in schedule.theaterScheduleList" :key="theater.idx">
                   <li v-for="time in theater.timetableList" :key="time.idx">
-                    <a :href="time.ticketPcUrl" class="ticketUrl">
+                    <a :href="time.ticketPcUrl" class="ticketUrl" target="_blank">
                       <div class="movie__runningTime">{{ time.rtime }} ~ {{ time.endTime }}</div>
                     </a>
                   </li>
