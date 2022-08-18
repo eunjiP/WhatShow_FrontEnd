@@ -66,6 +66,7 @@ export default {
             movie_tag: [],
             keyword: this.$route.params.keyword || '',  //mainHeader.vue에서 라우터를 이용해 보낸 파라미터로부터 데이터 받음 
             keyTag: this.$route.params.keyTag,
+            iuser: localStorage.getItem('iuser'),
         }
     },
 
@@ -85,7 +86,8 @@ export default {
 
         async getMovieInfo() {
             const param = {
-                'keyword': this.keyword
+                'keyword': this.keyword,
+                'iuser' : this.iuser
             };
             this.movie_info = await this.$get('recommend/movieSearch', param);
             if (this.movie_info.length === 0) {
