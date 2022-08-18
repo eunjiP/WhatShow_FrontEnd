@@ -167,7 +167,7 @@
     async getOptionList2(optionList1) {
       this.option2 = await this.$get(`/location/optionList2/${optionList1}`, {})
     },
-    
+
     //추천검색어 부분
     async getKeyword() {
       this.recommendKeyword = await this.$get('movie/selTopSearch', {});
@@ -407,6 +407,8 @@
           keyword: keyword
         }
       })
+      const close = document.querySelector('#modal-search button');
+      close.click();
     }
   }
 }
