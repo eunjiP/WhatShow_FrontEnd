@@ -93,7 +93,7 @@
       
         <b-modal id="modal-search" centered title="상세검색" header-bg-variant="dark" header-text-variant="light" body-bg-variant="dark" body-text-variant="light" style="background-color: rgba(0, 0, 0, 0.5);" hide-footer>
           <b-form-input id="modal__search" type="text" v-model="keyword" placeholder="검색키워드를 입력하세요." v-on:keyup.enter="searchPage(keyword)"/>
-          <div class="search__seltag mt-3 fw-bold" style="font-size:20px; color:#F9F871;">#태그설정</div>
+          <div class="search__seltag mt-3 fw-bold" style="font-size:20px; color:#F9F871;">장르 검색</div>
           <div class="container2 mt-3">
             <div class="row">
               <div>
@@ -167,7 +167,7 @@
     async getOptionList2(optionList1) {
       this.option2 = await this.$get(`/location/optionList2/${optionList1}`, {})
     },
-    
+
     //추천검색어 부분
     async getKeyword() {
       this.recommendKeyword = await this.$get('movie/selTopSearch', {});
@@ -407,6 +407,8 @@
           keyword: keyword
         }
       })
+      const close = document.querySelector('#modal-search button');
+      close.click();
     }
   }
 }

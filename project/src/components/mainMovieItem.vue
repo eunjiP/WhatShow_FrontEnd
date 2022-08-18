@@ -13,7 +13,7 @@
       <div class="row row-cols-2 align-items-center">
         <div class="preview__box col">
           <span v-if="item.preview == null" class="text-center">예고편 없음 </span>
-          <video v-else :src="item.preview" autoplay loop class="preview__video"></video>
+          <video v-else :src="item.preview" autoplay controls loop class="preview__video"></video>
         </div>
         <div class="row">
           <span class="close position-absolute top-0 end-0" @click="close"><i class="fa-solid fa-xmark"></i></span>
@@ -23,7 +23,7 @@
               <div class="theater__timeList">
                 <ul class=" d-inline ps-0" v-for="theater in schedule.theaterScheduleList" :key="theater.idx">
                   <li v-for="time in theater.timetableList" :key="time.idx">
-                    <a :href="time.ticketPcUrl" class="ticketUrl">
+                    <a :href="time.ticketPcUrl" class="ticketUrl" target="_blank">
                       <div class="movie__runningTime">{{ time.rtime }} ~ {{ time.endTime }}</div>
                     </a>
                   </li>
