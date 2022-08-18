@@ -50,7 +50,7 @@
                                 <ul v-for="theater in schedule.theaterScheduleList" :key="theater.idx">
                                     <li class="d-inline-block" v-for="time in theater.timetableList" :key="time.idx">
                                         <button class="ticketBtn btn">
-                                            <a :href="time.ticketPcUrl" class="ticketUrl">
+                                            <a :href="time.ticketPcUrl" class="ticketUrl" target="_blank" >
                                                 <div class="movie__runningTime">{{ time.rtime }} ~ {{ time.endTime }}</div> <!-- 상영시간 -->
                                                 <div class="movie__detailTheater">{{ time.tname }}</div> <!-- 상영관 -->
                                             </a>
